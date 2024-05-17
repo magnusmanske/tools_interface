@@ -1,33 +1,45 @@
+//! # Persondata Vorlagen
+//! Queries the [Persondata Vorlagen tool](https://persondata.toolforge.org/vorlagen) for information about template usage on Germam Wikipedia.
+//! Build a `PersondataTemplatesQuery` and call `get_blocking()` to get the results.
+//! Results are returned as a `Vec<PersondataTemplatesResult>`.
+//! 
+//! Example:
+//! ```
+//! use tools_interface::{PersondataTemplatesQuery, PersondataTemplatesParamNameOp};
+//! 
+//! fn main() {
+//!     let results = PersondataTemplatesQuery::with_template("Roscher")
+//!         .parameter_name("4")
+//!         .get_blocking()
+//!         .unwrap();
+//!     println!("{results:?}");
+//! }
+//! ```
+
 use std::{collections::HashMap, fmt};
 use crate::ToolsError;
 
-static TOOLS_INTERFACE_USER_AGENT: &str = concat!(
-    env!("CARGO_PKG_NAME"),
-    "/",
-    env!("CARGO_PKG_VERSION"),
-);
-
 
 #[derive(Debug, Default, PartialEq)]
-pub enum PersondataVorlagenOccOp {
+pub enum PersondataTemplatesOccOp {
     #[default]
     Equal,
     Larger,
     Smaller,
 }
 
-impl fmt::Display for PersondataVorlagenOccOp {
+impl fmt::Display for PersondataTemplatesOccOp {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         match self {
-            PersondataVorlagenOccOp::Equal => write!(f, "eq"),
-            PersondataVorlagenOccOp::Larger => write!(f, "gt"),
-            PersondataVorlagenOccOp::Smaller => write!(f, "lt"),
+            PersondataTemplatesOccOp::Equal => write!(f, "eq"),
+            PersondataTemplatesOccOp::Larger => write!(f, "gt"),
+            PersondataTemplatesOccOp::Smaller => write!(f, "lt"),
         }
     }
 }
 
 #[derive(Debug, Default, PartialEq)]
-pub enum PersondataVorlagenParamValueOp {
+pub enum PersondataTemplatesParamValueOp {
     #[default]
     Equal,
     Contains,
@@ -37,21 +49,21 @@ pub enum PersondataVorlagenParamValueOp {
     NotRegexp,
 }
 
-impl fmt::Display for PersondataVorlagenParamValueOp {
+impl fmt::Display for PersondataTemplatesParamValueOp {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         match self {
-            PersondataVorlagenParamValueOp::Equal => write!(f, "eq"),
-            PersondataVorlagenParamValueOp::Contains => write!(f, "hs"),
-            PersondataVorlagenParamValueOp::Like => write!(f, "lk"),
-            PersondataVorlagenParamValueOp::NotLike => write!(f, "nl"),
-            PersondataVorlagenParamValueOp::Regexp => write!(f, "rx"),
-            PersondataVorlagenParamValueOp::NotRegexp => write!(f, "nr"),
+            PersondataTemplatesParamValueOp::Equal => write!(f, "eq"),
+            PersondataTemplatesParamValueOp::Contains => write!(f, "hs"),
+            PersondataTemplatesParamValueOp::Like => write!(f, "lk"),
+            PersondataTemplatesParamValueOp::NotLike => write!(f, "nl"),
+            PersondataTemplatesParamValueOp::Regexp => write!(f, "rx"),
+            PersondataTemplatesParamValueOp::NotRegexp => write!(f, "nr"),
         }
     }
 }
 
 #[derive(Debug, Default, PartialEq)]
-pub enum PersondataVorlagenParamNameOp {
+pub enum PersondataTemplatesParamNameOp {
     #[default]
     Equal,
     Unequal,
@@ -62,28 +74,28 @@ pub enum PersondataVorlagenParamNameOp {
     NotRegexp,
 }
 
-impl fmt::Display for PersondataVorlagenParamNameOp {
+impl fmt::Display for PersondataTemplatesParamNameOp {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         match self {
-            PersondataVorlagenParamNameOp::Equal => write!(f, "eq"),
-            PersondataVorlagenParamNameOp::Unequal => write!(f, "ne"),
-            PersondataVorlagenParamNameOp::Missing => write!(f, "miss"),
-            PersondataVorlagenParamNameOp::Like => write!(f, "lk"),
-            PersondataVorlagenParamNameOp::NotLike => write!(f, "nl"),
-            PersondataVorlagenParamNameOp::Regexp => write!(f, "rx"),
-            PersondataVorlagenParamNameOp::NotRegexp => write!(f, "nr"),
+            PersondataTemplatesParamNameOp::Equal => write!(f, "eq"),
+            PersondataTemplatesParamNameOp::Unequal => write!(f, "ne"),
+            PersondataTemplatesParamNameOp::Missing => write!(f, "miss"),
+            PersondataTemplatesParamNameOp::Like => write!(f, "lk"),
+            PersondataTemplatesParamNameOp::NotLike => write!(f, "nl"),
+            PersondataTemplatesParamNameOp::Regexp => write!(f, "rx"),
+            PersondataTemplatesParamNameOp::NotRegexp => write!(f, "nr"),
         }
     }
 }
 
 #[derive(Debug, Default)]
-pub struct PersondataVorlagenResult {
+pub struct PersondataTemplatesResult {
     article: String,
     usage_number: u32,
     params: HashMap<u32,String>,
 }
 
-impl PersondataVorlagenResult {
+impl PersondataTemplatesResult {
     fn from_record(header: &csv::StringRecord, record: &csv::StringRecord) -> Self {
         let mut result = Self::default();
         for i in 0..header.len() {
@@ -124,25 +136,25 @@ impl PersondataVorlagenResult {
 }
 
 #[derive(Debug, Default)]
-pub struct PersondataVorlagenQuery {
+pub struct PersondataTemplatesQuery {
     with_wl: bool, // Mit Weiterleitungen
     tmpl: String, // Name der Vorlage
     occ: Option<u32>, // Einschränkung auf die wievielte Einbindung
-    occ_op: PersondataVorlagenOccOp, // Vergleichs-Operator
+    occ_op: PersondataTemplatesOccOp, // Vergleichs-Operator
     in_t: bool, // Nur Vorlage die direkt in einer Tabelle enthalten sind
     in_v: bool, // Nur Vorlage die direkt in einer anderen Vorlage enthalten sind
     in_r: bool, // Nur Vorlage die direkt in einer Referenz enthalten sind
     in_l: bool, // Nur Vorlage die direkt in einem Wikilink (Datei:) enthalten sind
     in_a: bool, // Nur Vorlage die direkt in einem Artikel enthalten sind
     param_name: String, // Name des Vorlagen-Parameters, mehrere Parameter können durch Pipe-Zeichen getrennt werden (nur bei Vergleich auf 'Gleich', 'Ungleich', 'Like' und 'NOT Like')
-    param_name_op: PersondataVorlagenParamNameOp, // Vergleichs-Operator
+    param_name_op: PersondataTemplatesParamNameOp, // Vergleichs-Operator
     param_value: String, // Name des Vorlagen-Parameters, mehrere Parameter können durch Pipe-Zeichen getrennt werden (nur bei Vergleich auf 'Gleich', 'Ungleich', 'Like' und 'NOT Like')
-    param_value_op: PersondataVorlagenParamValueOp, // Vergleichs-Operator
+    param_value_op: PersondataTemplatesParamValueOp, // Vergleichs-Operator
     in_c: bool, // Text innerhalb HTML-Kommentaren des Parameterinhalts durchsuchen
     case: bool, // Groß-/Kleinschreibung im Parameterinhalt beachten
 }
 
-impl PersondataVorlagenQuery {
+impl PersondataTemplatesQuery {
     pub fn new() -> Self {
         Self::default()
     }
@@ -155,7 +167,11 @@ impl PersondataVorlagenQuery {
         }
     }
 
-    pub fn with_occurrence(self, occ: u32, occ_op: PersondataVorlagenOccOp) -> Self {
+    pub fn with_occurrence(self, occ: u32) -> Self {
+        self.with_occurrence_op(occ, PersondataTemplatesOccOp::default())
+    }
+
+    pub fn with_occurrence_op(self, occ: u32, occ_op: PersondataTemplatesOccOp) -> Self {
         Self { occ: Some(occ), occ_op, ..self }
     }
 
@@ -187,11 +203,19 @@ impl PersondataVorlagenQuery {
         Self { case: true, ..self }
     }
 
-    pub fn parameter_name<S: Into<String>>(self, param_name: S, param_name_op: PersondataVorlagenParamNameOp) -> Self {
+    pub fn parameter_name<S: Into<String>>(self, param_name: S) -> Self {
+        self.parameter_name_op(param_name, PersondataTemplatesParamNameOp::default())
+    }
+
+    pub fn parameter_name_op<S: Into<String>>(self, param_name: S, param_name_op: PersondataTemplatesParamNameOp) -> Self {
         Self { param_name: param_name.into(), param_name_op, ..self }
     }
 
-    pub fn parameter_value<S: Into<String>>(self, param_value: S, param_value_op: PersondataVorlagenParamValueOp) -> Self {
+    pub fn parameter_value<S: Into<String>>(self, param_value: S) -> Self {
+        self.parameter_value_op(param_value, PersondataTemplatesParamValueOp::default())
+    }
+
+    pub fn parameter_value_op<S: Into<String>>(self, param_value: S, param_value_op: PersondataTemplatesParamValueOp) -> Self {
         Self { param_value: param_value.into(), param_value_op, ..self }
     }
 
@@ -207,21 +231,21 @@ impl PersondataVorlagenQuery {
 
         if let Some(occ) = self.occ {
             url += &format!("&occ={occ}");
-            if self.occ_op!=PersondataVorlagenOccOp::default() {
+            if self.occ_op!=PersondataTemplatesOccOp::default() {
                 url += &format!("&occ_op={}", self.occ_op);
             }
         }
 
         if !self.param_name.is_empty() {
             url += &format!("&param={}", self.param_name);
-            if self.param_name_op!=PersondataVorlagenParamNameOp::default() {
+            if self.param_name_op!=PersondataTemplatesParamNameOp::default() {
                 url += &format!("&param_name_op={}", self.param_name_op);
             }
         }
 
         if !self.param_value.is_empty() {
             url += &format!("&value={}", self.param_value);
-            if self.param_value_op!=PersondataVorlagenParamValueOp::default() {
+            if self.param_value_op!=PersondataTemplatesParamValueOp::default() {
                 url += &format!("&param_value_op={}", self.param_value_op);
             }
         }
@@ -251,11 +275,11 @@ impl PersondataVorlagenQuery {
         url
     }
 
-    pub fn get_blocking(&self) -> Result<Vec<PersondataVorlagenResult>,ToolsError> {
+    pub fn get_blocking(&self) -> Result<Vec<PersondataTemplatesResult>,ToolsError> {
         let mut ret = Vec::new();
         let url = self.generate_csv_url();
         let client = reqwest::blocking::Client::builder()
-            .user_agent(TOOLS_INTERFACE_USER_AGENT)
+            .user_agent(crate::TOOLS_INTERFACE_USER_AGENT)
             .build()?;
         let response = client.get(&url).send()?;
         let mut reader = csv::ReaderBuilder::new()
@@ -266,7 +290,7 @@ impl PersondataVorlagenQuery {
         let headers = reader.headers()?.to_owned();
         for result in reader.records() {
             let record = result?;
-            let entry = PersondataVorlagenResult::from_record(&headers, &record);
+            let entry = PersondataTemplatesResult::from_record(&headers, &record);
             ret.push(entry);
         }
         Ok(ret)
@@ -278,9 +302,9 @@ mod tests {
     use super::*;
 
     #[test]
-    fn test_persondata_vorlagen_query() {
-        let query = PersondataVorlagenQuery::with_template("Roscher")
-            .with_occurrence(4, PersondataVorlagenOccOp::Equal)
+    fn test_persondata_templates_query() {
+        let query = PersondataTemplatesQuery::with_template("Roscher")
+            .with_occurrence_op(4, PersondataTemplatesOccOp::Equal)
             .in_table()
             .in_template()
             .in_reference()
@@ -288,13 +312,13 @@ mod tests {
             .in_article()
             .in_comments()
             .case_sensitive()
-            .parameter_name("name", PersondataVorlagenParamNameOp::Equal)
-            .parameter_value("value", PersondataVorlagenParamValueOp::Equal);
+            .parameter_name_op("name", PersondataTemplatesParamNameOp::Equal)
+            .parameter_value_op("value", PersondataTemplatesParamValueOp::Equal);
 
         assert_eq!(query.tmpl, "Roscher");
         assert_eq!(query.with_wl, true);
         assert_eq!(query.occ, Some(4));
-        assert_eq!(query.occ_op, PersondataVorlagenOccOp::Equal);
+        assert_eq!(query.occ_op, PersondataTemplatesOccOp::Equal);
         assert_eq!(query.in_t, true);
         assert_eq!(query.in_v, true);
         assert_eq!(query.in_r, true);
@@ -303,18 +327,16 @@ mod tests {
         assert_eq!(query.in_c, true);
         assert_eq!(query.case, true);
         assert_eq!(query.param_name, "name");
-        assert_eq!(query.param_name_op, PersondataVorlagenParamNameOp::Equal);
+        assert_eq!(query.param_name_op, PersondataTemplatesParamNameOp::Equal);
         assert_eq!(query.param_value, "value");
-        assert_eq!(query.param_value_op, PersondataVorlagenParamValueOp::Equal);
+        assert_eq!(query.param_value_op, PersondataTemplatesParamValueOp::Equal);
     }
 
     #[test]
     fn test_example() {
-        let query = PersondataVorlagenQuery::with_template("Roscher")
-            // .parameter_name("4", PersondataVorlagenParamNameOp::default())
-            ;
+        let query = PersondataTemplatesQuery::with_template("Roscher")
+            .parameter_name_op("4", PersondataTemplatesParamNameOp::default());
         let x = query.get_blocking().unwrap();
-        println!("{:?}", x);
         assert!(x.len()>2000);
 
     }
