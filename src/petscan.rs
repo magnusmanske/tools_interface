@@ -90,9 +90,7 @@ impl PetScan {
     #[cfg(feature = "blocking")]
     pub fn get_blocking(&mut self) -> Result<(), ToolsError> {
         let url = format!("https://petscan.wmflabs.org/?psid={psid}&format=json&output_compatability=quick-intersection", psid=self.psid);
-        let client = reqwest::blocking::Client::builder()
-            .user_agent(crate::TOOLS_INTERFACE_USER_AGENT)
-            .build()?;
+        let client = crate::ToolsInterface::blocking_client()?;
         let json: Value = client.get(&url).send()?.json()?;
         self.from_json(&json)
     }

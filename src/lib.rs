@@ -4,6 +4,7 @@ pub mod persondata_template;
 pub mod pagepile;
 pub mod petscan;
 pub mod quickstatements;
+pub mod quarry;
 
 pub use error::ToolsError;
 pub use persondata_template::*;
@@ -11,6 +12,7 @@ pub use pagepile::*;
 pub use petscan::*;
 pub use quickstatements::*;
 pub use tools_interface::*;
+pub use quarry::*;
 
 
 /*

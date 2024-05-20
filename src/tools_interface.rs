@@ -13,20 +13,31 @@ pub struct ToolsInterface {
 }
 
 impl ToolsInterface {
+    #[cfg(feature = "blocking")]
     pub fn blocking_client() -> Result<reqwest::blocking::Client,ToolsError> {
         Ok(reqwest::blocking::Client::builder()
             .user_agent(crate::TOOLS_INTERFACE_USER_AGENT)
             .build()?)
     }
 
+    #[cfg(feature = "tokio")]
     pub fn tokio_client() -> Result<reqwest::Client,ToolsError> {
         Ok(reqwest::Client::builder()
             .user_agent(crate::TOOLS_INTERFACE_USER_AGENT)
             .build()?)
     }
     
+    #[cfg(feature = "tokio")]
+    /// Returns a MediaWiki API object for Wikidata.
     pub async fn wikidata_api() -> Result<Api,ToolsError> {
         let api = Api::new("https://www.wikidata.org/w/api.php").await?;
+        Ok(api)
+    }
+
+    #[cfg(feature = "tokio")]
+    /// Returns a MediaWiki API object for Wikimedia Commons.
+    pub async fn commons_api() -> Result<Api,ToolsError> {
+        let api = Api::new("https://commons.wikimedia.org/w/api.php").await?;
         Ok(api)
     }
 
