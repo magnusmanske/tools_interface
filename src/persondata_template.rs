@@ -275,25 +275,48 @@ impl PersondataTemplatesQuery {
         url
     }
 
+    #[cfg(feature = "blocking")]
     pub fn get_blocking(&self) -> Result<Vec<PersondataTemplatesResult>,ToolsError> {
-        let mut ret = Vec::new();
         let url = self.generate_csv_url();
         let client = reqwest::blocking::Client::builder()
             .user_agent(crate::TOOLS_INTERFACE_USER_AGENT)
             .build()?;
         let response = client.get(&url).send()?;
+
         let mut reader = csv::ReaderBuilder::new()
             .delimiter(b';')
             .has_headers(true)
             .flexible(true)
             .from_reader(response);
         let headers = reader.headers()?.to_owned();
-        for result in reader.records() {
-            let record = result?;
-            let entry = PersondataTemplatesResult::from_record(&headers, &record);
-            ret.push(entry);
-        }
-        Ok(ret)
+
+        Ok(reader.records()
+            .filter_map(|result| result.ok())
+            .map(|record| PersondataTemplatesResult::from_record(&headers, &record))
+            .collect())
+    }
+
+    #[cfg(feature = "tokio")]
+    pub async fn get(&self) -> Result<Vec<PersondataTemplatesResult>,ToolsError> {
+        let url = self.generate_csv_url();
+        let client = reqwest::Client::builder()
+            .user_agent(crate::TOOLS_INTERFACE_USER_AGENT)
+            .build()?;
+
+        let response = client.get(&url).send().await?;
+        let body = response.text().await?;
+
+        let mut reader = csv::ReaderBuilder::new()
+            .delimiter(b';')
+            .has_headers(true)
+            .flexible(true)
+            .from_reader(body.as_bytes());
+        let headers = reader.headers()?.to_owned();
+
+        Ok(reader.records()
+            .filter_map(|result| result.ok())
+            .map(|record| PersondataTemplatesResult::from_record(&headers, &record))
+            .collect())
     }
 }
 
@@ -332,11 +355,22 @@ mod tests {
         assert_eq!(query.param_value_op, PersondataTemplatesParamValueOp::Equal);
     }
 
+    #[cfg(feature = "blocking")]
     #[test]
-    fn test_example() {
+    fn get_persondata_template_blocking() {
         let query = PersondataTemplatesQuery::with_template("Roscher")
             .parameter_name_op("4", PersondataTemplatesParamNameOp::default());
         let x = query.get_blocking().unwrap();
+        assert!(x.len()>2000);
+
+    }
+
+    #[cfg(feature = "tokio")]
+    #[tokio::test]
+    async fn get_persondata_template_tokio() {
+        let query = PersondataTemplatesQuery::with_template("Roscher")
+            .parameter_name_op("4", PersondataTemplatesParamNameOp::default());
+        let x = query.get().await.unwrap();
         assert!(x.len()>2000);
 
     }

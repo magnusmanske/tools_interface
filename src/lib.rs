@@ -6,7 +6,11 @@ pub static TOOLS_INTERFACE_USER_AGENT: &str = concat!(
 
 
 pub mod error;
-pub mod persondata_vorlage;
+pub mod persondata_template;
+pub mod pagepile;
+pub mod petscan;
 
 pub use error::ToolsError;
-pub use persondata_vorlage::*;
+pub use persondata_template::*;
+pub use pagepile::*;
+pub use petscan::*;

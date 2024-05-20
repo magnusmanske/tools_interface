@@ -2,16 +2,22 @@ use std::{error::Error, fmt::{self, Display, Formatter}};
 
 #[derive(Debug)]
 pub enum ToolsError {
+    Tool(String),
     Reqwest(reqwest::Error),
     Csv(csv::Error),
+    Json(String),
+    SerdeJson(serde_json::Error),
 }
 
 impl Display for ToolsError {
     #[cfg(not(tarpaulin_include))]
     fn fmt(&self, f: &mut Formatter) -> fmt::Result {
         match self {
+            ToolsError::Tool(e) => write!(f, "Tool error: {}", e),
             ToolsError::Reqwest(e) => write!(f, "Reqwest error: {}", e),
             ToolsError::Csv(e) => write!(f, "CSV error: {}", e),
+            ToolsError::Json(e) => write!(f, "JSON error: {}", e),
+            ToolsError::SerdeJson(e) => write!(f, "Serde JSON error: {}", e),
         }
     }
 }
@@ -28,5 +34,11 @@ impl From<reqwest::Error> for ToolsError {
 impl From<csv::Error> for ToolsError {
     fn from(e: csv::Error) -> Self {
         Self::Csv(e)
+    }
+}
+
+impl From<serde_json::Error> for ToolsError {
+    fn from(e: serde_json::Error) -> Self {
+        Self::SerdeJson(e)
     }
 }
