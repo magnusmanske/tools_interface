@@ -1,5 +1,7 @@
 use std::{error::Error, fmt::{self, Display, Formatter}};
 
+use mediawiki::media_wiki_error::MediaWikiError;
+
 #[derive(Debug)]
 pub enum ToolsError {
     Tool(String),
@@ -7,6 +9,7 @@ pub enum ToolsError {
     Csv(csv::Error),
     Json(String),
     SerdeJson(serde_json::Error),
+    MediaWiki(MediaWikiError)
 }
 
 impl Display for ToolsError {
@@ -18,6 +21,7 @@ impl Display for ToolsError {
             ToolsError::Csv(e) => write!(f, "CSV error: {}", e),
             ToolsError::Json(e) => write!(f, "JSON error: {}", e),
             ToolsError::SerdeJson(e) => write!(f, "Serde JSON error: {}", e),
+            ToolsError::MediaWiki(e) => write!(f, "MediaWiki error: {}", e),
         }
     }
 }
@@ -40,5 +44,11 @@ impl From<csv::Error> for ToolsError {
 impl From<serde_json::Error> for ToolsError {
     fn from(e: serde_json::Error) -> Self {
         Self::SerdeJson(e)
+    }
+}
+
+impl From<MediaWikiError> for ToolsError {
+    fn from(e: MediaWikiError) -> Self {
+        Self::MediaWiki(e)
     }
 }

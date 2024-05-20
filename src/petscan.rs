@@ -58,7 +58,7 @@ pub struct PetScanPage {
     pub page_id: u32,
     pub page_latest: String,
     pub page_len: u32,
-    pub page_namespace: i32,
+    pub page_namespace: i64,
     pub page_title: String,
     #[serde(default)]
     pub giu: Vec<PetScanFileUsage>,
@@ -66,7 +66,12 @@ pub struct PetScanPage {
     pub metadata: PetScanMetadata,
 }
 
-
+impl Into<mediawiki::title::Title> for PetScanPage {
+    fn into(self) -> mediawiki::title::Title {
+        let title_with_spaces = mediawiki::title::Title::underscores_to_spaces(&self.page_title);
+        mediawiki::title::Title::new(&title_with_spaces, self.page_namespace)
+    }
+}
 
 #[derive(Debug, Default, PartialEq)]
 pub struct PetScan {
@@ -143,7 +148,7 @@ mod tests {
 
     #[cfg(feature = "tokio")]
     #[tokio::test]
-    async fn test_pagepile_get_tokio() {
+    async fn test_pagepile_get_async() {
         let mut ps = PetScan::new(25951472);
         ps.get().await.unwrap();
         assert_eq!(ps.pages.len(),1);
@@ -177,5 +182,16 @@ mod tests {
         assert_eq!(ps.pages[0].metadata.coordinates(), Some((49.572731,8.82455)));
         assert_eq!(ps.pages[0].metadata.image, "Germany_wald-michelbach_catholic_church.jpg");
         assert_eq!(ps.pages[0].metadata.wikidata, "Q110825193");
+    }
+
+    #[test]
+    fn test_petscan_into_title() {
+        let ps = PetScanPage {
+            page_namespace: 0,
+            page_title: "Foo".to_string(),
+            ..Default::default()
+        };
+        let title: mediawiki::title::Title = ps.into();
+        assert_eq!(title, mediawiki::title::Title::new("Foo", 0));
     }
 }

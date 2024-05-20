@@ -73,7 +73,7 @@ impl QuickStatements {
     }
 
     #[cfg(feature = "tokio")]
-    pub async fn run_tokio(self) -> Result<u64,ToolsError> {
+    pub async fn run(self) -> Result<u64,ToolsError> {
         let url = &self.petscan_uri;
         let params = [
             ("action","import"),
@@ -111,8 +111,9 @@ mod tests {
     use wiremock::{MockServer, Mock, ResponseTemplate};
     use wiremock::matchers::{body_string_contains, method, path};
 
+    #[cfg(feature = "tokio")]
     #[tokio::test]
-    async fn test_quickstatements_run_tokio() {
+    async fn test_quickstatements_run_async() {
         let mock_path = format!("/api.php");
         let mock_server = MockServer::start().await;
         let token = "FAKE_TOKEN";
@@ -141,7 +142,7 @@ mod tests {
         let mut qs = QuickStatements::new("Magnus_Manske", token).batch_name("foobar");
         qs.petscan_uri = format!("{}{mock_path}",mock_server.uri());
         qs.add_command("Q4115189\tP31\tQ1");
-        let batch_id = qs.run_tokio().await.unwrap();
+        let batch_id = qs.run().await.unwrap();
         assert_eq!(batch_id, 12345);
     }
 }

@@ -94,7 +94,7 @@ mod tests {
 
     #[cfg(feature = "tokio")]
     #[tokio::test]
-    async fn test_pagepile_get_tokio() {
+    async fn test_pagepile_get_async() {
         let mut pp = PagePile::new(51805);
         pp.get().await.unwrap();
         assert_eq!(pp.language().unwrap(),"de");

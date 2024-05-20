@@ -1636,6 +1636,7 @@ name = "tools_interface"
 version = "0.1.0"
 dependencies = [
  "csv",
+ "futures",
  "http",
  "mediawiki",
  "reqwest",

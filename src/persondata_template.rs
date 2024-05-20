@@ -363,7 +363,7 @@ mod tests {
 
     #[cfg(feature = "tokio")]
     #[tokio::test]
-    async fn get_persondata_template_tokio() {
+    async fn get_persondata_template_async() {
         let query = PersondataTemplatesQuery::with_template("Roscher")
             .parameter_name_op("4", PersondataTemplatesParamNameOp::default());
         let x = query.get().await.unwrap();
