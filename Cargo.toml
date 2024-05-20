@@ -18,3 +18,7 @@ blocking = []
 tokio = ["dep:tokio"]
 all = ["blocking"]
 default = ["blocking","tokio"]
+
+[dev-dependencies]
+wiremock = "0.6"
+http = "1"

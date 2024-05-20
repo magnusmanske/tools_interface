@@ -95,9 +95,7 @@ impl PetScan {
     #[cfg(feature = "tokio")]
     pub async fn get(&mut self) -> Result<(), ToolsError> {
         let url = format!("https://petscan.wmflabs.org/?psid={psid}&format=json&output_compatability=quick-intersection", psid=self.psid);
-        let client = reqwest::Client::builder()
-            .user_agent(crate::TOOLS_INTERFACE_USER_AGENT)
-            .build()?;
+        let client = crate::ToolsInterface::tokio_client()?;
         let json = client.get(&url).send().await?.json().await?;
         self.from_json(&json)
     }
@@ -118,7 +116,6 @@ impl PetScan {
             let page: PetScanPage = serde_json::from_value(page_json.clone())?;
             self.pages.push(page);
         }
-        println!("{:#?}", self);
         Ok(())
     }
 }
@@ -168,6 +165,17 @@ mod tests {
         assert_eq!(ps.pages[0].metadata.img_width, 964);
         assert_eq!(ps.pages[0].page_id, 1166558);
         assert_eq!(ps.pages[0].page_title, "Germany_wald-michelbach_catholic_church.jpg");
+    }
+
+    #[cfg(feature = "blocking")]
+    #[test]
+    fn test_petscan_get_blocking_metadata() {
+        let mut ps = PetScan::new(28348714);
+        ps.get_blocking().unwrap();
+        assert_eq!(ps.pages[0].page_id, 12115738);
+        assert_eq!(ps.pages[0].page_title, "St._Laurentius_(Wald-Michelbach)");
         assert_eq!(ps.pages[0].metadata.coordinates(), Some((49.572731,8.82455)));
+        assert_eq!(ps.pages[0].metadata.image, "Germany_wald-michelbach_catholic_church.jpg");
+        assert_eq!(ps.pages[0].metadata.wikidata, "Q110825193");
     }
 }

@@ -19,9 +19,7 @@ impl PagePile {
     #[cfg(feature = "blocking")]
     pub fn get_blocking(&mut self) -> Result<(), ToolsError> {
         let url = format!("https://pagepile.toolforge.org/api.php?id={id}&action=get_data&doit&format=json", id=self.id);
-        let client = reqwest::blocking::Client::builder()
-            .user_agent(crate::TOOLS_INTERFACE_USER_AGENT)
-            .build()?;
+        let client = crate::ToolsInterface::blocking_client()?;
         let json = client.get(&url).send()?.json()?;
         self.from_json(&json)
     }
@@ -29,9 +27,7 @@ impl PagePile {
     #[cfg(feature = "tokio")]
     pub async fn get(&mut self) -> Result<(), ToolsError> {
         let url = format!("https://pagepile.toolforge.org/api.php?id={id}&action=get_data&doit&format=json", id=self.id);
-        let client = reqwest::Client::builder()
-            .user_agent(crate::TOOLS_INTERFACE_USER_AGENT)
-            .build()?;
+        let client = crate::ToolsInterface::tokio_client()?;
         let json = client.get(&url).send().await?.json().await?;
         self.from_json(&json)
     }

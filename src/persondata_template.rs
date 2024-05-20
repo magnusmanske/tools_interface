@@ -4,6 +4,7 @@
 //! Results are returned as a `Vec<PersondataTemplatesResult>`.
 //! 
 //! Example:
+//! #[cfg(not(doctest))]
 //! ```
 //! use tools_interface::{PersondataTemplatesQuery, PersondataTemplatesParamNameOp};
 //! 
@@ -278,9 +279,7 @@ impl PersondataTemplatesQuery {
     #[cfg(feature = "blocking")]
     pub fn get_blocking(&self) -> Result<Vec<PersondataTemplatesResult>,ToolsError> {
         let url = self.generate_csv_url();
-        let client = reqwest::blocking::Client::builder()
-            .user_agent(crate::TOOLS_INTERFACE_USER_AGENT)
-            .build()?;
+        let client = crate::ToolsInterface::blocking_client()?;
         let response = client.get(&url).send()?;
 
         let mut reader = csv::ReaderBuilder::new()
@@ -299,10 +298,7 @@ impl PersondataTemplatesQuery {
     #[cfg(feature = "tokio")]
     pub async fn get(&self) -> Result<Vec<PersondataTemplatesResult>,ToolsError> {
         let url = self.generate_csv_url();
-        let client = reqwest::Client::builder()
-            .user_agent(crate::TOOLS_INTERFACE_USER_AGENT)
-            .build()?;
-
+        let client = crate::ToolsInterface::tokio_client()?;
         let response = client.get(&url).send().await?;
         let body = response.text().await?;
 
