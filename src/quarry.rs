@@ -5,16 +5,18 @@ use crate::ToolsError;
 #[derive(Debug, Default, PartialEq)]
 pub struct Quarry {
     id: u64,
-    labels: Vec<String>,
+    columns: Vec<String>,
     rows: Vec<Vec<Value>>,
 }
 
 impl Quarry {
+    /// Initialize with a valid Quarry ID.
     pub fn new(id: u64) -> Self {
         Self { id , ..Default::default() }
     }
 
     #[cfg(feature = "blocking")]
+    /// Download the latest results from Quarry.
     pub fn get_blocking(&mut self) -> Result<(),ToolsError> {
         let url = format!("https://quarry.wmcloud.org/query/{id}/result/latest/0/json", id=self.id);
         let client = crate::ToolsInterface::blocking_client()?;
@@ -23,6 +25,7 @@ impl Quarry {
     }
 
     #[cfg(feature = "tokio")]
+    /// Download the latest results from Quarry.
     pub async fn get(&mut self) -> Result<(),ToolsError> {
         let url = format!("https://quarry.wmcloud.org/query/{id}/result/latest/0/json", id=self.id);
         let client = crate::ToolsInterface::tokio_client()?;
@@ -31,7 +34,7 @@ impl Quarry {
     }
 
     fn from_json(&mut self, json: &Value) -> Result<(), ToolsError> {
-        self.labels = json.get("headers")
+        self.columns = json.get("headers")
             .ok_or_else(|| ToolsError::Json("No headers in Quarry JSON".to_string()))?
             .as_array()
             .ok_or_else(|| ToolsError::Json("['headers'] is not an array in Quarry JSON".to_string()))?
@@ -51,18 +54,22 @@ impl Quarry {
         Ok(())
     }
     
-    pub fn labels(&self) -> &[String] {
-        &self.labels
+    /// Get the column titles.
+    pub fn columns(&self) -> &[String] {
+        &self.columns
     }
 
+    /// Get the column number for a given title.
     pub fn colnum(&self, title: &str) -> Option<usize> {
-        self.labels.iter().position(|l| l==title)
+        self.columns.iter().position(|l| l==title)
     }
     
+    /// Get the rows.
     pub fn rows(&self) -> &[Vec<Value>] {
         &self.rows
     }
     
+    /// Get the Quarry ID.
     pub fn id(&self) -> u64 {
         self.id
     }
@@ -72,14 +79,24 @@ impl Quarry {
 mod tests {
     use super::*;
 
+    #[cfg(feature = "blocking")]
+    #[test]
+    fn test_quarry_get_blocking() {
+        let mut quarry = Quarry::new(82868); // dewiki root categories
+        quarry.get_blocking().unwrap();
+        let column_number = quarry.colnum("page_title").unwrap();
+        assert_eq!(column_number, 2);
+        assert!(quarry.rows().iter().any(|row| row[column_number].as_str()==Some("!Hauptkategorie")));
+    }
+
+    #[cfg(feature = "tokio")]
     #[tokio::test]
     async fn test_quarry_get_async() {
         let mut quarry = Quarry::new(82868); // dewiki root categories
         quarry.get().await.unwrap();
-        let col = quarry.colnum("page_title").unwrap();
-        assert_eq!(col, 2);
-        assert!(quarry.rows().iter().any(|row| row[col].as_str()==Some("!Hauptkategorie"))
-        );
+        let column_number = quarry.colnum("page_title").unwrap();
+        assert_eq!(column_number, 2);
+        assert!(quarry.rows().iter().any(|row| row[column_number].as_str()==Some("!Hauptkategorie")));
     }
 
 }
