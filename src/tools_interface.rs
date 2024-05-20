@@ -31,38 +31,43 @@ impl ToolsInterface {
     }
 
     #[cfg(feature = "tokio")]
-    /// Takes a wiki and a list of (perfectly formatted) titles.
-    /// Returns a map of titles to Wikidata IDs.
+    /// Takes a wiki and a list of prefixed titles.
+    /// Returns a map of titles (spaces, not underscores) to Wikidata IDs.
     pub async fn wikidata_item_for_titles(wiki: &str, titles: &[String]) -> Result<HashMap<String,String>,ToolsError> {
-        use std::sync::Arc;
         use futures::stream::StreamExt;
 
         const MAX_CONCURRENT: usize = 5;
 
-        let api = Arc::new(Self::wikidata_api().await?);
-        let api_params = Self::generate_api_params(titles, wiki, api);
+        let api_params = Self::generate_api_params_for_wikidata_item_for_titles(titles, wiki).await?;
         let futures = api_params.iter().map(|(api,params)| api.get_query_api_json(params));
-        let mut ret = HashMap::new();
         let stream = futures::stream::iter(futures).buffered(MAX_CONCURRENT);
         let results = stream.collect::<Vec<_>>().await;
+        let mut ret = HashMap::new();
         for result in results {
             let result = result?;
-            for (id,v) in result["entities"].as_object().ok_or(ToolsError::Json("['entities'] is not an object".into()))?.iter() {
+            let entities = result["entities"]
+                .as_object()
+                .ok_or_else(|| ToolsError::Json("['entities'] is not an object".into()))?;
+            for (id,v) in entities.iter() {
                 let sitelinks = v.get("sitelinks")
-                    .ok_or(ToolsError::Json("['sitelinks'] does not exist".into()))?
+                    .ok_or_else(|| ToolsError::Json("['sitelinks'] does not exist".into()))?
                     .as_object()
-                    .ok_or(ToolsError::Json("['sitelinks'] is not an object".into()))?;
-                let sitelink = sitelinks.get(wiki).ok_or(ToolsError::Json("site link not found".into()))?;
+                    .ok_or_else(|| ToolsError::Json("['sitelinks'] is not an object".into()))?;
+                let sitelink = sitelinks.get(wiki)
+                    .ok_or_else(|| ToolsError::Json("site link not found".into()))?;
                 let title = sitelink.get("title")
-                    .ok_or(ToolsError::Json("['title'] does not exist".into()))?
-                    .as_str().ok_or(ToolsError::Json("['title'] is not a string".into()))?;
-                ret.insert(title.to_string(),id.to_string());
+                    .ok_or_else(|| ToolsError::Json("['title'] does not exist".into()))?
+                    .as_str()
+                    .ok_or_else(|| ToolsError::Json("['title'] is not a string".into()))?;
+                ret.insert(title.replace('_'," ").to_string(),id.to_string());
             }
         }
         Ok(ret)
     }
 
-    fn generate_api_params(titles: &[String], wiki: &str, api: std::sync::Arc<Api>) -> Vec<(std::sync::Arc<Api>, HashMap<String, String>)> {
+    async fn generate_api_params_for_wikidata_item_for_titles(titles: &[String], wiki: &str) -> Result<Vec<(std::sync::Arc<Api>, HashMap<String, String>)>,ToolsError> {
+        use std::sync::Arc;
+        let api = Arc::new(Self::wikidata_api().await?);
         let api_params: Vec<_> = titles.chunks(50)
             .map(|chunk| {
                 let chunk = chunk.join("|");
@@ -79,7 +84,7 @@ impl ToolsInterface {
                 (api.clone(),params)
             })
             .collect();
-        api_params
+        Ok(api_params)
     }
 }
 
