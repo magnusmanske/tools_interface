@@ -1,3 +1,20 @@
+//! # QuickStatements
+//! This module provides a way to run QuickStatements commands server-side.
+//! You can add commands and run them in a batch.
+//! This requires your username and a QuickStatements token.
+//! The token can be obtained from https://tools.wmflabs.org/quickstatements/#/user when logged in.
+//! For this to work, you need to have run a batch (server side) before manually
+//! (that is, in the QuickStatements web interface), so your OAuth details can be filled in once.
+//! There are blocking and async methods available.
+//!
+//! ## Example
+//! #[cfg(not(doctest))]
+//! ```rust
+//! let mut qs = QuickStatements::new("Your user name", "Your PetScan token").batch_name("My batch");
+//! qs.add_command("Q4115189\tP31\tQ1");
+//! let batch_id = qs.run().await.unwrap();
+//! ```
+
 use crate::ToolsError;
 use serde_json::Value;
 

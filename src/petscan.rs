@@ -1,3 +1,17 @@
+//! # PetScan
+//! This module provides a wrapper around the PetScan tool.
+//! You can perform a PetScan query via a PSID.
+//! There are blocking and async methods available.
+//!
+//! ## Example
+//! #[cfg(not(doctest))]
+//! ```rust
+//! let mut ps = PetScan::new(12345); // Your PSID
+//! ps.parameters_mut().push(("foo".to_string(), "bar".to_string())); // Override parameters from the PSID
+//! ps.get().await.unwrap();
+//! let page_titles = ps.pages.iter().map(|page| page.page_title).collect::<Vec<_>>();
+//! ```
+
 use std::collections::HashMap;
 
 use crate::ToolsError;
@@ -76,6 +90,7 @@ impl Into<mediawiki::title::Title> for PetScanPage {
 #[derive(Debug, Default, PartialEq)]
 pub struct PetScan {
     psid: u32,
+    parameters: Vec<(String, String)>,
     pages: Vec<PetScanPage>,
     namespaces: HashMap<i32, String>,
     query: Option<String>,
@@ -94,7 +109,7 @@ impl PetScan {
     pub fn get_blocking(&mut self) -> Result<(), ToolsError> {
         let url = format!("https://petscan.wmflabs.org/?psid={psid}&format=json&output_compatability=quick-intersection", psid=self.psid);
         let client = crate::ToolsInterface::blocking_client()?;
-        let json: Value = client.get(&url).send()?.json()?;
+        let json: Value = client.get(&url).query(&self.parameters).send()?.json()?;
         self.from_json(&json)
     }
 
@@ -102,7 +117,13 @@ impl PetScan {
     pub async fn get(&mut self) -> Result<(), ToolsError> {
         let url = format!("https://petscan.wmflabs.org/?psid={psid}&format=json&output_compatability=quick-intersection", psid=self.psid);
         let client = crate::ToolsInterface::tokio_client()?;
-        let json = client.get(&url).send().await?.json().await?;
+        let json = client
+            .get(&url)
+            .query(&self.parameters)
+            .send()
+            .await?
+            .json()
+            .await?;
         self.from_json(&json)
     }
 
@@ -130,6 +151,10 @@ impl PetScan {
         }
         Ok(())
     }
+
+    pub fn parameters_mut(&mut self) -> &mut Vec<(String, String)> {
+        &mut self.parameters
+    }
 }
 
 #[cfg(test)]
@@ -137,7 +162,7 @@ mod tests {
     use super::*;
 
     #[test]
-    fn test_new() {
+    fn test_petscan_new() {
         let ps = PetScan::new(123);
         assert_eq!(ps.psid, 123);
         assert_eq!(ps.pages, vec![]);

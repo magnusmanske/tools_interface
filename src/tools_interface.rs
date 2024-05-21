@@ -1,7 +1,18 @@
-use std::time::Duration;
+//! # ToolsInterface
+//! Some common helper functions for interacting with the Wikimedia Toolforge environment,
+//! e.g. creating HTTP clients, getting Wikidata item ID for page titles, etc.
+//!
+//! ## Example
+//! #[cfg(not(doctest))]
+//! ```rust
+//! let result = ToolsInterface::wikidata_item_for_titles(wiki, ["Albert Einstein".to_string()]).await.unwrap();
+//! let q = result.get("Albert Einstein").unwrap(); // Yields "Q937"
+//! ```
+
+use crate::ToolsError;
 use mediawiki::api::Api;
 use std::collections::HashMap;
-use crate::ToolsError;
+use std::time::Duration;
 
 const DEFAULT_CLIENT_TIMEOUT_SECONDS: u64 = 60;
 

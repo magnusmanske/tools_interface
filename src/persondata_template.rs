@@ -5,7 +5,7 @@
 //!
 //! Example:
 //! #[cfg(not(doctest))]
-//! ```
+//! ```rust
 //! use tools_interface::{PersondataTemplatesQuery, PersondataTemplatesParamNameOp};
 //!
 //! fn main() {

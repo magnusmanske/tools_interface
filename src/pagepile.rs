@@ -1,3 +1,17 @@
+//! # PagePile
+//! Module for interacting with the PagePile tool.
+//! You can retrieve the list of pages in a PagePile by ID.
+//! There are blocking and async methods available.
+//!
+//! ## Example
+//! #[cfg(not(doctest))]
+//! ```rust
+//! let mut pp = PagePile::new(12345); // Your PagePile ID
+//! pp.get().await.unwrap();
+//! let wiki = pp.wiki().unwrap();
+//! let page_titles = pp.prefixed_titles();
+//! ```
+
 use crate::ToolsError;
 use serde_json::Value;
 
