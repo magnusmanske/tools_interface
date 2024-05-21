@@ -5,6 +5,7 @@ pub mod persondata_template;
 pub mod petscan;
 pub mod quarry;
 pub mod quickstatements;
+pub mod site;
 pub mod tools_interface;
 
 pub use error::ToolsError;
@@ -14,6 +15,7 @@ pub use persondata_template::*;
 pub use petscan::*;
 pub use quarry::*;
 pub use quickstatements::*;
+pub use site::Site;
 pub use tools_interface::*;
 
 /*
