@@ -1,6 +1,9 @@
-use crate::ToolsError;
+use std::time::Duration;
 use mediawiki::api::Api;
 use std::collections::HashMap;
+use crate::ToolsError;
+
+const DEFAULT_CLIENT_TIMEOUT_SECONDS: u64 = 60;
 
 pub static TOOLS_INTERFACE_USER_AGENT: &str =
     concat!(env!("CARGO_PKG_NAME"), "/", env!("CARGO_PKG_VERSION"),);
@@ -12,6 +15,7 @@ impl ToolsInterface {
     pub fn blocking_client() -> Result<reqwest::blocking::Client, ToolsError> {
         Ok(reqwest::blocking::Client::builder()
             .user_agent(crate::TOOLS_INTERFACE_USER_AGENT)
+            .timeout(Duration::from_secs(DEFAULT_CLIENT_TIMEOUT_SECONDS))
             .build()?)
     }
 
@@ -19,6 +23,7 @@ impl ToolsInterface {
     pub fn tokio_client() -> Result<reqwest::Client, ToolsError> {
         Ok(reqwest::Client::builder()
             .user_agent(crate::TOOLS_INTERFACE_USER_AGENT)
+            .timeout(Duration::from_secs(DEFAULT_CLIENT_TIMEOUT_SECONDS))
             .build()?)
     }
 
