@@ -1,5 +1,5 @@
-use serde_json::Value;
 use crate::ToolsError;
+use serde_json::Value;
 
 #[derive(Debug, Default, PartialEq)]
 pub struct QuickStatements {
@@ -49,57 +49,66 @@ impl QuickStatements {
     #[cfg(feature = "blocking")]
     /// Starts the server-side batch and consumes the QuickStatements object.
     /// Returns the batch ID if successful.
-    pub fn run_blocking(self) -> Result<u64,ToolsError> {
+    pub fn run_blocking(self) -> Result<u64, ToolsError> {
         let url = &self.petscan_uri;
         let params = [
-            ("action","import"),
-            ("submit","1"),
-            ("format","v1"),
-            ("token",&self.token),
-            ("username",&self.user_name),
-            ("batchname",&self.batch_name),
-            ("data",&self.commands),
-            ("compress",&self.compress.to_string()),
-            ("site",&self.site),
+            ("action", "import"),
+            ("submit", "1"),
+            ("format", "v1"),
+            ("token", &self.token),
+            ("username", &self.user_name),
+            ("batchname", &self.batch_name),
+            ("data", &self.commands),
+            ("compress", &self.compress.to_string()),
+            ("site", &self.site),
         ];
         let client = crate::ToolsInterface::blocking_client()?;
         let j: Value = client.post(url).form(&params).send()?.json()?;
-        let status = j["status"].as_str().ok_or(ToolsError::Json("['status'] is not a string".into()))?;
-        if status!="OK" {
-            return Err(ToolsError::Json(format!("QuickStatements status is not OK: {:?}", status)));
+        let status = j["status"]
+            .as_str()
+            .ok_or(ToolsError::Json("['status'] is not a string".into()))?;
+        if status != "OK" {
+            return Err(ToolsError::Json(format!(
+                "QuickStatements status is not OK: {:?}",
+                status
+            )));
         }
-        let batch_id = j["batch_id"].as_u64().ok_or(ToolsError::Json("['batch_id'] is not an integer".into()))?;
+        let batch_id = j["batch_id"]
+            .as_u64()
+            .ok_or(ToolsError::Json("['batch_id'] is not an integer".into()))?;
         Ok(batch_id)
     }
 
     #[cfg(feature = "tokio")]
-    pub async fn run(self) -> Result<u64,ToolsError> {
+    pub async fn run(self) -> Result<u64, ToolsError> {
         let url = &self.petscan_uri;
         let params = [
-            ("action","import"),
-            ("submit","1"),
-            ("format","v1"),
-            ("token",&self.token),
-            ("username",&self.user_name),
-            ("batchname",&self.batch_name),
-            ("data",&self.commands),
-            ("compress",if self.compress {"1"} else {"0"}),
-            ("site",&self.site),
+            ("action", "import"),
+            ("submit", "1"),
+            ("format", "v1"),
+            ("token", &self.token),
+            ("username", &self.user_name),
+            ("batchname", &self.batch_name),
+            ("data", &self.commands),
+            ("compress", if self.compress { "1" } else { "0" }),
+            ("site", &self.site),
         ];
         let client = crate::ToolsInterface::tokio_client()?;
-        let resopnse = client.post(url)
-            .form(&params)
-            .send()
-            .await?;
-        let j: Value = resopnse
-            .json()
-            .await?;
+        let resopnse = client.post(url).form(&params).send().await?;
+        let j: Value = resopnse.json().await?;
 
-        let status = j["status"].as_str().ok_or(ToolsError::Json("['status'] is not a string".into()))?;
-        if status!="OK" {
-            return Err(ToolsError::Json(format!("QuickStatements status is not OK: {:?}", status)));
+        let status = j["status"]
+            .as_str()
+            .ok_or(ToolsError::Json("['status'] is not a string".into()))?;
+        if status != "OK" {
+            return Err(ToolsError::Json(format!(
+                "QuickStatements status is not OK: {:?}",
+                status
+            )));
         }
-        let batch_id = j["batch_id"].as_u64().ok_or(ToolsError::Json("['batch_id'] is not an integer".into()))?;
+        let batch_id = j["batch_id"]
+            .as_u64()
+            .ok_or(ToolsError::Json("['batch_id'] is not an integer".into()))?;
         Ok(batch_id)
     }
 }
@@ -108,8 +117,8 @@ impl QuickStatements {
 mod tests {
     use super::*;
     use serde_json::json;
-    use wiremock::{MockServer, Mock, ResponseTemplate};
     use wiremock::matchers::{body_string_contains, method, path};
+    use wiremock::{Mock, MockServer, ResponseTemplate};
 
     #[cfg(feature = "tokio")]
     #[tokio::test]
@@ -138,9 +147,10 @@ mod tests {
                 "site": "wikidata",
                 "status": "OK"
             })))
-            .mount(&mock_server).await;
+            .mount(&mock_server)
+            .await;
         let mut qs = QuickStatements::new("Magnus_Manske", token).batch_name("foobar");
-        qs.petscan_uri = format!("{}{mock_path}",mock_server.uri());
+        qs.petscan_uri = format!("{}{mock_path}", mock_server.uri());
         qs.add_command("Q4115189\tP31\tQ1");
         let batch_id = qs.run().await.unwrap();
         assert_eq!(batch_id, 12345);

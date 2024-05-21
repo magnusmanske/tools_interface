@@ -2,12 +2,12 @@
 //! Queries the [Persondata Vorlagen tool](https://persondata.toolforge.org/vorlagen) for information about template usage on Germam Wikipedia.
 //! Build a `PersondataTemplatesQuery` and call `get_blocking()` to get the results.
 //! Results are returned as a `Vec<PersondataTemplatesResult>`.
-//! 
+//!
 //! Example:
 //! #[cfg(not(doctest))]
 //! ```
 //! use tools_interface::{PersondataTemplatesQuery, PersondataTemplatesParamNameOp};
-//! 
+//!
 //! fn main() {
 //!     let results = PersondataTemplatesQuery::with_template("Roscher")
 //!         .parameter_name("4")
@@ -17,9 +17,8 @@
 //! }
 //! ```
 
-use std::{collections::HashMap, fmt};
 use crate::ToolsError;
-
+use std::{collections::HashMap, fmt};
 
 #[derive(Debug, Default, PartialEq)]
 pub enum PersondataTemplatesOccOp {
@@ -93,7 +92,7 @@ impl fmt::Display for PersondataTemplatesParamNameOp {
 pub struct PersondataTemplatesResult {
     article: String,
     usage_number: u32,
-    params: HashMap<u32,String>,
+    params: HashMap<u32, String>,
 }
 
 impl PersondataTemplatesResult {
@@ -109,50 +108,49 @@ impl PersondataTemplatesResult {
                             if let Ok(key) = other.parse::<u32>() {
                                 result.params.insert(key, value.to_string());
                             } else {
-                            //     println!("Unknown header: {other}:{value}");
+                                //     println!("Unknown header: {other}:{value}");
                             }
-                        },
-                        _ => {},
+                        }
+                        _ => {}
                     }
-                },
+                }
                 None => (),
-            
             }
         }
         result
     }
-    
+
     pub fn article(&self) -> &str {
         &self.article
     }
-    
+
     /// "Einbindung"
     pub fn usage_number(&self) -> u32 {
         self.usage_number
     }
-    
-    pub fn params(&self) -> &HashMap<u32,String> {
+
+    pub fn params(&self) -> &HashMap<u32, String> {
         &self.params
     }
 }
 
 #[derive(Debug, Default)]
 pub struct PersondataTemplatesQuery {
-    with_wl: bool, // Mit Weiterleitungen
-    tmpl: String, // Name der Vorlage
-    occ: Option<u32>, // Einschränkung auf die wievielte Einbindung
-    occ_op: PersondataTemplatesOccOp, // Vergleichs-Operator
-    in_t: bool, // Nur Vorlage die direkt in einer Tabelle enthalten sind
-    in_v: bool, // Nur Vorlage die direkt in einer anderen Vorlage enthalten sind
-    in_r: bool, // Nur Vorlage die direkt in einer Referenz enthalten sind
-    in_l: bool, // Nur Vorlage die direkt in einem Wikilink (Datei:) enthalten sind
-    in_a: bool, // Nur Vorlage die direkt in einem Artikel enthalten sind
+    with_wl: bool,                                   // Mit Weiterleitungen
+    tmpl: String,                                    // Name der Vorlage
+    occ: Option<u32>,                                // Einschränkung auf die wievielte Einbindung
+    occ_op: PersondataTemplatesOccOp,                // Vergleichs-Operator
+    in_t: bool,         // Nur Vorlage die direkt in einer Tabelle enthalten sind
+    in_v: bool,         // Nur Vorlage die direkt in einer anderen Vorlage enthalten sind
+    in_r: bool,         // Nur Vorlage die direkt in einer Referenz enthalten sind
+    in_l: bool,         // Nur Vorlage die direkt in einem Wikilink (Datei:) enthalten sind
+    in_a: bool,         // Nur Vorlage die direkt in einem Artikel enthalten sind
     param_name: String, // Name des Vorlagen-Parameters, mehrere Parameter können durch Pipe-Zeichen getrennt werden (nur bei Vergleich auf 'Gleich', 'Ungleich', 'Like' und 'NOT Like')
     param_name_op: PersondataTemplatesParamNameOp, // Vergleichs-Operator
     param_value: String, // Name des Vorlagen-Parameters, mehrere Parameter können durch Pipe-Zeichen getrennt werden (nur bei Vergleich auf 'Gleich', 'Ungleich', 'Like' und 'NOT Like')
     param_value_op: PersondataTemplatesParamValueOp, // Vergleichs-Operator
-    in_c: bool, // Text innerhalb HTML-Kommentaren des Parameterinhalts durchsuchen
-    case: bool, // Groß-/Kleinschreibung im Parameterinhalt beachten
+    in_c: bool,          // Text innerhalb HTML-Kommentaren des Parameterinhalts durchsuchen
+    case: bool,          // Groß-/Kleinschreibung im Parameterinhalt beachten
 }
 
 impl PersondataTemplatesQuery {
@@ -173,7 +171,11 @@ impl PersondataTemplatesQuery {
     }
 
     pub fn with_occurrence_op(self, occ: u32, occ_op: PersondataTemplatesOccOp) -> Self {
-        Self { occ: Some(occ), occ_op, ..self }
+        Self {
+            occ: Some(occ),
+            occ_op,
+            ..self
+        }
     }
 
     pub fn in_table(self) -> Self {
@@ -208,16 +210,32 @@ impl PersondataTemplatesQuery {
         self.parameter_name_op(param_name, PersondataTemplatesParamNameOp::default())
     }
 
-    pub fn parameter_name_op<S: Into<String>>(self, param_name: S, param_name_op: PersondataTemplatesParamNameOp) -> Self {
-        Self { param_name: param_name.into(), param_name_op, ..self }
+    pub fn parameter_name_op<S: Into<String>>(
+        self,
+        param_name: S,
+        param_name_op: PersondataTemplatesParamNameOp,
+    ) -> Self {
+        Self {
+            param_name: param_name.into(),
+            param_name_op,
+            ..self
+        }
     }
 
     pub fn parameter_value<S: Into<String>>(self, param_value: S) -> Self {
         self.parameter_value_op(param_value, PersondataTemplatesParamValueOp::default())
     }
 
-    pub fn parameter_value_op<S: Into<String>>(self, param_value: S, param_value_op: PersondataTemplatesParamValueOp) -> Self {
-        Self { param_value: param_value.into(), param_value_op, ..self }
+    pub fn parameter_value_op<S: Into<String>>(
+        self,
+        param_value: S,
+        param_value_op: PersondataTemplatesParamValueOp,
+    ) -> Self {
+        Self {
+            param_value: param_value.into(),
+            param_value_op,
+            ..self
+        }
     }
 
     fn generate_csv_url(&self) -> String {
@@ -232,21 +250,21 @@ impl PersondataTemplatesQuery {
 
         if let Some(occ) = self.occ {
             url += &format!("&occ={occ}");
-            if self.occ_op!=PersondataTemplatesOccOp::default() {
+            if self.occ_op != PersondataTemplatesOccOp::default() {
                 url += &format!("&occ_op={}", self.occ_op);
             }
         }
 
         if !self.param_name.is_empty() {
             url += &format!("&param={}", self.param_name);
-            if self.param_name_op!=PersondataTemplatesParamNameOp::default() {
+            if self.param_name_op != PersondataTemplatesParamNameOp::default() {
                 url += &format!("&param_name_op={}", self.param_name_op);
             }
         }
 
         if !self.param_value.is_empty() {
             url += &format!("&value={}", self.param_value);
-            if self.param_value_op!=PersondataTemplatesParamValueOp::default() {
+            if self.param_value_op != PersondataTemplatesParamValueOp::default() {
                 url += &format!("&param_value_op={}", self.param_value_op);
             }
         }
@@ -277,7 +295,7 @@ impl PersondataTemplatesQuery {
     }
 
     #[cfg(feature = "blocking")]
-    pub fn get_blocking(&self) -> Result<Vec<PersondataTemplatesResult>,ToolsError> {
+    pub fn get_blocking(&self) -> Result<Vec<PersondataTemplatesResult>, ToolsError> {
         let url = self.generate_csv_url();
         let client = crate::ToolsInterface::blocking_client()?;
         let response = client.get(&url).send()?;
@@ -289,14 +307,15 @@ impl PersondataTemplatesQuery {
             .from_reader(response);
         let headers = reader.headers()?.to_owned();
 
-        Ok(reader.records()
+        Ok(reader
+            .records()
             .filter_map(|result| result.ok())
             .map(|record| PersondataTemplatesResult::from_record(&headers, &record))
             .collect())
     }
 
     #[cfg(feature = "tokio")]
-    pub async fn get(&self) -> Result<Vec<PersondataTemplatesResult>,ToolsError> {
+    pub async fn get(&self) -> Result<Vec<PersondataTemplatesResult>, ToolsError> {
         let url = self.generate_csv_url();
         let client = crate::ToolsInterface::tokio_client()?;
         let response = client.get(&url).send().await?;
@@ -309,7 +328,8 @@ impl PersondataTemplatesQuery {
             .from_reader(body.as_bytes());
         let headers = reader.headers()?.to_owned();
 
-        Ok(reader.records()
+        Ok(reader
+            .records()
             .filter_map(|result| result.ok())
             .map(|record| PersondataTemplatesResult::from_record(&headers, &record))
             .collect())
@@ -357,8 +377,7 @@ mod tests {
         let query = PersondataTemplatesQuery::with_template("Roscher")
             .parameter_name_op("4", PersondataTemplatesParamNameOp::default());
         let x = query.get_blocking().unwrap();
-        assert!(x.len()>2000);
-
+        assert!(x.len() > 2000);
     }
 
     #[cfg(feature = "tokio")]
@@ -367,7 +386,6 @@ mod tests {
         let query = PersondataTemplatesQuery::with_template("Roscher")
             .parameter_name_op("4", PersondataTemplatesParamNameOp::default());
         let x = query.get().await.unwrap();
-        assert!(x.len()>2000);
-
+        assert!(x.len() > 2000);
     }
 }

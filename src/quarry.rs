@@ -12,13 +12,19 @@ pub struct Quarry {
 impl Quarry {
     /// Initialize with a valid Quarry ID.
     pub fn new(id: u64) -> Self {
-        Self { id , ..Default::default() }
+        Self {
+            id,
+            ..Default::default()
+        }
     }
 
     #[cfg(feature = "blocking")]
     /// Download the latest results from Quarry.
-    pub fn get_blocking(&mut self) -> Result<(),ToolsError> {
-        let url = format!("https://quarry.wmcloud.org/query/{id}/result/latest/0/json", id=self.id);
+    pub fn get_blocking(&mut self) -> Result<(), ToolsError> {
+        let url = format!(
+            "https://quarry.wmcloud.org/query/{id}/result/latest/0/json",
+            id = self.id
+        );
         let client = crate::ToolsInterface::blocking_client()?;
         let json: Value = client.get(&url).send()?.json()?;
         self.from_json(&json)
@@ -26,23 +32,30 @@ impl Quarry {
 
     #[cfg(feature = "tokio")]
     /// Download the latest results from Quarry.
-    pub async fn get(&mut self) -> Result<(),ToolsError> {
-        let url = format!("https://quarry.wmcloud.org/query/{id}/result/latest/0/json", id=self.id);
+    pub async fn get(&mut self) -> Result<(), ToolsError> {
+        let url = format!(
+            "https://quarry.wmcloud.org/query/{id}/result/latest/0/json",
+            id = self.id
+        );
         let client = crate::ToolsInterface::tokio_client()?;
         let json: Value = client.get(&url).send().await?.json().await?;
         self.from_json(&json)
     }
 
     fn from_json(&mut self, json: &Value) -> Result<(), ToolsError> {
-        self.columns = json.get("headers")
+        self.columns = json
+            .get("headers")
             .ok_or_else(|| ToolsError::Json("No headers in Quarry JSON".to_string()))?
             .as_array()
-            .ok_or_else(|| ToolsError::Json("['headers'] is not an array in Quarry JSON".to_string()))?
+            .ok_or_else(|| {
+                ToolsError::Json("['headers'] is not an array in Quarry JSON".to_string())
+            })?
             .iter()
             .map(|s| s.as_str().unwrap_or("").to_string())
             .collect();
 
-        self.rows = json.get("rows")
+        self.rows = json
+            .get("rows")
             .ok_or_else(|| ToolsError::Json("No rows in Quarry JSON".to_string()))?
             .as_array()
             .ok_or_else(|| ToolsError::Json("Rows is not an array in Quarry JSON".to_string()))?
@@ -53,7 +66,7 @@ impl Quarry {
 
         Ok(())
     }
-    
+
     /// Get the column titles.
     pub fn columns(&self) -> &[String] {
         &self.columns
@@ -61,14 +74,14 @@ impl Quarry {
 
     /// Get the column number for a given title.
     pub fn colnum(&self, title: &str) -> Option<usize> {
-        self.columns.iter().position(|l| l==title)
+        self.columns.iter().position(|l| l == title)
     }
-    
+
     /// Get the rows.
     pub fn rows(&self) -> &[Vec<Value>] {
         &self.rows
     }
-    
+
     /// Get the Quarry ID.
     pub fn id(&self) -> u64 {
         self.id
@@ -86,7 +99,10 @@ mod tests {
         quarry.get_blocking().unwrap();
         let column_number = quarry.colnum("page_title").unwrap();
         assert_eq!(column_number, 2);
-        assert!(quarry.rows().iter().any(|row| row[column_number].as_str()==Some("!Hauptkategorie")));
+        assert!(quarry
+            .rows()
+            .iter()
+            .any(|row| row[column_number].as_str() == Some("!Hauptkategorie")));
     }
 
     #[cfg(feature = "tokio")]
@@ -96,7 +112,9 @@ mod tests {
         quarry.get().await.unwrap();
         let column_number = quarry.colnum("page_title").unwrap();
         assert_eq!(column_number, 2);
-        assert!(quarry.rows().iter().any(|row| row[column_number].as_str()==Some("!Hauptkategorie")));
+        assert!(quarry
+            .rows()
+            .iter()
+            .any(|row| row[column_number].as_str() == Some("!Hauptkategorie")));
     }
-
 }

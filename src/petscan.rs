@@ -84,7 +84,10 @@ pub struct PetScan {
 
 impl PetScan {
     pub fn new(psid: u32) -> Self {
-        Self { psid, ..Default::default() }
+        Self {
+            psid,
+            ..Default::default()
+        }
     }
 
     #[cfg(feature = "blocking")]
@@ -105,8 +108,11 @@ impl PetScan {
 
     fn from_json(&mut self, json: &Value) -> Result<(), ToolsError> {
         self.status = json["status"].as_str().map(|s| s.to_string());
-        if self.status!=Some("OK".to_string()) {
-            return Err(ToolsError::Tool(format!("PetScan status is not OK: {:?}", self.status)));
+        if self.status != Some("OK".to_string()) {
+            return Err(ToolsError::Tool(format!(
+                "PetScan status is not OK: {:?}",
+                self.status
+            )));
         }
         self.query = json["query"].as_str().map(|s| s.to_string());
         self.namespaces = json["namespaces"]
@@ -115,7 +121,10 @@ impl PetScan {
             .iter()
             .map(|(k, v)| (k.parse().unwrap(), v.as_str().unwrap().to_string()))
             .collect();
-        for page_json in json["pages"].as_array().ok_or(ToolsError::Json("['pages'] has no array".into()))? {
+        for page_json in json["pages"]
+            .as_array()
+            .ok_or(ToolsError::Json("['pages'] has no array".into()))?
+        {
             let page: PetScanPage = serde_json::from_value(page_json.clone())?;
             self.pages.push(page);
         }
@@ -139,7 +148,7 @@ mod tests {
     fn test_petscan_get_blocking() {
         let mut ps = PetScan::new(25951472);
         ps.get_blocking().unwrap();
-        assert_eq!(ps.pages.len(),1);
+        assert_eq!(ps.pages.len(), 1);
         assert_eq!(ps.pages[0].page_id, 3361346);
         assert_eq!(ps.pages[0].page_title, "Magnus_Manske");
     }
@@ -149,7 +158,7 @@ mod tests {
     async fn test_pagepile_get_async() {
         let mut ps = PetScan::new(25951472);
         ps.get().await.unwrap();
-        assert_eq!(ps.pages.len(),1);
+        assert_eq!(ps.pages.len(), 1);
         assert_eq!(ps.pages[0].page_id, 3361346);
         assert_eq!(ps.pages[0].page_title, "Magnus_Manske");
     }
@@ -159,15 +168,22 @@ mod tests {
     fn test_petscan_get_blocking_file() {
         let mut ps = PetScan::new(28348161);
         ps.get_blocking().unwrap();
-        let expected_giui = PetScanFileUsage { ns: 0, page: "St._Laurentius_(Wald-Michelbach)".to_string(), wiki: "dewiki".to_string() };
-        assert!(ps.pages[0].giu.iter().any(|giu| giu==&expected_giui));
-        assert!(ps.pages[0].giu.len()>2);
+        let expected_giui = PetScanFileUsage {
+            ns: 0,
+            page: "St._Laurentius_(Wald-Michelbach)".to_string(),
+            wiki: "dewiki".to_string(),
+        };
+        assert!(ps.pages[0].giu.iter().any(|giu| giu == &expected_giui));
+        assert!(ps.pages[0].giu.len() > 2);
         assert!(!ps.pages[0].metadata.disambiguation);
         assert_eq!(ps.pages[0].metadata.img_size, 796383);
         assert_eq!(ps.pages[0].metadata.img_height, 1364);
         assert_eq!(ps.pages[0].metadata.img_width, 964);
         assert_eq!(ps.pages[0].page_id, 1166558);
-        assert_eq!(ps.pages[0].page_title, "Germany_wald-michelbach_catholic_church.jpg");
+        assert_eq!(
+            ps.pages[0].page_title,
+            "Germany_wald-michelbach_catholic_church.jpg"
+        );
     }
 
     #[cfg(feature = "blocking")]
@@ -177,8 +193,14 @@ mod tests {
         ps.get_blocking().unwrap();
         assert_eq!(ps.pages[0].page_id, 12115738);
         assert_eq!(ps.pages[0].page_title, "St._Laurentius_(Wald-Michelbach)");
-        assert_eq!(ps.pages[0].metadata.coordinates(), Some((49.572731,8.82455)));
-        assert_eq!(ps.pages[0].metadata.image, "Germany_wald-michelbach_catholic_church.jpg");
+        assert_eq!(
+            ps.pages[0].metadata.coordinates(),
+            Some((49.572731, 8.82455))
+        );
+        assert_eq!(
+            ps.pages[0].metadata.image,
+            "Germany_wald-michelbach_catholic_church.jpg"
+        );
         assert_eq!(ps.pages[0].metadata.wikidata, "Q110825193");
     }
 
