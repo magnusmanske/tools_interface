@@ -1,3 +1,6 @@
+//! # Error module
+//! `ToolsError` is a wrapper around several error types that can be returned by the tools.
+
 use std::{
     error::Error,
     fmt::{self, Display, Formatter},

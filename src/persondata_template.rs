@@ -4,17 +4,10 @@
 //! Results are returned as a `Vec<PersondataTemplatesResult>`.
 //!
 //! Example:
-//! #[cfg(not(doctest))]
 //! ```rust
-//! use tools_interface::{PersondataTemplatesQuery, PersondataTemplatesParamNameOp};
-//!
-//! fn main() {
-//!     let results = PersondataTemplatesQuery::with_template("Roscher")
-//!         .parameter_name("4")
-//!         .get_blocking()
-//!         .unwrap();
-//!     println!("{results:?}");
-//! }
+//! let results: Vec<PersondataTemplatesResult> = PersondataTemplatesQuery::with_template("Roscher")
+//!     .parameter_name("4")
+//!     .get().await.unwrap();
 //! ```
 
 use crate::ToolsError;

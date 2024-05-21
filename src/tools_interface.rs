@@ -3,7 +3,6 @@
 //! e.g. creating HTTP clients, getting Wikidata item ID for page titles, etc.
 //!
 //! ## Example
-//! #[cfg(not(doctest))]
 //! ```rust
 //! let result = ToolsInterface::wikidata_item_for_titles(wiki, ["Albert Einstein".to_string()]).await.unwrap();
 //! let q = result.get("Albert Einstein").unwrap(); // Yields "Q937"
@@ -25,7 +24,7 @@ impl ToolsInterface {
     #[cfg(feature = "blocking")]
     pub fn blocking_client() -> Result<reqwest::blocking::Client, ToolsError> {
         Ok(reqwest::blocking::Client::builder()
-            .user_agent(crate::TOOLS_INTERFACE_USER_AGENT)
+            .user_agent(TOOLS_INTERFACE_USER_AGENT)
             .timeout(Duration::from_secs(DEFAULT_CLIENT_TIMEOUT_SECONDS))
             .build()?)
     }
@@ -33,7 +32,7 @@ impl ToolsInterface {
     #[cfg(feature = "tokio")]
     pub fn tokio_client() -> Result<reqwest::Client, ToolsError> {
         Ok(reqwest::Client::builder()
-            .user_agent(crate::TOOLS_INTERFACE_USER_AGENT)
+            .user_agent(TOOLS_INTERFACE_USER_AGENT)
             .timeout(Duration::from_secs(DEFAULT_CLIENT_TIMEOUT_SECONDS))
             .build()?)
     }

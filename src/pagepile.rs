@@ -4,7 +4,6 @@
 //! There are blocking and async methods available.
 //!
 //! ## Example
-//! #[cfg(not(doctest))]
 //! ```rust
 //! let mut pp = PagePile::new(12345); // Your PagePile ID
 //! pp.get().await.unwrap();

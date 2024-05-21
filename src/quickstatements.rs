@@ -8,7 +8,6 @@
 //! There are blocking and async methods available.
 //!
 //! ## Example
-//! #[cfg(not(doctest))]
 //! ```rust
 //! let mut qs = QuickStatements::new("Your user name", "Your PetScan token").batch_name("My batch");
 //! qs.add_command("Q4115189\tP31\tQ1");

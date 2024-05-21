@@ -1,6 +1,6 @@
 [package]
 name = "tools_interface"
-version = "0.1.0"
+version = "0.1.1"
 authors = ["Magnus Manske <magnusmanske@googlemail.com>"]
 edition = "2021"
 description = "Abstractions of serveral Wikipedia/Wikimedia/Wikidata-related tools"
@@ -17,7 +17,7 @@ futures = "0.3"
 lazy_static = "^1"
 mediawiki = "^0.2"
 regex = "^1"
-reqwest = { version = "0.12", features = ["json", "blocking"] }
+reqwest = { version = "^0.12", features = ["json", "blocking"] }
 serde_json = "^1"
 serde = "^1"
 tokio = { version = "^1", features = [

@@ -4,7 +4,6 @@
 //! There are blocking and async methods available.
 //!
 //! ## Example
-//! #[cfg(not(doctest))]
 //! ```rust
 //! let mut ps = PetScan::new(12345); // Your PSID
 //! ps.parameters_mut().push(("foo".to_string(), "bar".to_string())); // Override parameters from the PSID

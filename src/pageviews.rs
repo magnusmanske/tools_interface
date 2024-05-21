@@ -8,7 +8,6 @@
 //! Views for multiple pages, on multiple projects, can be retrieved concurrently for a single time span.
 //!
 //! ## Example
-//! #[cfg(not(doctest))]
 //! ```rust
 //! let pv = Pageviews::new(
 //!     PageviewsGranularity::Monthly, // Get monthly views

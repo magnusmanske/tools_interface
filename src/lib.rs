@@ -1,3 +1,18 @@
+//! # Tools Interface
+//!
+//! This rust crate implements structs to easily interface with several Wikipedia/Wikidata/Wikimedia tools and APIs.
+//!
+//! ## Supported tools
+//!
+//! - PagePile (read only)
+//! - Pageviews API
+//! - Persondata Template
+//! - PetScan
+//! - Quarry (existing results only)
+//! - QuickStatements (start batches)
+//!
+//! If you would like to see other tools supported, add a request to the [Issue tracker](https://github.com/magnusmanske/tools_interface/issues).
+
 pub mod error;
 pub mod pagepile;
 pub mod pageviews;
@@ -9,14 +24,14 @@ pub mod site;
 pub mod tools_interface;
 
 pub use error::ToolsError;
-pub use pagepile::*;
+pub use pagepile::PagePile;
 pub use pageviews::*;
 pub use persondata_template::*;
 pub use petscan::*;
-pub use quarry::*;
-pub use quickstatements::*;
+pub use quarry::Quarry;
+pub use quickstatements::QuickStatements;
 pub use site::Site;
-pub use tools_interface::*;
+pub use tools_interface::ToolsInterface;
 
 /*
 TODO

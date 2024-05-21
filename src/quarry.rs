@@ -4,7 +4,6 @@
 //! There are blocking and async methods available.
 //!
 //! ## Example
-//! #[cfg(not(doctest))]
 //! ```rust
 //! let mut quarry = Quarry::new(12345); // Your Quarry query ID
 //! quarry.get().await.unwrap();
