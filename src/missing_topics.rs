@@ -145,7 +145,7 @@ impl MissingTopics {
             .as_object()
             .ok_or(ToolsError::Json("['results'] has no object".into()))?
             .iter()
-            .map(|(k, v)| (k.to_string(), v.as_u64().unwrap()))
+            .filter_map(|(k, v)| Some((k.to_string(), v.as_u64()?)))
             .collect();
         self.url_used = j["url"]
             .as_str()

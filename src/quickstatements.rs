@@ -110,8 +110,8 @@ impl QuickStatements {
             ("site", &self.site),
         ];
         let client = crate::ToolsInterface::tokio_client()?;
-        let resopnse = client.post(url).form(&params).send().await?;
-        let j: Value = resopnse.json().await?;
+        let response = client.post(url).form(&params).send().await?;
+        let j: Value = response.json().await?;
 
         let status = j["status"]
             .as_str()

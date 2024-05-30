@@ -4,6 +4,7 @@
 //!
 //! ## Supported tools
 //!
+//! - [Completer](https://completer.toolforge.org/)
 //! - [PagePile](https://pagepile.toolforge.org/) (read only)
 //! - [Pageviews API](https://wikitech.wikimedia.org/wiki/Analytics/AQS/Pageviews)
 //! - [Persondata Template](https://persondata.toolforge.org/vorlagen/)
@@ -22,6 +23,7 @@ pub mod persondata_template;
 pub mod petscan;
 pub mod quarry;
 pub mod quickstatements;
+pub mod completer;
 pub mod site;
 pub mod tools_interface;
 
@@ -35,6 +37,7 @@ pub use quarry::Quarry;
 pub use quickstatements::QuickStatements;
 pub use site::Site;
 pub use tools_interface::ToolsInterface;
+pub use completer::{Completer, CompleterFilter};
 
 /*
 TODO
