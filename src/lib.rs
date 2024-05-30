@@ -8,12 +8,14 @@
 //! - [Pageviews API](https://wikitech.wikimedia.org/wiki/Analytics/AQS/Pageviews)
 //! - [Persondata Template](https://persondata.toolforge.org/vorlagen/)
 //! - [PetScan](https://petscan.wmflabs.org/)
+//! - [Missing Topics](https://missingtopics.toolforge.org/)
 //! - [Quarry](https://quarry.wmcloud.org/) (existing results only)
 //! - [QuickStatements](https://quickstatements.toolforge.org/) (start batches)
 //!
 //! If you would like to see other tools supported, add a request to the [Issue tracker](https://github.com/magnusmanske/tools_interface/issues).
 
 pub mod error;
+pub mod missing_topics;
 pub mod pagepile;
 pub mod pageviews;
 pub mod persondata_template;
@@ -24,6 +26,7 @@ pub mod site;
 pub mod tools_interface;
 
 pub use error::ToolsError;
+pub use missing_topics::MissingTopics;
 pub use pagepile::PagePile;
 pub use pageviews::*;
 pub use persondata_template::*;

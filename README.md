@@ -8,6 +8,7 @@ This rust crate implements structs to easily interface with several Wikipedia/Wi
 - [Pageviews API](https://wikitech.wikimedia.org/wiki/Analytics/AQS/Pageviews)
 - [Persondata Template](https://persondata.toolforge.org/vorlagen/)
 - [PetScan](https://petscan.wmflabs.org/)
+- [Missing Topics](https://missingtopics.toolforge.org/)
 - [Quarry](https://quarry.wmcloud.org/) (existing results only)
 - [QuickStatements](https://quickstatements.toolforge.org/) (start batches)
 
