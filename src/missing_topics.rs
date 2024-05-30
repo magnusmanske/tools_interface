@@ -5,11 +5,15 @@
 //!
 //! ## Example
 //! ```rust
-//! let mut mt = MissingTopics::new(Site::from_wiki("dewiki").unwrap());
-//! mt = mt.with_article("Biologie");
-//! mt = mt.no_template_links(true);
+//! let mut mt = MissingTopics::new(Site::from_wiki("dewiki").unwrap())
+//!     .with_article("Biologie")
+//!     .no_template_links(true);
 //! mt.run().await.unwrap();
-//! println!("Results: {:?}", mt.results());
+//! mt.results()
+//!     .iter()
+//!     .for_each(|(title, count)| {
+//!        println!("{title} wanted {count} times");
+//!     });
 //! ```
 
 use serde_json::Value;
@@ -22,10 +26,9 @@ pub struct MissingTopics {
     category_depth: Option<u32>,
     category: Option<String>,
     article: Option<String>,
-    limit_results: Option<u32>,
+    occurs_more_often_than: Option<u32>,
     no_template_links: Option<bool>,
-    /// true if omitted!
-    no_singles: Option<bool>,
+    no_singles: bool,
 
     url_used: String,
     results: Vec<(String, u64)>,
@@ -33,6 +36,7 @@ pub struct MissingTopics {
 }
 
 impl MissingTopics {
+    /// Create a new MissingTopics object with the given site.
     pub fn new(site: Site) -> Self {
         Self {
             site,
@@ -41,29 +45,32 @@ impl MissingTopics {
         }
     }
 
+    /// Set the category and category depth for the query.
+    /// The category depth is the number of subcategories to include.
+    /// Only one of category or article can be set.
     pub fn with_category(mut self, category: &str, category_depth: u32) -> Self {
         self.category = Some(category.into());
         self.category_depth = Some(category_depth);
         self
     }
 
+    /// Set the article for the query.
+    /// Only one of category or article can be set.
     pub fn with_article(mut self, article: &str) -> Self {
         self.article = Some(article.into());
         self
     }
 
-    pub fn limit(mut self, limit_results: u32) -> Self {
-        self.limit_results = Some(limit_results);
+    /// Any result must have more than the given number of occurrences.
+    pub fn limit(mut self, occurs_more_often_than: u32) -> Self {
+        self.no_singles = true;
+        self.occurs_more_often_than = Some(occurs_more_often_than);
         self
     }
 
+    /// Filter out links from templates used in category pages.
     pub fn no_template_links(mut self, no_template_links: bool) -> Self {
         self.no_template_links = Some(no_template_links);
-        self
-    }
-
-    pub fn no_singles(mut self, no_singles: bool) -> Self {
-        self.no_singles = Some(no_singles);
         self
     }
 
@@ -92,22 +99,22 @@ impl MissingTopics {
             ));
         }
         match self.no_singles {
-            Some(true) => parameters.push(("nosingles".to_string(), "1".to_string())),
-            Some(false) => parameters.push(("nosingles".to_string(), "0".to_string())),
-            _ => {}
+            true => parameters.push(("nosingles".to_string(), "1".to_string())),
+            false => parameters.push(("nosingles".to_string(), "0".to_string())),
         }
         match self.no_template_links {
             Some(true) => parameters.push(("no_template_links".to_string(), "1".to_string())),
             Some(false) => parameters.push(("no_template_links".to_string(), "0".to_string())),
             _ => {}
         }
-        if let Some(limit_results) = self.limit_results {
-            parameters.push(("limitnum".to_string(), limit_results.to_string()));
+        if let Some(occurs_more_often_than) = self.occurs_more_often_than {
+            parameters.push(("limitnum".to_string(), occurs_more_often_than.to_string()));
         }
         Ok(parameters)
     }
 
     #[cfg(feature = "tokio")]
+    /// Run the query asynchronously.
     pub async fn run(&mut self) -> Result<(), ToolsError> {
         let url = &self.tool_url;
         let parameters = self.generate_paramters()?;
@@ -118,6 +125,7 @@ impl MissingTopics {
     }
 
     #[cfg(feature = "blocking")]
+    /// Run the query in a blocking manner.
     pub fn run_blocking(&mut self) -> Result<(), ToolsError> {
         let url = &self.tool_url;
         let parameters = self.generate_paramters()?;
@@ -146,12 +154,20 @@ impl MissingTopics {
         Ok(())
     }
 
+    /// Get the URL used for the last query.
     pub fn url_used(&self) -> &str {
         &self.url_used
     }
 
+    /// Get the results of the last query.
+    /// The results are a list of tuples with the missing article and the number of occurrences.
     pub fn results(&self) -> &[(String, u64)] {
         &self.results
+    }
+
+    /// Get the site used for the query.
+    pub fn site(&self) -> &Site {
+        &self.site
     }
 }
 
@@ -185,10 +201,10 @@ mod tests {
     #[tokio::test]
     async fn test_missing_topics_run_async() {
         let mock_server = get_mock_server().await;
-        let mut mt = MissingTopics::new(Site::from_wiki("dewiki").unwrap());
+        let mut mt = MissingTopics::new(Site::from_wiki("dewiki").unwrap())
+            .with_article("Biologie")
+            .no_template_links(true);
         mt.tool_url = format!("{}/", mock_server.uri());
-        mt = mt.with_article("Biologie");
-        mt = mt.no_template_links(true);
         mt.run().await.unwrap();
         assert_eq!(mt.results.len(), 6);
         assert_eq!(mt.results[5].0, "Zellphysiologie");
