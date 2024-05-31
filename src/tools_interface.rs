@@ -13,7 +13,7 @@ use mediawiki::api::Api;
 use std::collections::HashMap;
 use std::time::Duration;
 
-const DEFAULT_CLIENT_TIMEOUT_SECONDS: u64 = 60;
+const DEFAULT_CLIENT_TIMEOUT_SECONDS: u64 = 300; // 5min
 
 pub static TOOLS_INTERFACE_USER_AGENT: &str =
     concat!(env!("CARGO_PKG_NAME"), "/", env!("CARGO_PKG_VERSION"),);

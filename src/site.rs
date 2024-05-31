@@ -7,6 +7,7 @@
 use lazy_static::lazy_static;
 use mediawiki::api::Api;
 use regex::Regex;
+use serde::Serialize;
 
 use crate::ToolsError;
 
@@ -16,7 +17,7 @@ lazy_static! {
     static ref RE_WEBSERVER_WIKI: Regex = Regex::new(r"^(.+)(wik.+)$").expect("Regex error");
 }
 
-#[derive(Clone, Debug, Default, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 pub struct Site {
     wiki: String,
     language: String,

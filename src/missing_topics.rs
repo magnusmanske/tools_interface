@@ -16,9 +16,8 @@
 //!     });
 //! ```
 
-use serde_json::Value;
-
 use crate::{Site, ToolsError};
+use serde_json::Value;
 
 #[derive(Debug, Default, PartialEq)]
 pub struct MissingTopics {

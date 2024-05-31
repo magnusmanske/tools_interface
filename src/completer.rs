@@ -17,23 +17,23 @@
 //!     });
 //! ```
 
-use serde_json::{json, Value};
 use crate::ToolsError;
+use serde_json::{json, Value};
 
 #[derive(Debug, PartialEq)]
 /// This is a filter value for `Completer`.
 /// It can be a category (with depth), a PetScan ID, or a template.
 /// Categories and templates must not have a namespace prefix.
 pub enum CompleterFilter {
-    Category{category: String, depth: u32},
-    PetScan{psid: String},
-    Template{template: String},
+    Category { category: String, depth: u32 },
+    PetScan { psid: String },
+    Template { template: String },
 }
 
 impl CompleterFilter {
     fn to_json(&self) -> Value {
         match self {
-            CompleterFilter::Category{category, depth} => {
+            CompleterFilter::Category { category, depth } => {
                 json!({
                     "type": "category",
                     "specific": {
@@ -42,16 +42,16 @@ impl CompleterFilter {
                         "talk": false,
                     }
                 })
-            },
-            CompleterFilter::PetScan{psid} => {
+            }
+            CompleterFilter::PetScan { psid } => {
                 json!({
                     "type": "petscan",
                     "specific": {
                         "id": psid,
                     }
                 })
-            },
-            CompleterFilter::Template{template} => {
+            }
+            CompleterFilter::Template { template } => {
                 json!({
                     "type": "template",
                     "specific": {
@@ -59,7 +59,7 @@ impl CompleterFilter {
                         "talk": false,
                     }
                 })
-            },
+            }
         }
     }
 }
@@ -135,18 +135,17 @@ impl Completer {
 
     fn from_json(&mut self, j: Value) -> Result<(), ToolsError> {
         if j["success"].as_bool() != Some(true) {
-            return Err(ToolsError::Tool(format!(
-                "Completer has failed: {:?}",
-                j
-            )));
+            return Err(ToolsError::Tool(format!("Completer has failed: {:?}", j)));
         }
-        self.id = j["meta"]["id"].as_u64().ok_or(ToolsError::Tool("No ID".to_string()))?;
+        self.id = j["meta"]["id"]
+            .as_u64()
+            .ok_or(ToolsError::Tool("No ID".to_string()))?;
         self.results = j["data"]
             .as_array()
             .ok_or(ToolsError::Json("['data'] has no array".into()))?
             .iter()
             .filter_map(|arr| arr.as_array())
-            .filter_map(|arr| Some((arr.get(0)?,arr.get(1)?)))
+            .filter_map(|arr| Some((arr.get(0)?, arr.get(1)?)))
             .filter_map(|(k, v)| Some((k.as_str()?.to_string(), v.as_u64()?)))
             .collect();
         Ok(())
@@ -166,7 +165,7 @@ impl Completer {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use wiremock::matchers::{method, path, body_json};
+    use wiremock::matchers::{body_json, method, path};
     use wiremock::{Mock, MockServer, ResponseTemplate};
 
     async fn get_mock_server() -> MockServer {
@@ -187,11 +186,20 @@ mod tests {
     async fn test_completer_async() {
         let mock_server = get_mock_server().await;
         let mut c = Completer::new("de", "en")
-            .filter(CompleterFilter::Category{category: "Biologie".to_string(), depth: 0})
+            .filter(CompleterFilter::Category {
+                category: "Biologie".to_string(),
+                depth: 0,
+            })
             .ignore_cache();
         c.tool_url = format!("{}/data", mock_server.uri());
         c.run().await.unwrap();
         assert_eq!(c.id(), 6623);
-        assert_eq!(c.results(), &[("Optimum".to_string(), 4), ("Zustandsänderung".to_string(), 1)]);
+        assert_eq!(
+            c.results(),
+            &[
+                ("Optimum".to_string(), 4),
+                ("Zustandsänderung".to_string(), 1)
+            ]
+        );
     }
 }

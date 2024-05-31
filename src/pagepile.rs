@@ -11,12 +11,13 @@
 //! let page_titles = pp.prefixed_titles();
 //! ```
 
-use crate::ToolsError;
+use crate::{Site, ToolsError};
 use serde_json::Value;
 
 #[derive(Debug, Default, PartialEq)]
 pub struct PagePile {
     id: u32,
+
     prefixed_titles: Vec<String>,
     language: Option<String>,
     project: Option<String>,
@@ -24,6 +25,7 @@ pub struct PagePile {
 }
 
 impl PagePile {
+    /// Creates a new PagePile with the given ID.
     pub fn new(id: u32) -> Self {
         Self {
             id,
@@ -32,6 +34,7 @@ impl PagePile {
     }
 
     #[cfg(feature = "blocking")]
+    /// Retrieves the PagePile.
     pub fn get_blocking(&mut self) -> Result<(), ToolsError> {
         let url = format!(
             "https://pagepile.toolforge.org/api.php?id={id}&action=get_data&doit&format=json",
@@ -43,6 +46,7 @@ impl PagePile {
     }
 
     #[cfg(feature = "tokio")]
+    /// Retrieves the PagePile asynchronously.
     pub async fn get(&mut self) -> Result<(), ToolsError> {
         let url = format!(
             "https://pagepile.toolforge.org/api.php?id={id}&action=get_data&doit&format=json",
@@ -86,20 +90,37 @@ impl PagePile {
         Ok(())
     }
 
+    /// Returns the namespace-prefixed pages in the PagePile.
     pub fn prefixed_titles(&self) -> &[String] {
         &self.prefixed_titles
     }
 
+    /// Returns the language for the PagePile, if known.
     pub fn language(&self) -> Option<&String> {
         self.language.as_ref()
     }
 
+    /// Returns the project for the PagePile, if known.
     pub fn project(&self) -> Option<&String> {
         self.project.as_ref()
     }
 
+    /// Returns the wiki for the PagePile, if known.
     pub fn wiki(&self) -> Option<&String> {
         self.wiki.as_ref()
+    }
+
+    /// Returns the site for the PagePile, if wither the wiki, or the language and project are known.
+    pub fn site(&self) -> Option<crate::Site> {
+        Some(match &self.wiki {
+            Some(wiki) => Site::from_wiki(wiki)?,
+            None => {
+                Site::from_language_project(
+                    self.language.as_ref()?,
+                    self.project.as_ref()?,
+                )
+            }
+        })
     }
 }
 

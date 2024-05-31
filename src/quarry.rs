@@ -5,12 +5,15 @@
 //!
 //! ## Example
 //! ```rust
-//! let mut quarry = Quarry::new(12345); // Your Quarry query ID
-//! quarry.get().await.unwrap();
-//! let column_number = quarry.colnum("page_title").unwrap();
-//! let page_titles = quarry.rows().iter()
-//!     .filter_map(|row| row[column_number].as_str())
-//!     .collect::<Vec<_>>();
+//! #[tokio::main]
+//! async fn main() {
+//!     let mut quarry = Quarry::new(12345); // Your Quarry query ID
+//!     quarry.get().await.unwrap();
+//!     let column_number = quarry.colnum("page_title").unwrap();
+//!     let page_titles = quarry.rows().iter()
+//!         .filter_map(|row| row[column_number].as_str())
+//!         .collect::<Vec<_>>();
+//! }
 //! ```
 
 use serde_json::Value;

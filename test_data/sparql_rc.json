@@ -1,0 +1,341 @@
+{
+  "status": "OK",
+  "items": [
+    {
+      "id": "Q121134008",
+      "changed": true,
+      "label": "Castelluzzo",
+      "diff_url": "https://www.wikidata.org/w/index.php?title=Q121134008&type=revision&diff=2142329255&oldid=1984122805",
+      "created": false,
+      "reverted": false,
+      "ts_before": "20240501102926",
+      "ts_after": "20240501222229",
+      "editors": [
+        { "user_id": "1229412", "user_text": "Yhaou", "edits": 1 },
+        { "user_id": "4228", "user_text": "Eric-92", "edits": 1 },
+        { "user_id": "6815437", "user_text": "Prometeo fun", "edits": 11 }
+      ],
+      "diff": "<tr><td colspan=\"2\" class=\"diff-lineno\">label / it</td><td colspan=\"2\" class=\"diff-lineno\">label / it</td></tr><tr><td class=\"diff-marker\" data-marker=\"\u2212\"></td><td class=\"diff-deletedline\"><div>Castelluzzo <del class=\"diffchange diffchange-inline\">Monaldeschi-Funari</del></div></td><td class=\"diff-marker\" data-marker=\"+\"></td><td class=\"diff-addedline\"><div>Castelluzzo</div></td></tr><tr><td colspan=\"2\" class=\"diff-lineno\">label / en</td><td colspan=\"2\" class=\"diff-lineno\">label / en</td></tr><tr><td class=\"diff-marker\" data-marker=\"\u2212\"></td><td class=\"diff-deletedline\"><div>Castelluzzo <del class=\"diffchange diffchange-inline\">Monaldeschi-Funari</del></div></td><td class=\"diff-marker\" data-marker=\"+\"></td><td class=\"diff-addedline\"><div>Castelluzzo</div></td></tr><tr><td colspan=\"2\" class=\"diff-lineno\">label / fr</td><td colspan=\"2\" class=\"diff-lineno\">label / fr</td></tr><tr><td colspan=\"2\">\u00a0</td><td class=\"diff-marker\" data-marker=\"+\"></td><td class=\"diff-addedline\"><div><ins class=\"diffchange diffchange-inline\">Castelluzzo</ins></div></td></tr><tr><td colspan=\"2\" class=\"diff-lineno\">aliases / it / 0</td><td colspan=\"2\" class=\"diff-lineno\">aliases / it / 0</td></tr><tr><td colspan=\"2\">\u00a0</td><td class=\"diff-marker\" data-marker=\"+\"></td><td class=\"diff-addedline\"><div><ins class=\"diffchange diffchange-inline\">Monaldeschi-Funari Castle</ins></div></td></tr><tr><td colspan=\"2\" class=\"diff-lineno\">aliases / en / 0</td><td colspan=\"2\" class=\"diff-lineno\">aliases / en / 0</td></tr><tr><td colspan=\"2\">\u00a0</td><td class=\"diff-marker\" data-marker=\"+\"></td><td class=\"diff-addedline\"><div><ins class=\"diffchange diffchange-inline\">Castello Monaldeschi-Funari</ins></div></td></tr><tr><td colspan=\"2\" class=\"diff-lineno\">aliases / fr / 0</td><td colspan=\"2\" class=\"diff-lineno\">aliases / fr / 0</td></tr><tr><td colspan=\"2\">\u00a0</td><td class=\"diff-marker\" data-marker=\"+\"></td><td class=\"diff-addedline\"><div><ins class=\"diffchange diffchange-inline\">Ch\u00e2teau Monaldeschi-Funari</ins></div></td></tr><tr><td colspan=\"2\" class=\"diff-lineno\">description / it</td><td colspan=\"2\" class=\"diff-lineno\">description / it</td></tr><tr><td class=\"diff-marker\" data-marker=\"\u2212\"></td><td class=\"diff-deletedline\"><div><del class=\"diffchange diffchange-inline\">edificio </del>storico fortificato tra i centri di Orvieto e Lubriano, in corrispondenza della via Romea Germanica</div></td><td class=\"diff-marker\" data-marker=\"+\"></td><td class=\"diff-addedline\"><div><ins class=\"diffchange diffchange-inline\">Edificio </ins>storico fortificato tra i centri di Orvieto e Lubriano, in corrispondenza della via Romea Germanica<ins class=\"diffchange diffchange-inline\">.</ins></div></td></tr><tr><td colspan=\"2\" class=\"diff-lineno\">description / en</td><td colspan=\"2\" class=\"diff-lineno\">description / en</td></tr><tr><td colspan=\"2\">\u00a0</td><td class=\"diff-marker\" data-marker=\"+\"></td><td class=\"diff-addedline\"><div><ins class=\"diffchange diffchange-inline\">Fortified building between the towns of Orvieto and Lubriano in Italy.</ins></div></td></tr><tr><td colspan=\"2\" class=\"diff-lineno\">description / fr</td><td colspan=\"2\" class=\"diff-lineno\">description / fr</td></tr><tr><td colspan=\"2\">\u00a0</td><td class=\"diff-marker\" data-marker=\"+\"></td><td class=\"diff-addedline\"><div><ins class=\"diffchange diffchange-inline\">ch\u00e2teau dans le Latium (Italie)</ins></div></td></tr><tr><td colspan=\"2\" class=\"diff-lineno\">links / frwiki / name</td><td colspan=\"2\" class=\"diff-lineno\">links / frwiki / name</td></tr><tr><td colspan=\"2\">\u00a0</td><td class=\"diff-marker\" data-marker=\"+\"></td><td class=\"diff-addedline\"><div><ins class=\"diffchange diffchange-inline\"><a dir=\"auto\" href=\"https://fr.wikipedia.org/wiki/Ch%C3%A2teau_Monaldeschi-Funari\" hreflang=\"fr\">Ch\u00e2teau Monaldeschi-Funari</a></ins></div></td></tr>"
+    },
+    {
+      "id": "Q1011369",
+      "changed": true,
+      "label": "Burg Coppenbr\u00fcgge",
+      "diff_url": "https://www.wikidata.org/w/index.php?title=Q1011369&type=revision&diff=2142227147&oldid=1759272627",
+      "created": false,
+      "reverted": false,
+      "ts_before": "20240501183954",
+      "ts_after": "20240501194100",
+      "editors": [
+        { "user_id": "1895734", "user_text": "M2k~dewiki", "edits": 2 }
+      ],
+      "diff": "<tr><td colspan=\"2\" class=\"diff-lineno\">aliases / de / 0</td><td colspan=\"2\" class=\"diff-lineno\">aliases / de / 0</td></tr><tr><td colspan=\"2\">\u00a0</td><td class=\"diff-marker\" data-marker=\"+\"></td><td class=\"diff-addedline\"><div><ins class=\"diffchange diffchange-inline\">Schloss Coppenbr\u00fcgge</ins></div></td></tr><tr><td colspan=\"2\" class=\"diff-lineno\"></td><td colspan=\"2\" class=\"diff-lineno\">Property / <a title=\"Property:P527\" href=\"/wiki/Property:P527\">has part(s)</a></td></tr><tr><td colspan=\"2\">\u00a0</td><td class=\"diff-marker\" data-marker=\"+\"></td><td class=\"diff-addedline\"><div><ins class=\"diffchange diffchange-inline\"><span><a title=\"Q125738584\" href=\"/wiki/Q125738584\">Q125738584</a></span></ins></div></td></tr><tr><td colspan=\"2\" class=\"diff-lineno\"></td><td colspan=\"2\" class=\"diff-lineno\">Property / <a title=\"Property:P527\" href=\"/wiki/Property:P527\">has part(s)</a>: <a title=\"Q125738584\" href=\"/wiki/Q125738584\">Q125738584</a> / rank</td></tr><tr><td colspan=\"2\">\u00a0</td><td class=\"diff-marker\" data-marker=\"+\"></td><td class=\"diff-addedline\"><div><ins class=\"diffchange diffchange-inline\"><span>Normal rank</span></ins></div></td></tr>"
+    },
+    {
+      "id": "Q5277200",
+      "changed": true,
+      "label": "Dimdim Castle",
+      "diff_url": "https://www.wikidata.org/w/index.php?title=Q5277200&type=revision&diff=2142225244&oldid=2075371813",
+      "created": false,
+      "reverted": false,
+      "ts_before": "20240501193823",
+      "ts_after": "20240501193823",
+      "editors": [{ "user_id": "6816690", "user_text": "Idand34", "edits": 1 }],
+      "diff": "<tr><td colspan=\"2\" class=\"diff-lineno\">description / he</td><td colspan=\"2\" class=\"diff-lineno\">description / he</td></tr><tr><td colspan=\"2\">\u00a0</td><td class=\"diff-marker\" data-marker=\"+\"></td><td class=\"diff-addedline\"><div><ins class=\"diffchange diffchange-inline\">\u05de\u05d1\u05e6\u05e8 \u05d1\u05d0\u05d9\u05e8\u05d0\u05df</ins></div></td></tr>"
+    },
+    {
+      "id": "Q12371646",
+      "changed": true,
+      "label": "Otep\u00e4\u00e4 Castle",
+      "diff_url": "https://www.wikidata.org/w/index.php?title=Q12371646&type=revision&diff=2142205580&oldid=2096522591",
+      "created": false,
+      "reverted": false,
+      "ts_before": "20240501190746",
+      "ts_after": "20240501190746",
+      "editors": [{ "user_id": "0", "user_text": "87.119.178.21", "edits": 1 }],
+      "diff": "<tr><td colspan=\"2\" class=\"diff-lineno\">links / enwiki / name</td><td colspan=\"2\" class=\"diff-lineno\">links / enwiki / name</td></tr><tr><td colspan=\"2\">\u00a0</td><td class=\"diff-marker\" data-marker=\"+\"></td><td class=\"diff-addedline\"><div><ins class=\"diffchange diffchange-inline\"><a dir=\"auto\" href=\"https://en.wikipedia.org/wiki/Otep%C3%A4%C3%A4_Castle\" hreflang=\"en\">Otep\u00e4\u00e4 Castle</a></ins></div></td></tr>"
+    },
+    {
+      "id": "Q106048931",
+      "changed": true,
+      "label": "Rocchetta",
+      "diff_url": "https://www.wikidata.org/w/index.php?title=Q106048931&type=revision&diff=2142186052&oldid=1956010084",
+      "created": false,
+      "reverted": false,
+      "ts_before": "20240501184054",
+      "ts_after": "20240501184054",
+      "editors": [{ "user_id": "471303", "user_text": "Sciking", "edits": 1 }],
+      "diff": "<tr><td colspan=\"2\" class=\"diff-lineno\">links / lmowiki / name</td><td colspan=\"2\" class=\"diff-lineno\">links / lmowiki / name</td></tr><tr><td colspan=\"2\">\u00a0</td><td class=\"diff-marker\" data-marker=\"+\"></td><td class=\"diff-addedline\"><div><ins class=\"diffchange diffchange-inline\"><a dir=\"auto\" href=\"https://lmo.wikipedia.org/wiki/Rocheta_(Corresg)\" hreflang=\"lmo\">Rocheta (Corresg)</a></ins></div></td></tr>"
+    },
+    {
+      "id": "Q4848470",
+      "changed": true,
+      "label": "Corbi\u00e8res Castle",
+      "diff_url": "https://www.wikidata.org/w/index.php?title=Q4848470&type=revision&diff=2142177783&oldid=2025599607",
+      "created": false,
+      "reverted": false,
+      "ts_before": "20240501182342",
+      "ts_after": "20240501183009",
+      "editors": [
+        { "user_id": "1056397", "user_text": "Espandero", "edits": 6 }
+      ],
+      "diff": "<tr><td colspan=\"2\" class=\"diff-lineno\">Property / <a title=\"Property:P18\" href=\"/wiki/Property:P18\">image</a></td><td colspan=\"2\" class=\"diff-lineno\">Property / <a title=\"Property:P18\" href=\"/wiki/Property:P18\">image</a></td></tr><tr><td class=\"diff-marker\" data-marker=\"\u2212\"></td><td class=\"diff-deletedline\"><div><del class=\"diffchange diffchange-inline\"><span><a class=\"extiw\" href=\"//commons.wikimedia.org/wiki/File:Castle_Corbi%C3%A8res_Sep_2010.jpg\">Castle Corbi\u00e8res Sep 2010.jpg</a></span></del></div></td><td class=\"diff-marker\" data-marker=\"+\"></td><td class=\"diff-addedline\"><div><ins class=\"diffchange diffchange-inline\"><span><a class=\"extiw\" href=\"//commons.wikimedia.org/wiki/File:Ch%C3%A2teau_de_Corbi%C3%A8res.jpg\">Ch\u00e2teau de Corbi\u00e8res.jpg</a></span></ins></div></td></tr><tr><td colspan=\"2\" class=\"diff-lineno\">Property / <a title=\"Property:P18\" href=\"/wiki/Property:P18\">image</a>: <a class=\"extiw\" href=\"//commons.wikimedia.org/wiki/File:Castle_Corbi%C3%A8res_Sep_2010.jpg\">Castle Corbi\u00e8res Sep 2010.jpg</a> / rank</td><td colspan=\"2\" class=\"diff-lineno\">Property / <a title=\"Property:P18\" href=\"/wiki/Property:P18\">image</a>: <a class=\"extiw\" href=\"//commons.wikimedia.org/wiki/File:Ch%C3%A2teau_de_Corbi%C3%A8res.jpg\">Ch\u00e2teau de Corbi\u00e8res.jpg</a> / rank</td></tr><tr><td class=\"diff-marker\" data-marker=\"\u2212\"></td><td class=\"diff-deletedline\"><div><del class=\"diffchange diffchange-inline\"><span>Normal rank</span></del></div></td><td class=\"diff-marker\" data-marker=\"+\"></td><td class=\"diff-addedline\"><div><ins class=\"diffchange diffchange-inline\"><span>Preferred rank</span></ins></div></td></tr><tr><td colspan=\"2\" class=\"diff-lineno\"></td><td colspan=\"2\" class=\"diff-lineno\">Property / <a title=\"Property:P18\" href=\"/wiki/Property:P18\">image</a>: <a class=\"extiw\" href=\"//commons.wikimedia.org/wiki/File:Ch%C3%A2teau_de_Corbi%C3%A8res.jpg\">Ch\u00e2teau de Corbi\u00e8res.jpg</a> / qualifier</td></tr><tr><td colspan=\"2\">\u00a0</td><td class=\"diff-marker\" data-marker=\"+\"></td><td class=\"diff-addedline\"><div><ins class=\"diffchange diffchange-inline\"><span><a title=\"Property:P7108\" href=\"/wiki/Property:P7108\">location of the point of view</a>: <a title=\"Q67708\" href=\"/wiki/Q67708\">Corbi\u00e8res</a></span></ins></div></td></tr><tr><td colspan=\"2\" class=\"diff-lineno\">Property / <a title=\"Property:P18\" href=\"/wiki/Property:P18\">image</a>: <a class=\"extiw\" href=\"//commons.wikimedia.org/wiki/File:Castle_Corbi%C3%A8res_Sep_2010.jpg\">Castle Corbi\u00e8res Sep 2010.jpg</a> / reference</td><td colspan=\"2\" class=\"diff-lineno\"></td></tr><tr><td class=\"diff-marker\" data-marker=\"\u2212\"></td><td class=\"diff-deletedline\"><div><del class=\"diffchange diffchange-inline\"><span><a title=\"Property:P143\" href=\"/wiki/Property:P143\">imported from Wikimedia project</a>: <a title=\"Q328\" href=\"/wiki/Q328\">English Wikipedia</a></span></del></div></td><td colspan=\"2\">\u00a0</td></tr><tr><td colspan=\"2\" class=\"diff-lineno\"></td><td colspan=\"2\" class=\"diff-lineno\">Property / <a title=\"Property:P18\" href=\"/wiki/Property:P18\">image</a></td></tr><tr><td colspan=\"2\">\u00a0</td><td class=\"diff-marker\" data-marker=\"+\"></td><td class=\"diff-addedline\"><div><ins class=\"diffchange diffchange-inline\"><span><a class=\"extiw\" href=\"//commons.wikimedia.org/wiki/File:Ch%C3%A2teau_de_Corbi%C3%A8res_depuis_le_pont_de_Corbi%C3%A8res.jpg\">Ch\u00e2teau de Corbi\u00e8res depuis le pont de Corbi\u00e8res.jpg</a></span></ins></div></td></tr><tr><td colspan=\"2\" class=\"diff-lineno\"></td><td colspan=\"2\" class=\"diff-lineno\">Property / <a title=\"Property:P18\" href=\"/wiki/Property:P18\">image</a>: <a class=\"extiw\" href=\"//commons.wikimedia.org/wiki/File:Ch%C3%A2teau_de_Corbi%C3%A8res_depuis_le_pont_de_Corbi%C3%A8res.jpg\">Ch\u00e2teau de Corbi\u00e8res depuis le pont de Corbi\u00e8res.jpg</a> / rank</td></tr><tr><td colspan=\"2\">\u00a0</td><td class=\"diff-marker\" data-marker=\"+\"></td><td class=\"diff-addedline\"><div><ins class=\"diffchange diffchange-inline\"><span>Normal rank</span></ins></div></td></tr><tr><td colspan=\"2\" class=\"diff-lineno\"></td><td colspan=\"2\" class=\"diff-lineno\">Property / <a title=\"Property:P18\" href=\"/wiki/Property:P18\">image</a>: <a class=\"extiw\" href=\"//commons.wikimedia.org/wiki/File:Ch%C3%A2teau_de_Corbi%C3%A8res_depuis_le_pont_de_Corbi%C3%A8res.jpg\">Ch\u00e2teau de Corbi\u00e8res depuis le pont de Corbi\u00e8res.jpg</a> / qualifier</td></tr><tr><td colspan=\"2\">\u00a0</td><td class=\"diff-marker\" data-marker=\"+\"></td><td class=\"diff-addedline\"><div><ins class=\"diffchange diffchange-inline\"><span><a title=\"Property:P7108\" href=\"/wiki/Property:P7108\">location of the point of view</a>: <a title=\"Q125738232\" href=\"/wiki/Q125738232\">Q125738232</a></span></ins></div></td></tr>"
+    },
+    {
+      "id": "Q30155025",
+      "changed": true,
+      "label": "Nebbelunde voldsted",
+      "diff_url": "https://www.wikidata.org/w/index.php?title=Q30155025&type=revision&diff=2142165241&oldid=919523473",
+      "created": false,
+      "reverted": false,
+      "ts_before": "20240501181128",
+      "ts_after": "20240501181128",
+      "editors": [
+        { "user_id": "131727", "user_text": "Gerd Fahrenhorst", "edits": 2 }
+      ],
+      "diff": "<tr><td colspan=\"2\" class=\"diff-lineno\">label / de</td><td colspan=\"2\" class=\"diff-lineno\">label / de</td></tr><tr><td colspan=\"2\">\u00a0</td><td class=\"diff-marker\" data-marker=\"+\"></td><td class=\"diff-addedline\"><div><ins class=\"diffchange diffchange-inline\">Nebbelunde voldsted</ins></div></td></tr>"
+    },
+    {
+      "id": "Q7860523",
+      "changed": true,
+      "label": "Tynemouth Castle",
+      "diff_url": "https://www.wikidata.org/w/index.php?title=Q7860523&type=revision&diff=2142114676&oldid=2141136648",
+      "created": false,
+      "reverted": false,
+      "ts_before": "20240501164834",
+      "ts_after": "20240501164834",
+      "editors": [{ "user_id": "2249101", "user_text": "Patraiz", "edits": 1 }],
+      "diff": "<tr><td colspan=\"2\" class=\"diff-lineno\">links / itwiki / name</td><td colspan=\"2\" class=\"diff-lineno\">links / itwiki / name</td></tr><tr><td colspan=\"2\">\u00a0</td><td class=\"diff-marker\" data-marker=\"+\"></td><td class=\"diff-addedline\"><div><ins class=\"diffchange diffchange-inline\"><a dir=\"auto\" href=\"https://it.wikipedia.org/wiki/Priorato_e_castello_di_Tynemouth\" hreflang=\"it\">Priorato e castello di Tynemouth</a></ins></div></td></tr>"
+    },
+    {
+      "id": "Q5367993",
+      "changed": true,
+      "label": "Elvaston Castle",
+      "diff_url": "https://www.wikidata.org/w/index.php?title=Q5367993&type=revision&diff=2142078405&oldid=2091341901",
+      "created": false,
+      "reverted": false,
+      "ts_before": "20240501154713",
+      "ts_after": "20240501154729",
+      "editors": [{ "user_id": "3283331", "user_text": "Baidax", "edits": 3 }],
+      "diff": "<tr><td colspan=\"2\" class=\"diff-lineno\">label / fr</td><td colspan=\"2\" class=\"diff-lineno\">label / fr</td></tr><tr><td class=\"diff-marker\" data-marker=\"\u2212\"></td><td class=\"diff-deletedline\"><div>Elvaston <del class=\"diffchange diffchange-inline\">Castle</del></div></td><td class=\"diff-marker\" data-marker=\"+\"></td><td class=\"diff-addedline\"><div><ins class=\"diffchange diffchange-inline\">ch\u00e2teau d'</ins>Elvaston</div></td></tr><tr><td colspan=\"2\" class=\"diff-lineno\">aliases / fr / 0</td><td colspan=\"2\" class=\"diff-lineno\">aliases / fr / 0</td></tr><tr><td colspan=\"2\">\u00a0</td><td class=\"diff-marker\" data-marker=\"+\"></td><td class=\"diff-addedline\"><div><ins class=\"diffchange diffchange-inline\">Elvaston Castle</ins></div></td></tr><tr><td colspan=\"2\" class=\"diff-lineno\">links / frwiki / name</td><td colspan=\"2\" class=\"diff-lineno\">links / frwiki / name</td></tr><tr><td class=\"diff-marker\" data-marker=\"\u2212\"></td><td class=\"diff-deletedline\"><div><a dir=\"auto\" href=\"https://fr.wikipedia.org/wiki/Elvaston_Castle\" hreflang=\"fr\">Elvaston <del class=\"diffchange diffchange-inline\">Castle</del></a></div></td><td class=\"diff-marker\" data-marker=\"+\"></td><td class=\"diff-addedline\"><div><a dir=\"auto\" href=\"https://fr.wikipedia.org/wiki/Ch%C3%A2teau_d%27Elvaston\" hreflang=\"fr\"><ins class=\"diffchange diffchange-inline\">Ch\u00e2teau d'</ins>Elvaston</a></div></td></tr>"
+    },
+    {
+      "id": "Q3752910",
+      "changed": true,
+      "label": "Desmond Castle",
+      "diff_url": "https://www.wikidata.org/w/index.php?title=Q3752910&type=revision&diff=2142078262&oldid=1988680320",
+      "created": false,
+      "reverted": false,
+      "ts_before": "20240501144539",
+      "ts_after": "20240501154715",
+      "editors": [
+        { "user_id": "1933097", "user_text": "\u00c9riugena", "edits": 1 },
+        { "user_id": "240787", "user_text": "Kevin Scannell", "edits": 2 }
+      ],
+      "diff": "<tr><td colspan=\"2\" class=\"diff-lineno\">description / ga</td><td colspan=\"2\" class=\"diff-lineno\">description / ga</td></tr><tr><td colspan=\"2\">\u00a0</td><td class=\"diff-marker\" data-marker=\"+\"></td><td class=\"diff-addedline\"><div><ins class=\"diffchange diffchange-inline\">caisle\u00e1n i gContae Chorca\u00ed</ins></div></td></tr><tr><td colspan=\"2\" class=\"diff-lineno\">links / gawiki / name</td><td colspan=\"2\" class=\"diff-lineno\">links / gawiki / name</td></tr><tr><td class=\"diff-marker\" data-marker=\"\u2212\"></td><td class=\"diff-deletedline\"><div><a dir=\"auto\" href=\"https://ga.wikipedia.org/wiki/Caisle%C3%A1n_Deasmhumhan\" hreflang=\"ga\">Caisle\u00e1n Deasmhumhan</a></div></td><td class=\"diff-marker\" data-marker=\"+\"></td><td class=\"diff-addedline\"><div><a dir=\"auto\" href=\"https://ga.wikipedia.org/wiki/Caisle%C3%A1n_Deasmhumhan_(Contae_Chorca%C3%AD)\" hreflang=\"ga\">Caisle\u00e1n Deasmhumhan <ins class=\"diffchange diffchange-inline\">(Contae Chorca\u00ed)</ins></a></div></td></tr>"
+    },
+    {
+      "id": "Q8342625",
+      "changed": true,
+      "label": "Castell de Vilallonga",
+      "diff_url": "https://www.wikidata.org/w/index.php?title=Q8342625&type=revision&diff=2142069017&oldid=2085642909",
+      "created": false,
+      "reverted": false,
+      "ts_before": "20240501153008",
+      "ts_after": "20240501153100",
+      "editors": [{ "user_id": "5115", "user_text": "B25es", "edits": 3 }],
+      "diff": "<tr><td colspan=\"2\" class=\"diff-lineno\">Property / <a title=\"Property:P2473\" href=\"/wiki/Property:P2473\">IGPCV ID</a>: <span class=\"wb-external-id\">46.25.255-001</span> / rank</td><td colspan=\"2\" class=\"diff-lineno\">Property / <a title=\"Property:P2473\" href=\"/wiki/Property:P2473\">IGPCV ID</a>: <span class=\"wb-external-id\">46.25.255-001</span> / rank</td></tr><tr><td class=\"diff-marker\" data-marker=\"\u2212\"></td><td class=\"diff-deletedline\"><div><del class=\"diffchange diffchange-inline\"><span>Normal rank</span></del></div></td><td class=\"diff-marker\" data-marker=\"+\"></td><td class=\"diff-addedline\"><div><ins class=\"diffchange diffchange-inline\"><span>Deprecated rank</span></ins></div></td></tr><tr><td colspan=\"2\" class=\"diff-lineno\">Property / <a title=\"Property:P2473\" href=\"/wiki/Property:P2473\">IGPCV ID</a>: <span class=\"wb-external-id\">46.255-9999-000001</span> / rank</td><td colspan=\"2\" class=\"diff-lineno\">Property / <a title=\"Property:P2473\" href=\"/wiki/Property:P2473\">IGPCV ID</a>: <span class=\"wb-external-id\">46.255-9999-000001</span> / rank</td></tr><tr><td class=\"diff-marker\" data-marker=\"\u2212\"></td><td class=\"diff-deletedline\"><div><del class=\"diffchange diffchange-inline\"><span>Normal rank</span></del></div></td><td class=\"diff-marker\" data-marker=\"+\"></td><td class=\"diff-addedline\"><div><ins class=\"diffchange diffchange-inline\"><span>Preferred rank</span></ins></div></td></tr><tr><td colspan=\"2\" class=\"diff-lineno\"></td><td colspan=\"2\" class=\"diff-lineno\">Property / <a title=\"Property:P2473\" href=\"/wiki/Property:P2473\">IGPCV ID</a>: <span class=\"wb-external-id\">46.255-9999-000001</span> / reference</td></tr><tr><td colspan=\"2\">\u00a0</td><td class=\"diff-marker\" data-marker=\"+\"></td><td class=\"diff-addedline\"><div><ins class=\"diffchange diffchange-inline\"><span><a title=\"Property:P854\" href=\"/wiki/Property:P854\">reference URL</a>: <a rel=\"nofollow\" class=\"external free\" href=\"https://eduwp.edu.gva.es/patrimonio-cultural/ficha-inmueble.php?id=1451\">https://eduwp.edu.gva.es/patrimonio-cultural/ficha-inmueble.php?id=1451</a></span><br><span><a title=\"Property:P813\" href=\"/wiki/Property:P813\">retrieved</a>: <b class=\"wb-details wb-time-details wb-time-rendered\">1 May 2024</b><table class=\"wb-details wb-time-details\"><tr><th class=\"wb-time-isotime\">Timestamp</th><td class=\"wb-time-isotime\">+2024-05-01T00:00:00Z</td></tr><tr><th class=\"wb-time-timezone\">Timezone</th><td class=\"wb-time-timezone\">+00:00</td></tr><tr><th class=\"wb-time-calendar\">Calendar</th><td class=\"wb-time-calendar\">Gregorian</td></tr><tr><th class=\"wb-time-precision\">Precision</th><td class=\"wb-time-precision\">1 day</td></tr><tr><th class=\"wb-time-before\">Before</th><td class=\"wb-time-before\">0</td></tr><tr><th class=\"wb-time-after\">After</th><td class=\"wb-time-after\">0</td></tr></table></span></ins></div></td></tr><tr><td colspan=\"2\" class=\"diff-lineno\">Property / <a title=\"Property:P2473\" href=\"/wiki/Property:P2473\">IGPCV ID</a>: <span class=\"wb-external-id\">46.255-9999-000001</span> / reference</td><td colspan=\"2\" class=\"diff-lineno\"></td></tr><tr><td class=\"diff-marker\" data-marker=\"\u2212\"></td><td class=\"diff-deletedline\"><div><del class=\"diffchange diffchange-inline\"><span><a title=\"Property:P854\" href=\"/wiki/Property:P854\">reference URL</a>: <a rel=\"nofollow\" class=\"external free\" href=\"https://ceice.gva.es/va/web/patrimonio-cultural-y-museos/inventario-general\">https://ceice.gva.es/va/web/patrimonio-cultural-y-museos/inventario-general</a></span><br><span><a title=\"Property:P813\" href=\"/wiki/Property:P813\">retrieved</a>: <b class=\"wb-details wb-time-details wb-time-rendered\">31 March 2023</b><table class=\"wb-details wb-time-details\"><tr><th class=\"wb-time-isotime\">Timestamp</th><td class=\"wb-time-isotime\">+2023-03-31T00:00:00Z</td></tr><tr><th class=\"wb-time-timezone\">Timezone</th><td class=\"wb-time-timezone\">+00:00</td></tr><tr><th class=\"wb-time-calendar\">Calendar</th><td class=\"wb-time-calendar\">Gregorian</td></tr><tr><th class=\"wb-time-precision\">Precision</th><td class=\"wb-time-precision\">1 day</td></tr><tr><th class=\"wb-time-before\">Before</th><td class=\"wb-time-before\">0</td></tr><tr><th class=\"wb-time-after\">After</th><td class=\"wb-time-after\">0</td></tr></table></span></del></div></td><td colspan=\"2\">\u00a0</td></tr><tr><td colspan=\"2\" class=\"diff-lineno\"></td><td colspan=\"2\" class=\"diff-lineno\">Property / <a title=\"Property:P973\" href=\"/wiki/Property:P973\">described at URL</a></td></tr><tr><td colspan=\"2\">\u00a0</td><td class=\"diff-marker\" data-marker=\"+\"></td><td class=\"diff-addedline\"><div><ins class=\"diffchange diffchange-inline\"><span><a rel=\"nofollow\" class=\"external free\" href=\"https://eduwp.edu.gva.es/patrimonio-cultural/ficha-inmueble.php?id=1451\">https://eduwp.edu.gva.es/patrimonio-cultural/ficha-inmueble.php?id=1451</a></span></ins></div></td></tr><tr><td colspan=\"2\" class=\"diff-lineno\"></td><td colspan=\"2\" class=\"diff-lineno\">Property / <a title=\"Property:P973\" href=\"/wiki/Property:P973\">described at URL</a>: <a rel=\"nofollow\" class=\"external free\" href=\"https://eduwp.edu.gva.es/patrimonio-cultural/ficha-inmueble.php?id=1451\">https://eduwp.edu.gva.es/patrimonio-cultural/ficha-inmueble.php?id=1451</a> / rank</td></tr><tr><td colspan=\"2\">\u00a0</td><td class=\"diff-marker\" data-marker=\"+\"></td><td class=\"diff-addedline\"><div><ins class=\"diffchange diffchange-inline\"><span>Normal rank</span></ins></div></td></tr><tr><td colspan=\"2\" class=\"diff-lineno\"></td><td colspan=\"2\" class=\"diff-lineno\">Property / <a title=\"Property:P973\" href=\"/wiki/Property:P973\">described at URL</a>: <a rel=\"nofollow\" class=\"external free\" href=\"https://eduwp.edu.gva.es/patrimonio-cultural/ficha-inmueble.php?id=1451\">https://eduwp.edu.gva.es/patrimonio-cultural/ficha-inmueble.php?id=1451</a> / qualifier</td></tr><tr><td colspan=\"2\">\u00a0</td><td class=\"diff-marker\" data-marker=\"+\"></td><td class=\"diff-addedline\"><div><ins class=\"diffchange diffchange-inline\"><span><a title=\"Property:P407\" href=\"/wiki/Property:P407\">language of work or name</a>: <a title=\"Q7026\" href=\"/wiki/Q7026\">Catalan</a></span></ins></div></td></tr><tr><td colspan=\"2\" class=\"diff-lineno\"></td><td colspan=\"2\" class=\"diff-lineno\">Property / <a title=\"Property:P973\" href=\"/wiki/Property:P973\">described at URL</a>: <a rel=\"nofollow\" class=\"external free\" href=\"https://eduwp.edu.gva.es/patrimonio-cultural/ficha-inmueble.php?id=1451\">https://eduwp.edu.gva.es/patrimonio-cultural/ficha-inmueble.php?id=1451</a> / qualifier</td></tr><tr><td colspan=\"2\">\u00a0</td><td class=\"diff-marker\" data-marker=\"+\"></td><td class=\"diff-addedline\"><div><ins class=\"diffchange diffchange-inline\"><span><a title=\"Property:P813\" href=\"/wiki/Property:P813\">retrieved</a>: <b class=\"wb-details wb-time-details wb-time-rendered\">1 May 2024</b><table class=\"wb-details wb-time-details\"><tr><th class=\"wb-time-isotime\">Timestamp</th><td class=\"wb-time-isotime\">+2024-05-01T00:00:00Z</td></tr><tr><th class=\"wb-time-timezone\">Timezone</th><td class=\"wb-time-timezone\">+00:00</td></tr><tr><th class=\"wb-time-calendar\">Calendar</th><td class=\"wb-time-calendar\">Gregorian</td></tr><tr><th class=\"wb-time-precision\">Precision</th><td class=\"wb-time-precision\">1 day</td></tr><tr><th class=\"wb-time-before\">Before</th><td class=\"wb-time-before\">0</td></tr><tr><th class=\"wb-time-after\">After</th><td class=\"wb-time-after\">0</td></tr></table></span></ins></div></td></tr>"
+    },
+    {
+      "id": "Q125732123",
+      "changed": true,
+      "label": "forteresse de Montfrault",
+      "diff_url": "https://www.wikidata.org/w/index.php?title=Q125732123&type=revision&diff=2142041075&oldid=2142041005",
+      "created": true,
+      "reverted": false,
+      "ts_before": "20240501145247",
+      "ts_after": "20240501145251",
+      "editors": [{ "user_id": "2993873", "user_text": "Eskivor", "edits": 2 }],
+      "diff": "<tr><td colspan=\"2\" class=\"diff-lineno\">links / frwiki / name</td><td colspan=\"2\" class=\"diff-lineno\">links / frwiki / name</td></tr><tr><td colspan=\"2\">\u00a0</td><td class=\"diff-marker\" data-marker=\"+\"></td><td class=\"diff-addedline\"><div><ins class=\"diffchange diffchange-inline\"><a dir=\"auto\" href=\"https://fr.wikipedia.org/wiki/Forteresse_de_Montfrault\" hreflang=\"fr\">Forteresse de Montfrault</a></ins></div></td></tr>"
+    },
+    {
+      "id": "Q2550865",
+      "changed": true,
+      "label": "Wasserburg M\u00fcggenburg",
+      "diff_url": "https://www.wikidata.org/w/index.php?title=Q2550865&type=revision&diff=2141939490&oldid=1361710670",
+      "created": false,
+      "reverted": false,
+      "ts_before": "20240501123813",
+      "ts_after": "20240501123828",
+      "editors": [
+        { "user_id": "213008", "user_text": "Giorgio Michele", "edits": 3 }
+      ],
+      "diff": "<tr><td colspan=\"2\" class=\"diff-lineno\">label / en</td><td colspan=\"2\" class=\"diff-lineno\">label / en</td></tr><tr><td class=\"diff-marker\" data-marker=\"\u2212\"></td><td class=\"diff-deletedline\"><div><del class=\"diffchange diffchange-inline\">Wasserburg M\u00fcggenburg</del></div></td></tr><tr><td colspan=\"2\" class=\"diff-lineno\">description / de</td><td colspan=\"2\" class=\"diff-lineno\">description / de</td></tr><tr><td class=\"diff-marker\" data-marker=\"\u2212\"></td><td class=\"diff-deletedline\"><div><del class=\"diffchange diffchange-inline\">Burg </del>in Mecklenburg-Vorpommern, Deutschland</div></td><td class=\"diff-marker\" data-marker=\"+\"></td><td class=\"diff-addedline\"><div><ins class=\"diffchange diffchange-inline\">Schloss </ins>in <ins class=\"diffchange diffchange-inline\">Neuenkirchen, Landkreis Vorpommern-Greifswald, </ins>Mecklenburg-Vorpommern, Deutschland</div></td></tr><tr><td colspan=\"2\" class=\"diff-lineno\">Property / <a title=\"Property:P1435\" href=\"/wiki/Property:P1435\">heritage designation</a></td><td colspan=\"2\" class=\"diff-lineno\">Property / <a title=\"Property:P1435\" href=\"/wiki/Property:P1435\">heritage designation</a></td></tr><tr><td class=\"diff-marker\" data-marker=\"\u2212\"></td><td class=\"diff-deletedline\"><div><del class=\"diffchange diffchange-inline\"><span><a title=\"Q11691318\" href=\"/wiki/Q11691318\">cultural heritage monument in Germany</a></span></del></div></td><td class=\"diff-marker\" data-marker=\"+\"></td><td class=\"diff-addedline\"><div><ins class=\"diffchange diffchange-inline\"><span><a title=\"Q28859204\" href=\"/wiki/Q28859204\">architectural heritage monument in Mecklenburg-Vorpommern</a></span></ins></div></td></tr>"
+    },
+    {
+      "id": "Q2241034",
+      "changed": true,
+      "label": "Freistadt Castle",
+      "diff_url": "https://www.wikidata.org/w/index.php?title=Q2241034&type=revision&diff=2141937116&oldid=1944430514",
+      "created": false,
+      "reverted": false,
+      "ts_before": "20240501123357",
+      "ts_after": "20240501123357",
+      "editors": [
+        { "user_id": "268439", "user_text": "Robert Heilinger", "edits": 1 }
+      ],
+      "diff": "<tr><td colspan=\"2\" class=\"diff-lineno\">Property / <a title=\"Property:P625\" href=\"/wiki/Property:P625\">coordinate location</a></td><td colspan=\"2\" class=\"diff-lineno\">Property / <a title=\"Property:P625\" href=\"/wiki/Property:P625\">coordinate location</a></td></tr><tr><td class=\"diff-marker\" data-marker=\"\u2212\"></td><td class=\"diff-deletedline\"><div><del class=\"diffchange diffchange-inline\"><span><b class=\"wb-details wb-globe-details wb-globe-rendered\">48\u00b0 30' 45.0\", 14\u00b0 30' 23.0\"</b><table class=\"wb-details wb-globe-details\"><tr><th class=\"wb-globe-latitude\">Latitude</th><td class=\"wb-globe-latitude\">48.5125</td></tr><tr><th class=\"wb-globe-longitude\">Longitude</th><td class=\"wb-globe-longitude\">14.5064</td></tr><tr><th class=\"wb-globe-precision\">Precision</th><td class=\"wb-globe-precision\">0.0001</td></tr><tr><th class=\"wb-globe-globe\">Globe</th><td class=\"wb-globe-globe\"><a href=\"http://www.wikidata.org/entity/Q2\">Earth</a></td></tr></table></span></del></div></td><td class=\"diff-marker\" data-marker=\"+\"></td><td class=\"diff-addedline\"><div><ins class=\"diffchange diffchange-inline\"><span><b class=\"wb-details wb-globe-details wb-globe-rendered\">48\u00b0 30' 44.39\", 14\u00b0 30' 23.58\"</b><table class=\"wb-details wb-globe-details\"><tr><th class=\"wb-globe-latitude\">Latitude</th><td class=\"wb-globe-latitude\">48.512330555556</td></tr><tr><th class=\"wb-globe-longitude\">Longitude</th><td class=\"wb-globe-longitude\">14.50655</td></tr><tr><th class=\"wb-globe-precision\">Precision</th><td class=\"wb-globe-precision\">2.7777777777778E-6</td></tr><tr><th class=\"wb-globe-globe\">Globe</th><td class=\"wb-globe-globe\"><a href=\"http://www.wikidata.org/entity/Q2\">Earth</a></td></tr></table></span></ins></div></td></tr>"
+    },
+    {
+      "id": "Q5050429",
+      "changed": true,
+      "label": "Castle of Torrelobat\u00f3n",
+      "diff_url": "https://www.wikidata.org/w/index.php?title=Q5050429&type=revision&diff=2141910222&oldid=2137531242",
+      "created": false,
+      "reverted": false,
+      "ts_before": "20240501114812",
+      "ts_after": "20240501114812",
+      "editors": [{ "user_id": "54884", "user_text": "Rodelar", "edits": 1 }],
+      "diff": "<tr><td colspan=\"2\" class=\"diff-lineno\">Property / <a title=\"Property:P361\" href=\"/wiki/Property:P361\">part of</a></td><td colspan=\"2\" class=\"diff-lineno\"></td></tr><tr><td class=\"diff-marker\" data-marker=\"\u2212\"></td><td class=\"diff-deletedline\"><div><del class=\"diffchange diffchange-inline\"><span><a title=\"Q6344997\" href=\"/wiki/Q6344997\">Q6344997</a></span></del></div></td><td colspan=\"2\">\u00a0</td></tr><tr><td colspan=\"2\" class=\"diff-lineno\">Property / <a title=\"Property:P361\" href=\"/wiki/Property:P361\">part of</a>: <a title=\"Q6344997\" href=\"/wiki/Q6344997\">Q6344997</a> / rank</td><td colspan=\"2\" class=\"diff-lineno\"></td></tr><tr><td class=\"diff-marker\" data-marker=\"\u2212\"></td><td class=\"diff-deletedline\"><div><del class=\"diffchange diffchange-inline\"><span>Normal rank</span></del></div></td><td colspan=\"2\">\u00a0</td></tr><tr><td colspan=\"2\" class=\"diff-lineno\">Property / <a title=\"Property:P361\" href=\"/wiki/Property:P361\">part of</a>: <a title=\"Q6344997\" href=\"/wiki/Q6344997\">Q6344997</a> / reference</td><td colspan=\"2\" class=\"diff-lineno\"></td></tr><tr><td class=\"diff-marker\" data-marker=\"\u2212\"></td><td class=\"diff-deletedline\"><div><del class=\"diffchange diffchange-inline\"><span><a title=\"Property:P143\" href=\"/wiki/Property:P143\">imported from Wikimedia project</a>: <a title=\"Q8449\" href=\"/wiki/Q8449\">Spanish Wikipedia</a></span><br><span><a title=\"Property:P4656\" href=\"/wiki/Property:P4656\">Wikimedia import URL</a>: <a rel=\"nofollow\" class=\"external free\" href=\"https://es.wikipedia.org/w/index.php?title=Castillo_de_los_Comuneros_de_Torrelobat\u00f3n&amp;oldid=116502702\">https://es.wikipedia.org/w/index.php?title=Castillo_de_los_Comuneros_de_Torrelobat\u00f3n&amp;oldid=116502702</a></span></del></div></td><td colspan=\"2\">\u00a0</td></tr>"
+    },
+    {
+      "id": "Q125593627",
+      "changed": true,
+      "label": "Isola di Loreto Castle",
+      "diff_url": "https://www.wikidata.org/w/index.php?title=Q125593627&type=revision&diff=2141899201&oldid=2136972311",
+      "created": false,
+      "reverted": false,
+      "ts_before": "20240501113025",
+      "ts_after": "20240501113025",
+      "editors": [
+        { "user_id": "48942", "user_text": "Mai-Sachme", "edits": 1 }
+      ],
+      "diff": "<tr><td colspan=\"2\" class=\"diff-lineno\"></td><td colspan=\"2\" class=\"diff-lineno\">Property / <a title=\"Property:P706\" href=\"/wiki/Property:P706\">located in/on physical feature</a></td></tr><tr><td colspan=\"2\">\u00a0</td><td class=\"diff-marker\" data-marker=\"+\"></td><td class=\"diff-addedline\"><div><ins class=\"diffchange diffchange-inline\"><span><a title=\"Q3803032\" href=\"/wiki/Q3803032\">Loreto Island</a></span></ins></div></td></tr><tr><td colspan=\"2\" class=\"diff-lineno\"></td><td colspan=\"2\" class=\"diff-lineno\">Property / <a title=\"Property:P706\" href=\"/wiki/Property:P706\">located in/on physical feature</a>: <a title=\"Q3803032\" href=\"/wiki/Q3803032\">Loreto Island</a> / rank</td></tr><tr><td colspan=\"2\">\u00a0</td><td class=\"diff-marker\" data-marker=\"+\"></td><td class=\"diff-addedline\"><div><ins class=\"diffchange diffchange-inline\"><span>Normal rank</span></ins></div></td></tr>"
+    },
+    {
+      "id": "Q858940",
+      "changed": true,
+      "label": "Castel Capuano",
+      "diff_url": "https://www.wikidata.org/w/index.php?title=Q858940&type=revision&diff=2141850965&oldid=1959538330",
+      "created": false,
+      "reverted": false,
+      "ts_before": "20240501101049",
+      "ts_after": "20240501101049",
+      "editors": [{ "user_id": "3656600", "user_text": "Ambra75", "edits": 1 }],
+      "diff": "<tr><td colspan=\"2\" class=\"diff-lineno\">description / bg</td><td colspan=\"2\" class=\"diff-lineno\">description / bg</td></tr><tr><td colspan=\"2\">\u00a0</td><td class=\"diff-marker\" data-marker=\"+\"></td><td class=\"diff-addedline\"><div><ins class=\"diffchange diffchange-inline\">\u043a\u0440\u0435\u043f\u043e\u0441\u0442\u0435\u043d \u0437\u0430\u043c\u044a\u043a \u0432 \u041d\u0435\u0430\u043f\u043e\u043b, \u0418\u0442\u0430\u043b\u0438\u044f</ins></div></td></tr>"
+    },
+    {
+      "id": "Q1048627",
+      "changed": true,
+      "label": "Castel Sant'Elmo",
+      "diff_url": "https://www.wikidata.org/w/index.php?title=Q1048627&type=revision&diff=2141850509&oldid=2127392123",
+      "created": false,
+      "reverted": false,
+      "ts_before": "20240501101005",
+      "ts_after": "20240501101005",
+      "editors": [{ "user_id": "3656600", "user_text": "Ambra75", "edits": 1 }],
+      "diff": "<tr><td colspan=\"2\" class=\"diff-lineno\">description / bg</td><td colspan=\"2\" class=\"diff-lineno\">description / bg</td></tr><tr><td colspan=\"2\">\u00a0</td><td class=\"diff-marker\" data-marker=\"+\"></td><td class=\"diff-addedline\"><div><ins class=\"diffchange diffchange-inline\">\u043a\u0440\u0435\u043f\u043e\u0441\u0442\u0435\u043d \u0437\u0430\u043c\u044a\u043a \u0432 \u041d\u0435\u0430\u043f\u043e\u043b, \u0418\u0442\u0430\u043b\u0438\u044f</ins></div></td></tr>"
+    },
+    {
+      "id": "Q781219",
+      "changed": true,
+      "label": "Castel Nuovo",
+      "diff_url": "https://www.wikidata.org/w/index.php?title=Q781219&type=revision&diff=2141849435&oldid=2117661889",
+      "created": false,
+      "reverted": false,
+      "ts_before": "20240501100821",
+      "ts_after": "20240501100821",
+      "editors": [{ "user_id": "3656600", "user_text": "Ambra75", "edits": 1 }],
+      "diff": "<tr><td colspan=\"2\" class=\"diff-lineno\">description / bg</td><td colspan=\"2\" class=\"diff-lineno\">description / bg</td></tr><tr><td colspan=\"2\">\u00a0</td><td class=\"diff-marker\" data-marker=\"+\"></td><td class=\"diff-addedline\"><div><ins class=\"diffchange diffchange-inline\">\u0437\u0430\u043c\u044a\u043a \u0432 \u041d\u0435\u0430\u043f\u043e\u043b, \u0418\u0442\u0430\u043b\u0438\u044f</ins></div></td></tr>"
+    },
+    {
+      "id": "Q25535597",
+      "changed": true,
+      "label": "Castello Monte Mauro",
+      "diff_url": "https://www.wikidata.org/w/index.php?title=Q25535597&type=revision&diff=2141830541&oldid=1953810956",
+      "created": false,
+      "reverted": false,
+      "ts_before": "20240501093255",
+      "ts_after": "20240501093545",
+      "editors": [{ "user_id": "31862", "user_text": "Patafisik", "edits": 4 }],
+      "diff": "<tr><td colspan=\"2\" class=\"diff-lineno\">aliases / en / 0</td><td colspan=\"2\" class=\"diff-lineno\">aliases / en / 0</td></tr><tr><td colspan=\"2\">\u00a0</td><td class=\"diff-marker\" data-marker=\"+\"></td><td class=\"diff-addedline\"><div><ins class=\"diffchange diffchange-inline\">Rocca di Monte Mauro</ins></div></td></tr><tr><td colspan=\"2\" class=\"diff-lineno\">aliases / it / 0</td><td colspan=\"2\" class=\"diff-lineno\">aliases / it / 0</td></tr><tr><td colspan=\"2\">\u00a0</td><td class=\"diff-marker\" data-marker=\"+\"></td><td class=\"diff-addedline\"><div><ins class=\"diffchange diffchange-inline\">Rocca di Monte Mauro</ins></div></td></tr><tr><td colspan=\"2\" class=\"diff-lineno\">aliases / it / 1</td><td colspan=\"2\" class=\"diff-lineno\">aliases / it / 1</td></tr><tr><td colspan=\"2\">\u00a0</td><td class=\"diff-marker\" data-marker=\"+\"></td><td class=\"diff-addedline\"><div><ins class=\"diffchange diffchange-inline\">Castello di Montemaggiore</ins></div></td></tr><tr><td colspan=\"2\" class=\"diff-lineno\">aliases / it / 2</td><td colspan=\"2\" class=\"diff-lineno\">aliases / it / 2</td></tr><tr><td colspan=\"2\">\u00a0</td><td class=\"diff-marker\" data-marker=\"+\"></td><td class=\"diff-addedline\"><div><ins class=\"diffchange diffchange-inline\">Torre superstite del Castello di Montemaggiore</ins></div></td></tr><tr><td colspan=\"2\" class=\"diff-lineno\">aliases / it / 3</td><td colspan=\"2\" class=\"diff-lineno\">aliases / it / 3</td></tr><tr><td colspan=\"2\">\u00a0</td><td class=\"diff-marker\" data-marker=\"+\"></td><td class=\"diff-addedline\"><div><ins class=\"diffchange diffchange-inline\">Castello di Tiberiaco</ins></div></td></tr><tr><td colspan=\"2\" class=\"diff-lineno\">aliases / fr / 0</td><td colspan=\"2\" class=\"diff-lineno\">aliases / fr / 0</td></tr><tr><td colspan=\"2\">\u00a0</td><td class=\"diff-marker\" data-marker=\"+\"></td><td class=\"diff-addedline\"><div><ins class=\"diffchange diffchange-inline\">Rocca di Monte Mauro</ins></div></td></tr><tr><td colspan=\"2\" class=\"diff-lineno\">aliases / la / 0</td><td colspan=\"2\" class=\"diff-lineno\">aliases / la / 0</td></tr><tr><td colspan=\"2\">\u00a0</td><td class=\"diff-marker\" data-marker=\"+\"></td><td class=\"diff-addedline\"><div><ins class=\"diffchange diffchange-inline\">castrum Tiberiacis</ins></div></td></tr><tr><td colspan=\"2\" class=\"diff-lineno\">description / en</td><td colspan=\"2\" class=\"diff-lineno\">description / en</td></tr><tr><td colspan=\"2\">\u00a0</td><td class=\"diff-marker\" data-marker=\"+\"></td><td class=\"diff-addedline\"><div><ins class=\"diffchange diffchange-inline\">ruins in Monte Mauro, Brisighella, Italy</ins></div></td></tr><tr><td colspan=\"2\" class=\"diff-lineno\"></td><td colspan=\"2\" class=\"diff-lineno\">Property / <a title=\"Property:P1435\" href=\"/wiki/Property:P1435\">heritage designation</a>: <a title=\"Q26971668\" href=\"/wiki/Q26971668\">Italian national heritage</a> / reference</td></tr><tr><td colspan=\"2\">\u00a0</td><td class=\"diff-marker\" data-marker=\"+\"></td><td class=\"diff-addedline\"><div><ins class=\"diffchange diffchange-inline\"><span><a title=\"Property:P248\" href=\"/wiki/Property:P248\">stated in</a>: <a title=\"Q105826821\" href=\"/wiki/Q105826821\">Tourer.it</a></span></ins></div></td></tr><tr><td colspan=\"2\" class=\"diff-lineno\"></td><td colspan=\"2\" class=\"diff-lineno\">Property / <a title=\"Property:P31\" href=\"/wiki/Property:P31\">instance of</a></td></tr><tr><td colspan=\"2\">\u00a0</td><td class=\"diff-marker\" data-marker=\"+\"></td><td class=\"diff-addedline\"><div><ins class=\"diffchange diffchange-inline\"><span><a title=\"Q12518\" href=\"/wiki/Q12518\">tower</a></span></ins></div></td></tr><tr><td colspan=\"2\" class=\"diff-lineno\"></td><td colspan=\"2\" class=\"diff-lineno\">Property / <a title=\"Property:P31\" href=\"/wiki/Property:P31\">instance of</a>: <a title=\"Q12518\" href=\"/wiki/Q12518\">tower</a> / rank</td></tr><tr><td colspan=\"2\">\u00a0</td><td class=\"diff-marker\" data-marker=\"+\"></td><td class=\"diff-addedline\"><div><ins class=\"diffchange diffchange-inline\"><span>Normal rank</span></ins></div></td></tr><tr><td colspan=\"2\" class=\"diff-lineno\"></td><td colspan=\"2\" class=\"diff-lineno\">Property / <a title=\"Property:P31\" href=\"/wiki/Property:P31\">instance of</a></td></tr><tr><td colspan=\"2\">\u00a0</td><td class=\"diff-marker\" data-marker=\"+\"></td><td class=\"diff-addedline\"><div><ins class=\"diffchange diffchange-inline\"><span><a title=\"Q17715832\" href=\"/wiki/Q17715832\">castle ruin</a></span></ins></div></td></tr><tr><td colspan=\"2\" class=\"diff-lineno\"></td><td colspan=\"2\" class=\"diff-lineno\">Property / <a title=\"Property:P31\" href=\"/wiki/Property:P31\">instance of</a>: <a title=\"Q17715832\" href=\"/wiki/Q17715832\">castle ruin</a> / rank</td></tr><tr><td colspan=\"2\">\u00a0</td><td class=\"diff-marker\" data-marker=\"+\"></td><td class=\"diff-addedline\"><div><ins class=\"diffchange diffchange-inline\"><span>Normal rank</span></ins></div></td></tr><tr><td colspan=\"2\" class=\"diff-lineno\"></td><td colspan=\"2\" class=\"diff-lineno\">Property / <a title=\"Property:P625\" href=\"/wiki/Property:P625\">coordinate location</a></td></tr><tr><td colspan=\"2\">\u00a0</td><td class=\"diff-marker\" data-marker=\"+\"></td><td class=\"diff-addedline\"><div><ins class=\"diffchange diffchange-inline\"><span><b class=\"wb-details wb-globe-details wb-globe-rendered\">44\u00b0 14' 8.491\", 11\u00b0 42' 0.558\"</b><table class=\"wb-details wb-globe-details\"><tr><th class=\"wb-globe-latitude\">Latitude</th><td class=\"wb-globe-latitude\">44.235692</td></tr><tr><th class=\"wb-globe-longitude\">Longitude</th><td class=\"wb-globe-longitude\">11.700155</td></tr><tr><th class=\"wb-globe-precision\">Precision</th><td class=\"wb-globe-precision\">1.0E-6</td></tr><tr><th class=\"wb-globe-globe\">Globe</th><td class=\"wb-globe-globe\"><a href=\"http://www.wikidata.org/entity/Q2\">Earth</a></td></tr></table></span></ins></div></td></tr><tr><td colspan=\"2\" class=\"diff-lineno\"></td><td colspan=\"2\" class=\"diff-lineno\">Property / <a title=\"Property:P625\" href=\"/wiki/Property:P625\">coordinate location</a>: 44\u00b014&apos;8.491&quot;N, 11\u00b042&apos;0.558&quot;E / rank</td></tr><tr><td colspan=\"2\">\u00a0</td><td class=\"diff-marker\" data-marker=\"+\"></td><td class=\"diff-addedline\"><div><ins class=\"diffchange diffchange-inline\"><span>Normal rank</span></ins></div></td></tr><tr><td colspan=\"2\" class=\"diff-lineno\"></td><td colspan=\"2\" class=\"diff-lineno\">Property / <a title=\"Property:P625\" href=\"/wiki/Property:P625\">coordinate location</a>: 44\u00b014&apos;8.491&quot;N, 11\u00b042&apos;0.558&quot;E / reference</td></tr><tr><td colspan=\"2\">\u00a0</td><td class=\"diff-marker\" data-marker=\"+\"></td><td class=\"diff-addedline\"><div><ins class=\"diffchange diffchange-inline\"><span><a title=\"Property:P248\" href=\"/wiki/Property:P248\">stated in</a>: <a title=\"Q105826821\" href=\"/wiki/Q105826821\">Tourer.it</a></span></ins></div></td></tr><tr><td colspan=\"2\" class=\"diff-lineno\"></td><td colspan=\"2\" class=\"diff-lineno\">Property / <a title=\"Property:P4133\" href=\"/wiki/Property:P4133\">Tourer.it ID</a></td></tr><tr><td colspan=\"2\">\u00a0</td><td class=\"diff-marker\" data-marker=\"+\"></td><td class=\"diff-addedline\"><div><ins class=\"diffchange diffchange-inline\"><span><a class=\"wb-external-id external\" href=\"https://www.tourer.it/mappa?id=8821\" rel=\"nofollow\">8821</a></span></ins></div></td></tr><tr><td colspan=\"2\" class=\"diff-lineno\"></td><td colspan=\"2\" class=\"diff-lineno\">Property / <a title=\"Property:P4133\" href=\"/wiki/Property:P4133\">Tourer.it ID</a>: <a class=\"wb-external-id external\" href=\"https://www.tourer.it/mappa?id=8821\" rel=\"nofollow\">8821</a> / rank</td></tr><tr><td colspan=\"2\">\u00a0</td><td class=\"diff-marker\" data-marker=\"+\"></td><td class=\"diff-addedline\"><div><ins class=\"diffchange diffchange-inline\"><span>Normal rank</span></ins></div></td></tr><tr><td colspan=\"2\" class=\"diff-lineno\"></td><td colspan=\"2\" class=\"diff-lineno\">Property / <a title=\"Property:P6375\" href=\"/wiki/Property:P6375\">street address</a></td></tr><tr><td colspan=\"2\">\u00a0</td><td class=\"diff-marker\" data-marker=\"+\"></td><td class=\"diff-addedline\"><div><ins class=\"diffchange diffchange-inline\"><span><span lang=\"it\" class=\"wb-monolingualtext-value\">via Monte Mauro \u2012 Monte Mauro \u2012 Brisighella (RA)</span> <span class=\"wb-monolingualtext-language-name\" dir=\"auto\">(Italian)</span></span></ins></div></td></tr><tr><td colspan=\"2\" class=\"diff-lineno\"></td><td colspan=\"2\" class=\"diff-lineno\">Property / <a title=\"Property:P6375\" href=\"/wiki/Property:P6375\">street address</a>: <span lang=\"it\" class=\"wb-monolingualtext-value\">via Monte Mauro \u2012 Monte Mauro \u2012 Brisighella (RA)</span> <span class=\"wb-monolingualtext-language-name\" dir=\"auto\">(Italian)</span> / rank</td></tr><tr><td colspan=\"2\">\u00a0</td><td class=\"diff-marker\" data-marker=\"+\"></td><td class=\"diff-addedline\"><div><ins class=\"diffchange diffchange-inline\"><span>Normal rank</span></ins></div></td></tr><tr><td colspan=\"2\" class=\"diff-lineno\"></td><td colspan=\"2\" class=\"diff-lineno\">Property / <a title=\"Property:P6375\" href=\"/wiki/Property:P6375\">street address</a>: <span lang=\"it\" class=\"wb-monolingualtext-value\">via Monte Mauro \u2012 Monte Mauro \u2012 Brisighella (RA)</span> <span class=\"wb-monolingualtext-language-name\" dir=\"auto\">(Italian)</span> / reference</td></tr><tr><td colspan=\"2\">\u00a0</td><td class=\"diff-marker\" data-marker=\"+\"></td><td class=\"diff-addedline\"><div><ins class=\"diffchange diffchange-inline\"><span><a title=\"Property:P248\" href=\"/wiki/Property:P248\">stated in</a>: <a title=\"Q105826821\" href=\"/wiki/Q105826821\">Tourer.it</a></span></ins></div></td></tr><tr><td colspan=\"2\" class=\"diff-lineno\"></td><td colspan=\"2\" class=\"diff-lineno\">Property / <a title=\"Property:P571\" href=\"/wiki/Property:P571\">inception</a></td></tr><tr><td colspan=\"2\">\u00a0</td><td class=\"diff-marker\" data-marker=\"+\"></td><td class=\"diff-addedline\"><div><ins class=\"diffchange diffchange-inline\"><span><b class=\"wb-details wb-time-details wb-time-rendered\">13. century</b><table class=\"wb-details wb-time-details\"><tr><th class=\"wb-time-isotime\">Timestamp</th><td class=\"wb-time-isotime\">+1250-01-01T00:00:00Z</td></tr><tr><th class=\"wb-time-timezone\">Timezone</th><td class=\"wb-time-timezone\">+00:00</td></tr><tr><th class=\"wb-time-calendar\">Calendar</th><td class=\"wb-time-calendar\">Gregorian</td></tr><tr><th class=\"wb-time-precision\">Precision</th><td class=\"wb-time-precision\">100 years</td></tr><tr><th class=\"wb-time-before\">Before</th><td class=\"wb-time-before\">0</td></tr><tr><th class=\"wb-time-after\">After</th><td class=\"wb-time-after\">0</td></tr></table></span></ins></div></td></tr><tr><td colspan=\"2\" class=\"diff-lineno\"></td><td colspan=\"2\" class=\"diff-lineno\">Property / <a title=\"Property:P571\" href=\"/wiki/Property:P571\">inception</a>: 13. century / rank</td></tr><tr><td colspan=\"2\">\u00a0</td><td class=\"diff-marker\" data-marker=\"+\"></td><td class=\"diff-addedline\"><div><ins class=\"diffchange diffchange-inline\"><span>Normal rank</span></ins></div></td></tr><tr><td colspan=\"2\" class=\"diff-lineno\"></td><td colspan=\"2\" class=\"diff-lineno\">Property / <a title=\"Property:P571\" href=\"/wiki/Property:P571\">inception</a>: 13. century / reference</td></tr><tr><td colspan=\"2\">\u00a0</td><td class=\"diff-marker\" data-marker=\"+\"></td><td class=\"diff-addedline\"><div><ins class=\"diffchange diffchange-inline\"><span><a title=\"Property:P248\" href=\"/wiki/Property:P248\">stated in</a>: <a title=\"Q105826821\" href=\"/wiki/Q105826821\">Tourer.it</a></span><br><span><a title=\"Property:P4133\" href=\"/wiki/Property:P4133\">Tourer.it ID</a>: <a class=\"wb-external-id external\" href=\"https://www.tourer.it/mappa?id=8821\" rel=\"nofollow\">8821</a></span><br><span><a title=\"Property:P813\" href=\"/wiki/Property:P813\">retrieved</a>: <b class=\"wb-details wb-time-details wb-time-rendered\">18 March 2021</b><table class=\"wb-details wb-time-details\"><tr><th class=\"wb-time-isotime\">Timestamp</th><td class=\"wb-time-isotime\">+2021-03-18T00:00:00Z</td></tr><tr><th class=\"wb-time-timezone\">Timezone</th><td class=\"wb-time-timezone\">+00:00</td></tr><tr><th class=\"wb-time-calendar\">Calendar</th><td class=\"wb-time-calendar\">Gregorian</td></tr><tr><th class=\"wb-time-precision\">Precision</th><td class=\"wb-time-precision\">1 day</td></tr><tr><th class=\"wb-time-before\">Before</th><td class=\"wb-time-before\">0</td></tr><tr><th class=\"wb-time-after\">After</th><td class=\"wb-time-after\">0</td></tr></table></span></ins></div></td></tr><tr><td colspan=\"2\" class=\"diff-lineno\"></td><td colspan=\"2\" class=\"diff-lineno\">Property / <a title=\"Property:P18\" href=\"/wiki/Property:P18\">image</a></td></tr><tr><td colspan=\"2\">\u00a0</td><td class=\"diff-marker\" data-marker=\"+\"></td><td class=\"diff-addedline\"><div><ins class=\"diffchange diffchange-inline\"><span><a class=\"extiw\" href=\"//commons.wikimedia.org/wiki/File:Le_ultime_vestigia_del_castello_di_Monte_Mauro_-_panoramio.jpg\">Le ultime vestigia del castello di Monte Mauro - panoramio.jpg</a></span></ins></div></td></tr><tr><td colspan=\"2\" class=\"diff-lineno\"></td><td colspan=\"2\" class=\"diff-lineno\">Property / <a title=\"Property:P18\" href=\"/wiki/Property:P18\">image</a>: <a class=\"extiw\" href=\"//commons.wikimedia.org/wiki/File:Le_ultime_vestigia_del_castello_di_Monte_Mauro_-_panoramio.jpg\">Le ultime vestigia del castello di Monte Mauro - panoramio.jpg</a> / rank</td></tr><tr><td colspan=\"2\">\u00a0</td><td class=\"diff-marker\" data-marker=\"+\"></td><td class=\"diff-addedline\"><div><ins class=\"diffchange diffchange-inline\"><span>Normal rank</span></ins></div></td></tr><tr><td colspan=\"2\" class=\"diff-lineno\"></td><td colspan=\"2\" class=\"diff-lineno\">Property / <a title=\"Property:P373\" href=\"/wiki/Property:P373\">Commons category</a></td></tr><tr><td colspan=\"2\">\u00a0</td><td class=\"diff-marker\" data-marker=\"+\"></td><td class=\"diff-addedline\"><div><ins class=\"diffchange diffchange-inline\"><span>Rocca di Monte Mauro</span></ins></div></td></tr><tr><td colspan=\"2\" class=\"diff-lineno\"></td><td colspan=\"2\" class=\"diff-lineno\">Property / <a title=\"Property:P373\" href=\"/wiki/Property:P373\">Commons category</a>: Rocca di Monte Mauro / rank</td></tr><tr><td colspan=\"2\">\u00a0</td><td class=\"diff-marker\" data-marker=\"+\"></td><td class=\"diff-addedline\"><div><ins class=\"diffchange diffchange-inline\"><span>Normal rank</span></ins></div></td></tr><tr><td colspan=\"2\" class=\"diff-lineno\">links / commonswiki / name</td><td colspan=\"2\" class=\"diff-lineno\">links / commonswiki / name</td></tr><tr><td colspan=\"2\">\u00a0</td><td class=\"diff-marker\" data-marker=\"+\"></td><td class=\"diff-addedline\"><div><ins class=\"diffchange diffchange-inline\"><a dir=\"auto\" href=\"https://commons.wikimedia.org/wiki/Category:Rocca_di_Monte_Mauro\" hreflang=\"en\">Category:Rocca di Monte Mauro</a></ins></div></td></tr>"
+    },
+    {
+      "id": "Q28001048",
+      "changed": true,
+      "label": "Castello di Levizzano Rangone",
+      "diff_url": "https://www.wikidata.org/w/index.php?title=Q28001048&type=revision&diff=2141805501&oldid=2120981615",
+      "created": false,
+      "reverted": false,
+      "ts_before": "20240501085341",
+      "ts_after": "20240501085428",
+      "editors": [{ "user_id": "0", "user_text": "37.103.31.35", "edits": 2 }],
+      "diff": "<tr><td colspan=\"2\" class=\"diff-lineno\"></td><td colspan=\"2\" class=\"diff-lineno\">Property / <a title=\"Property:P5252\" href=\"/wiki/Property:P5252\">winter view</a></td></tr><tr><td colspan=\"2\">\u00a0</td><td class=\"diff-marker\" data-marker=\"+\"></td><td class=\"diff-addedline\"><div><ins class=\"diffchange diffchange-inline\"><span><a class=\"extiw\" href=\"//commons.wikimedia.org/wiki/File:Il_Castello_di_Levizzano_vestito_di_bianco.jpg\">Il Castello di Levizzano vestito di bianco.jpg</a></span></ins></div></td></tr><tr><td colspan=\"2\" class=\"diff-lineno\"></td><td colspan=\"2\" class=\"diff-lineno\">Property / <a title=\"Property:P5252\" href=\"/wiki/Property:P5252\">winter view</a>: <a class=\"extiw\" href=\"//commons.wikimedia.org/wiki/File:Il_Castello_di_Levizzano_vestito_di_bianco.jpg\">Il Castello di Levizzano vestito di bianco.jpg</a> / rank</td></tr><tr><td colspan=\"2\">\u00a0</td><td class=\"diff-marker\" data-marker=\"+\"></td><td class=\"diff-addedline\"><div><ins class=\"diffchange diffchange-inline\"><span>Normal rank</span></ins></div></td></tr>"
+    },
+    {
+      "id": "Q71279",
+      "changed": true,
+      "label": "Malbork Castle",
+      "diff_url": "https://www.wikidata.org/w/index.php?title=Q71279&type=revision&diff=2141800429&oldid=2103653364",
+      "created": false,
+      "reverted": false,
+      "ts_before": "20240501084441",
+      "ts_after": "20240501084441",
+      "editors": [
+        { "user_id": "3642470", "user_text": "Sijorl49", "edits": 1 }
+      ],
+      "diff": "<tr><td colspan=\"2\" class=\"diff-lineno\">description / bg</td><td colspan=\"2\" class=\"diff-lineno\">description / bg</td></tr><tr><td colspan=\"2\">\u00a0</td><td class=\"diff-marker\" data-marker=\"+\"></td><td class=\"diff-addedline\"><div><ins class=\"diffchange diffchange-inline\">\u0437\u0430\u043c\u044a\u043a \u043d\u0430 \u0422\u0435\u0432\u0442\u043e\u043d\u0441\u043a\u0438\u044f \u043e\u0440\u0434\u0435\u043d \u0432 \u041f\u043e\u043b\u0448\u0430</ins></div></td></tr>"
+    },
+    {
+      "id": "Q593311",
+      "changed": true,
+      "label": "Bratislava Castle",
+      "diff_url": "https://www.wikidata.org/w/index.php?title=Q593311&type=revision&diff=2141793676&oldid=2135944221",
+      "created": false,
+      "reverted": false,
+      "ts_before": "20240501083220",
+      "ts_after": "20240501083220",
+      "editors": [{ "user_id": "9046", "user_text": "Pescan", "edits": 1 }],
+      "diff": "<tr><td colspan=\"2\" class=\"diff-lineno\"></td><td colspan=\"2\" class=\"diff-lineno\">Property / <a title=\"Property:P5775\" href=\"/wiki/Property:P5775\">image of interior</a></td></tr><tr><td colspan=\"2\">\u00a0</td><td class=\"diff-marker\" data-marker=\"+\"></td><td class=\"diff-addedline\"><div><ins class=\"diffchange diffchange-inline\"><span><a class=\"extiw\" href=\"//commons.wikimedia.org/wiki/File:Bratislava_-_hlavne_schodisko_hradneho_palaca.jpg\">Bratislava - hlavne schodisko hradneho palaca.jpg</a></span></ins></div></td></tr><tr><td colspan=\"2\" class=\"diff-lineno\"></td><td colspan=\"2\" class=\"diff-lineno\">Property / <a title=\"Property:P5775\" href=\"/wiki/Property:P5775\">image of interior</a>: <a class=\"extiw\" href=\"//commons.wikimedia.org/wiki/File:Bratislava_-_hlavne_schodisko_hradneho_palaca.jpg\">Bratislava - hlavne schodisko hradneho palaca.jpg</a> / rank</td></tr><tr><td colspan=\"2\">\u00a0</td><td class=\"diff-marker\" data-marker=\"+\"></td><td class=\"diff-addedline\"><div><ins class=\"diffchange diffchange-inline\"><span>Normal rank</span></ins></div></td></tr>"
+    },
+    {
+      "id": "Q3662531",
+      "changed": true,
+      "label": "Castello di Caprarica",
+      "diff_url": "https://www.wikidata.org/w/index.php?title=Q3662531&type=revision&diff=2141793079&oldid=2116710868",
+      "created": false,
+      "reverted": false,
+      "ts_before": "20240501083128",
+      "ts_after": "20240501083128",
+      "editors": [{ "user_id": "5249", "user_text": "Bob08", "edits": 1 }],
+      "diff": "<tr><td colspan=\"2\" class=\"diff-lineno\">label / fr</td><td colspan=\"2\" class=\"diff-lineno\">label / fr</td></tr><tr><td class=\"diff-marker\" data-marker=\"\u2212\"></td><td class=\"diff-deletedline\"><div><del class=\"diffchange diffchange-inline\">Ch\u00e2teau </del>de Caprarica</div></td><td class=\"diff-marker\" data-marker=\"+\"></td><td class=\"diff-addedline\"><div><ins class=\"diffchange diffchange-inline\">ch\u00e2teau </ins>de Caprarica</div></td></tr>"
+    },
+    {
+      "id": "Q100157406",
+      "changed": true,
+      "label": "Castle Bedheim",
+      "diff_url": "https://www.wikidata.org/w/index.php?title=Q100157406&type=revision&diff=2141788307&oldid=1420778553",
+      "created": false,
+      "reverted": false,
+      "ts_before": "20240501082414",
+      "ts_after": "20240501082414",
+      "editors": [
+        { "user_id": "3042692", "user_text": "Ionenlaser", "edits": 1 }
+      ],
+      "diff": "<tr><td colspan=\"2\" class=\"diff-lineno\">description / en</td><td colspan=\"2\" class=\"diff-lineno\">description / en</td></tr><tr><td colspan=\"2\">\u00a0</td><td class=\"diff-marker\" data-marker=\"+\"></td><td class=\"diff-addedline\"><div><ins class=\"diffchange diffchange-inline\">Bedheim Castle in Thuringia</ins></div></td></tr>"
+    },
+    {
+      "id": "Q14558523",
+      "changed": true,
+      "label": "Little Castle",
+      "diff_url": "https://www.wikidata.org/w/index.php?title=Q14558523&type=revision&diff=2141633724&oldid=1963954970",
+      "created": false,
+      "reverted": false,
+      "ts_before": "20240501030628",
+      "ts_after": "20240501030707",
+      "editors": [{ "user_id": "1319147", "user_text": "AnBuKu", "edits": 2 }],
+      "diff": "<tr><td colspan=\"2\" class=\"diff-lineno\"></td><td colspan=\"2\" class=\"diff-lineno\">Property / <a title=\"Property:P381\" href=\"/wiki/Property:P381\">PCP reference number</a>: <a class=\"wb-external-id external\" href=\"https://wikidata-externalid-url.toolforge.org/?url=https%3A%2F%2Fheritage.toolforge.org%2Fapi%2Fapi.php%3Faction%3Dsearch%26format%3Dhtml%26srcountry%3Dch%26srid%3D%251&amp;exp=0*(.*)&amp;id=01363\" rel=\"nofollow\">01363</a> / reference</td></tr><tr><td colspan=\"2\">\u00a0</td><td class=\"diff-marker\" data-marker=\"+\"></td><td class=\"diff-addedline\"><div><ins class=\"diffchange diffchange-inline\"><span><a title=\"Property:P248\" href=\"/wiki/Property:P248\">stated in</a>: <a title=\"Q116780576\" href=\"/wiki/Q116780576\">Swiss PCP Inventory 2023</a></span></ins></div></td></tr><tr><td colspan=\"2\" class=\"diff-lineno\">Property / <a title=\"Property:P973\" href=\"/wiki/Property:P973\">described at URL</a></td><td colspan=\"2\" class=\"diff-lineno\">Property / <a title=\"Property:P973\" href=\"/wiki/Property:P973\">described at URL</a></td></tr><tr><td class=\"diff-marker\" data-marker=\"\u2212\"></td><td class=\"diff-deletedline\"><div><del class=\"diffchange diffchange-inline\"><span><a rel=\"nofollow\" class=\"external free\" href=\"https://apps.dynasphere.de/0001/report/rep_OBJEKT_bauinventar_230811.pdf\">https://apps.dynasphere.de/0001/report/rep_OBJEKT_bauinventar_230811.pdf</a></span></del></div></td><td class=\"diff-marker\" data-marker=\"+\"></td><td class=\"diff-addedline\"><div><ins class=\"diffchange diffchange-inline\"><span><a rel=\"nofollow\" class=\"external free\" href=\"https://denkmalpflege.apps.be.ch/de/collection/item/31786/\">https://denkmalpflege.apps.be.ch/de/collection/item/31786/</a></span></ins></div></td></tr><tr><td colspan=\"2\" class=\"diff-lineno\"></td><td colspan=\"2\" class=\"diff-lineno\">Property / <a title=\"Property:P973\" href=\"/wiki/Property:P973\">described at URL</a>: <a rel=\"nofollow\" class=\"external free\" href=\"https://denkmalpflege.apps.be.ch/de/collection/item/31786/\">https://denkmalpflege.apps.be.ch/de/collection/item/31786/</a> / qualifier</td></tr><tr><td colspan=\"2\">\u00a0</td><td class=\"diff-marker\" data-marker=\"+\"></td><td class=\"diff-addedline\"><div><ins class=\"diffchange diffchange-inline\"><span><a title=\"Property:P813\" href=\"/wiki/Property:P813\">retrieved</a>: <b class=\"wb-details wb-time-details wb-time-rendered\">1 May 2024</b><table class=\"wb-details wb-time-details\"><tr><th class=\"wb-time-isotime\">Timestamp</th><td class=\"wb-time-isotime\">+2024-05-01T00:00:00Z</td></tr><tr><th class=\"wb-time-timezone\">Timezone</th><td class=\"wb-time-timezone\">+00:00</td></tr><tr><th class=\"wb-time-calendar\">Calendar</th><td class=\"wb-time-calendar\">Gregorian</td></tr><tr><th class=\"wb-time-precision\">Precision</th><td class=\"wb-time-precision\">1 day</td></tr><tr><th class=\"wb-time-before\">Before</th><td class=\"wb-time-before\">0</td></tr><tr><th class=\"wb-time-after\">After</th><td class=\"wb-time-after\">0</td></tr></table></span></ins></div></td></tr><tr><td colspan=\"2\" class=\"diff-lineno\">Property / <a title=\"Property:P973\" href=\"/wiki/Property:P973\">described at URL</a>: <a rel=\"nofollow\" class=\"external free\" href=\"https://apps.dynasphere.de/0001/report/rep_OBJEKT_bauinventar_230811.pdf\">https://apps.dynasphere.de/0001/report/rep_OBJEKT_bauinventar_230811.pdf</a> / qualifier</td><td colspan=\"2\" class=\"diff-lineno\"></td></tr><tr><td class=\"diff-marker\" data-marker=\"\u2212\"></td><td class=\"diff-deletedline\"><div><del class=\"diffchange diffchange-inline\"><span><a title=\"Property:P2701\" href=\"/wiki/Property:P2701\">file format</a>: <a title=\"Q42332\" href=\"/wiki/Q42332\">Portable Document Format</a></span></del></div></td><td colspan=\"2\">\u00a0</td></tr><tr><td colspan=\"2\" class=\"diff-lineno\">Property / <a title=\"Property:P973\" href=\"/wiki/Property:P973\">described at URL</a>: <a rel=\"nofollow\" class=\"external free\" href=\"https://apps.dynasphere.de/0001/report/rep_OBJEKT_bauinventar_230811.pdf\">https://apps.dynasphere.de/0001/report/rep_OBJEKT_bauinventar_230811.pdf</a> / qualifier</td><td colspan=\"2\" class=\"diff-lineno\"></td></tr><tr><td class=\"diff-marker\" data-marker=\"\u2212\"></td><td class=\"diff-deletedline\"><div><del class=\"diffchange diffchange-inline\"><span><a title=\"Property:P813\" href=\"/wiki/Property:P813\">retrieved</a>: <b class=\"wb-details wb-time-details wb-time-rendered\">11 January 2022</b><table class=\"wb-details wb-time-details\"><tr><th class=\"wb-time-isotime\">Timestamp</th><td class=\"wb-time-isotime\">+2022-01-11T00:00:00Z</td></tr><tr><th class=\"wb-time-timezone\">Timezone</th><td class=\"wb-time-timezone\">+00:00</td></tr><tr><th class=\"wb-time-calendar\">Calendar</th><td class=\"wb-time-calendar\">Gregorian</td></tr><tr><th class=\"wb-time-precision\">Precision</th><td class=\"wb-time-precision\">1 day</td></tr><tr><th class=\"wb-time-before\">Before</th><td class=\"wb-time-before\">0</td></tr><tr><th class=\"wb-time-after\">After</th><td class=\"wb-time-after\">0</td></tr></table></span></del></div></td><td colspan=\"2\">\u00a0</td></tr>"
+    }
+  ],
+  "total_items": 23442
+}

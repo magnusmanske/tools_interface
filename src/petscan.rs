@@ -14,17 +14,17 @@
 use std::collections::HashMap;
 
 use crate::ToolsError;
-use serde::Deserialize;
+use serde::{Deserialize, Serialize};
 use serde_json::Value;
 
-#[derive(Debug, Default, PartialEq, Deserialize)]
+#[derive(Debug, Default, PartialEq, Serialize, Deserialize)]
 pub struct PetScanFileUsage {
     pub ns: i32,
     pub page: String,
     pub wiki: String,
 }
 
-#[derive(Debug, Default, PartialEq, Deserialize)]
+#[derive(Debug, Default, PartialEq, Serialize, Deserialize)]
 pub struct PetScanMetadata {
     // TODO defaultsort (fix JSON output upstream)
     #[serde(default)]
@@ -93,10 +93,12 @@ pub struct PetScan {
     pages: Vec<PetScanPage>,
     namespaces: HashMap<i32, String>,
     query: Option<String>,
+    wiki: Option<String>,
     status: Option<String>,
 }
 
 impl PetScan {
+    /// Create a new PetScan query with a PSID.
     pub fn new(psid: u32) -> Self {
         Self {
             psid,
@@ -105,6 +107,7 @@ impl PetScan {
     }
 
     #[cfg(feature = "blocking")]
+    /// Perform a blocking PetScan query.
     pub fn get_blocking(&mut self) -> Result<(), ToolsError> {
         let url = format!("https://petscan.wmflabs.org/?psid={psid}&format=json&output_compatability=quick-intersection", psid=self.psid);
         let client = crate::ToolsInterface::blocking_client()?;
@@ -113,6 +116,7 @@ impl PetScan {
     }
 
     #[cfg(feature = "tokio")]
+    /// Get the PetScan query asynchronously.
     pub async fn get(&mut self) -> Result<(), ToolsError> {
         let url = format!("https://petscan.wmflabs.org/?psid={psid}&format=json&output_compatability=quick-intersection", psid=self.psid);
         let client = crate::ToolsInterface::tokio_client()?;
@@ -141,6 +145,7 @@ impl PetScan {
             .iter()
             .map(|(k, v)| (k.parse().unwrap(), v.as_str().unwrap().to_string()))
             .collect();
+        self.wiki = json["wiki"].as_str().map(|s| s.to_string());
         for page_json in json["pages"]
             .as_array()
             .ok_or(ToolsError::Json("['pages'] has no array".into()))?
@@ -151,8 +156,25 @@ impl PetScan {
         Ok(())
     }
 
+    /// Get the mutable parameters for the future PetScan query.
+    /// You can override the parameters from the PSID this way.
     pub fn parameters_mut(&mut self) -> &mut Vec<(String, String)> {
         &mut self.parameters
+    }
+
+    /// Get the namespaces from the PetScan query.
+    pub fn pages(&self) -> &[PetScanPage] {
+        &self.pages
+    }
+
+    /// Get the (main) wiki from the PetScan query.
+    pub fn wiki(&self) -> Option<&String> {
+        self.wiki.as_ref()
+    }
+
+    /// Get the PetScan query that was run.
+    pub fn query(&self) -> Option<&String> {
+        self.query.as_ref()
     }
 }
 

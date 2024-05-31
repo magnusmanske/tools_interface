@@ -12,9 +12,11 @@
 //! - [Missing Topics](https://missingtopics.toolforge.org/)
 //! - [Quarry](https://quarry.wmcloud.org/) (existing results only)
 //! - [QuickStatements](https://quickstatements.toolforge.org/) (start batches)
+//! - [SparqlRC](https://wikidata-todo.toolforge.org/sparql_rc.php)
 //!
 //! If you would like to see other tools supported, add a request to the [Issue tracker](https://github.com/magnusmanske/tools_interface/issues).
 
+pub mod completer;
 pub mod error;
 pub mod missing_topics;
 pub mod pagepile;
@@ -23,10 +25,11 @@ pub mod persondata_template;
 pub mod petscan;
 pub mod quarry;
 pub mod quickstatements;
-pub mod completer;
 pub mod site;
+pub mod sparql_rc;
 pub mod tools_interface;
 
+pub use completer::{Completer, CompleterFilter};
 pub use error::ToolsError;
 pub use missing_topics::MissingTopics;
 pub use pagepile::PagePile;
@@ -36,8 +39,8 @@ pub use petscan::*;
 pub use quarry::Quarry;
 pub use quickstatements::QuickStatements;
 pub use site::Site;
+pub use sparql_rc::{EntityEdit, EntityEditor, SparqlRC};
 pub use tools_interface::ToolsInterface;
-pub use completer::{Completer, CompleterFilter};
 
 /*
 TODO
@@ -50,7 +53,6 @@ TODO
 - https://wikidata-todo.toolforge.org/user_edits.php
 - https://wikidata-todo.toolforge.org/wd_edit_stats.php
 - https://wikidata-todo.toolforge.org/wdq_image_feed.php
-- https://wikidata-todo.toolforge.org/sparql_rc.php
 - https://fist.toolforge.org/wd4wp/#/
 - https://wikidata-todo.toolforge.org/duplicity/#/
 - https://whattodo.toolforge.org
