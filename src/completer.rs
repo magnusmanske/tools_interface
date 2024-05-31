@@ -112,16 +112,24 @@ impl Completer {
         })
     }
 
+    #[cfg(feature = "blocking")]
+    /// Run the query in a blocking manner.
+    pub fn run_blocking(&mut self) -> Result<(), ToolsError> {
+        let url = &self.tool_url;
+        let j = self.generate_payload();
+        let client = crate::ToolsInterface::blocking_client()?;
+        let j: Value = client.post(url).json(&j).send()?.json()?;
+        self.from_json(j)
+    }
+
     #[cfg(feature = "tokio")]
     /// Run the query asynchronously.
     pub async fn run(&mut self) -> Result<(), ToolsError> {
         let url = &self.tool_url;
         let j = self.generate_payload();
-        // println!("PAYLOAD: {}", j);
         let client = crate::ToolsInterface::tokio_client()?;
         let response = client.post(url).json(&j).send().await?;
         let j: Value = response.json().await?;
-        // println!("RESPONSE: {}", j);
         self.from_json(j)
     }
 
