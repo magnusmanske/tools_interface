@@ -5,14 +5,13 @@ use crate::ToolsError;
 
 #[async_trait]
 pub trait Tool {
-
     #[cfg(feature = "blocking")]
     /// Run the tool in a blocking manner.
-    fn run_blocking(&mut self) -> Result<(), ToolsError> ;
+    fn run_blocking(&mut self) -> Result<(), ToolsError>;
 
     #[cfg(feature = "tokio")]
     /// Run the tool asynchronously.
-    async fn run(&mut self) -> Result<(), ToolsError> ;
+    async fn run(&mut self) -> Result<(), ToolsError>;
 
     fn from_json(&mut self, _j: Value) -> Result<(), ToolsError> {
         unimplemented!();
