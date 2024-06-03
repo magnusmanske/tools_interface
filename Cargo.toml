@@ -35,3 +35,10 @@ default = ["blocking", "tokio"]
 [dev-dependencies]
 wiremock = "0.6"
 http = "1"
+
+[profile.release]
+strip = true      # Automatically strip symbols from the binary.
+opt-level = "s"   # Optimize for size, but leave loop vectorization.
+lto = true
+codegen-units = 1
+panic = "abort"
