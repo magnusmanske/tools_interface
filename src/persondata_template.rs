@@ -1,15 +1,14 @@
-//! # Persondata Vorlagen
-//! Queries the [Persondata Vorlagen tool](https://persondata.toolforge.org/vorlagen) for information about template usage on Germam Wikipedia.
-//! Build a `PersondataTemplates` and call `get_blocking()` to get the results.
-//! Results are returned as a `Vec<PersondataTemplatesResult>`.
-//!
-//! Example:
-//! ```rust
-//! let results: Vec<PersondataTemplatesResult> = PersondataTemplates::with_template("Roscher")
-//!     .parameter_name("4")
-//!     .get().await.unwrap();
-//! ```
-
+/// # Persondata Vorlagen
+/// Queries the [Persondata Vorlagen tool](https://persondata.toolforge.org/vorlagen) for information about template usage on Germam Wikipedia.
+/// Build a `PersondataTemplates` and call `get_blocking()` to get the results.
+/// Results are returned as a `Vec<PersondataTemplatesResult>`.
+///
+/// Example:
+/// ```rust
+/// let results: Vec<PersondataTemplatesResult> = PersondataTemplates::with_template("Roscher")
+///     .parameter_name("4")
+///     .get().await.unwrap();
+/// ```
 use async_trait::async_trait;
 
 use crate::{Tool, ToolsError};

@@ -1,16 +1,15 @@
-//! # PetScan
-//! This module provides a wrapper around the PetScan tool.
-//! You can perform a PetScan query via a PSID.
-//! There are blocking and async methods available.
-//!
-//! ## Example
-//! ```rust
-//! let mut ps = PetScan::new(12345); // Your PSID
-//! ps.parameters_mut().push(("foo".to_string(), "bar".to_string())); // Override parameters from the PSID
-//! ps.get().await.unwrap();
-//! let page_titles = ps.pages.iter().map(|page| page.page_title).collect::<Vec<_>>();
-//! ```
-
+/// # PetScan
+/// This module provides a wrapper around the PetScan tool.
+/// You can perform a PetScan query via a PSID.
+/// There are blocking and async methods available.
+///
+/// ## Example
+/// ```rust
+/// let mut ps = PetScan::new(12345); // Your PSID
+/// ps.parameters_mut().push(("foo".to_string(), "bar".to_string())); // Override parameters from the PSID
+/// ps.get().await.unwrap();
+/// let page_titles = ps.pages.iter().map(|page| page.page_title).collect::<Vec<_>>();
+/// ```
 use std::collections::HashMap;
 
 use crate::{Tool, ToolsError};

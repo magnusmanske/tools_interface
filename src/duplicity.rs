@@ -1,24 +1,23 @@
-//! # Duplicity
-//! Module for interacting with the [Duplicity tool](https://wikidata-todo.toolforge.org/duplicity/).
-//! You can retrieve a list of pages on a wiki that do not have a Wikidata item.
-//! There are blocking and async methods available.
-//!
-//! ## Example
-//! ```rust
-//! let wikis = Duplicity::wikis().await.unwrap();
-//! wikis
-//!     .iter()
-//!     .for_each(|(wiki, count)| println!("{wiki} has {count} pages without WIkidata item"));
-//!
-//! let mut d = Duplicity::new(Site::from_wiki("enwiki").unwrap());
-//! d.run().await.unwrap();
-//! d.results()
-//!     .iter()
-//!     .for_each(|result| {
-//!        println!("{} was added {}",result.title, result.creation_date);
-//!     });
-//! ```
-
+/// # Duplicity
+/// Module for interacting with the [Duplicity tool](https://wikidata-todo.toolforge.org/duplicity/).
+/// You can retrieve a list of pages on a wiki that do not have a Wikidata item.
+/// There are blocking and async methods available.
+///
+/// ## Example
+/// ```rust
+/// let wikis = Duplicity::wikis().await.unwrap();
+/// wikis
+///     .iter()
+///     .for_each(|(wiki, count)| println!("{wiki} has {count} pages without WIkidata item"));
+///
+/// let mut d = Duplicity::new(Site::from_wiki("enwiki").unwrap());
+/// d.run().await.unwrap();
+/// d.results()
+///     .iter()
+///     .for_each(|result| {
+///        println!("{} was added {}",result.title, result.creation_date);
+///     });
+/// ```
 use crate::{Site, Tool, ToolsError};
 use async_trait::async_trait;
 use chrono::NaiveDateTime;

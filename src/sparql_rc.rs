@@ -1,21 +1,20 @@
-//! # SparqlRC
-//! Module for interacting with the [SparqlRC tool](https://wikidata-todo.toolforge.org/sparql_rc.php).
-//! You can retrieve a list of missing topics for a page or category.
-//! There are blocking and async methods available.
-//!
-//! ## Example
-//! ```rust
-//! let mut rc = SparqlRC::new("SELECT ?q { ?q wdt:P31 wd:Q23413 }")
-//!     .start(NaiveDate::from_ymd_opt(2024, 5, 1).unwrap().into())
-//!     .end(NaiveDate::from_ymd_opt(2024, 5, 2).unwrap().into());
-//! rc.run().await.unwrap();
-//! rc.results()
-//!     .iter()
-//!     .for_each(|entity_edit| {
-//!        println!("Entity changed: {}", entity_edit.id);
-//!     });
-//! ```
-
+/// # SparqlRC
+/// Module for interacting with the [SparqlRC tool](https://wikidata-todo.toolforge.org/sparql_rc.php).
+/// You can retrieve a list of missing topics for a page or category.
+/// There are blocking and async methods available.
+///
+/// ## Example
+/// ```rust
+/// let mut rc = SparqlRC::new("SELECT ?q { ?q wdt:P31 wd:Q23413 }")
+///     .start(NaiveDate::from_ymd_opt(2024, 5, 1).unwrap().into())
+///     .end(NaiveDate::from_ymd_opt(2024, 5, 2).unwrap().into());
+/// rc.run().await.unwrap();
+/// rc.results()
+///     .iter()
+///     .for_each(|entity_edit| {
+///        println!("Entity changed: {}", entity_edit.id);
+///     });
+/// ```
 use crate::{Tool, ToolsError};
 use async_trait::async_trait;
 use chrono::NaiveDateTime;

@@ -1,13 +1,12 @@
-//! # ToolsInterface
-//! Some common helper functions for interacting with the Wikimedia Toolforge environment,
-//! e.g. creating HTTP clients, getting Wikidata item ID for page titles, etc.
-//!
-//! ## Example
-//! ```rust
-//! let result = ToolsInterface::wikidata_item_for_titles(wiki, ["Albert Einstein".to_string()]).await.unwrap();
-//! let q = result.get("Albert Einstein").unwrap(); // Yields "Q937"
-//! ```
-
+/// # ToolsInterface
+/// Some common helper functions for interacting with the Wikimedia Toolforge environment,
+/// e.g. creating HTTP clients, getting Wikidata item ID for page titles, etc.
+///
+/// ## Example
+/// ```rust
+/// let result = ToolsInterface::wikidata_item_for_titles(wiki, ["Albert Einstein".to_string()]).await.unwrap();
+/// let q = result.get("Albert Einstein").unwrap(); // Yields "Q937"
+/// ```
 use crate::ToolsError;
 use mediawiki::api::Api;
 use std::collections::HashMap;

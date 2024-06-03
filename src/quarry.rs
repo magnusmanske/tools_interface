@@ -1,21 +1,20 @@
-//! # Quarry
-//! A module for interacting with the Quarry web service.
-//! You can query for the latest results of a Quarry query via the query ID.
-//! There are blocking and async methods available.
-//!
-//! ## Example
-//! ```rust
-//! #[tokio::main]
-//! async fn main() {
-//!     let mut quarry = Quarry::new(12345); // Your Quarry query ID
-//!     quarry.get().await.unwrap();
-//!     let column_number = quarry.colnum("page_title").unwrap();
-//!     let page_titles = quarry.rows().iter()
-//!         .filter_map(|row| row[column_number].as_str())
-//!         .collect::<Vec<_>>();
-//! }
-//! ```
-
+/// # Quarry
+/// A module for interacting with the Quarry web service.
+/// You can query for the latest results of a Quarry query via the query ID.
+/// There are blocking and async methods available.
+///
+/// ## Example
+/// ```rust
+/// #[tokio::main]
+/// async fn main() {
+///     let mut quarry = Quarry::new(12345); // Your Quarry query ID
+///     quarry.get().await.unwrap();
+///     let column_number = quarry.colnum("page_title").unwrap();
+///     let page_titles = quarry.rows().iter()
+///         .filter_map(|row| row[column_number].as_str())
+///         .collect::<Vec<_>>();
+/// }
+/// ```
 use async_trait::async_trait;
 use serde_json::Value;
 

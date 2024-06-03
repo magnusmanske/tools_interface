@@ -1,40 +1,38 @@
-//! # Pageviews
-//! This implements a simple interface to the Wikimedia Pageviews API.
-//! More information can be found [here](https://wikitech.wikimedia.org/wiki/Analytics/AQS/Pageviews).
-//! Currently, only single-page views are supported.
-//! Aggregate and top views are not yet implemented.
-//!
-//! ## Features
-//! Views for multiple pages, on multiple projects, can be retrieved concurrently for a single time span.
-//!
-//! ## Example
-//! ```rust
-//! let pv = Pageviews::new(
-//!     PageviewsGranularity::Monthly, // Get monthly views
-//!     PageviewsAccess::All, // Get all-access views
-//!     PageviewsAgent::All, // Get views from all agents
-//! );
-//!
-//! // Prepre a `(String,String)` vector of project-page pairs.
-//! let project_pages = [
-//!     ("de.wikipedia", "Barack Obama"),
-//!     ("de.wikipedia", "Trude Herr"),
-//! ].into_iter().map(|(a, b)| (a.into(), b.into())).collect();
-//!
-//! // Get the pageviews for these pages for every month of 2016.
-//! let results = pv.get_multiple_articles(
-//!     &project_pages,
-//!     &Pageviews::month_start(2016, 1).unwrap(),
-//!     &Pageviews::month_end(2016, 12).unwrap(),
-//!     5,
-//! ).await.unwrap();
-//!
-//! // Count all views of all pages.
-//! let overall_views: u64 = results.iter().map(|r| r.total_views()).sum();
-//! ```
-
+/// # Pageviews
+/// This implements a simple interface to the Wikimedia Pageviews API.
+/// More information can be found [here](https://wikitech.wikimedia.org/wiki/Analytics/AQS/Pageviews).
+/// Currently, only single-page views are supported.
+/// Aggregate and top views are not yet implemented.
+///
+/// ## Features
+/// Views for multiple pages, on multiple projects, can be retrieved concurrently for a single time span.
+///
+/// ## Example
+/// ```rust
+/// let pv = Pageviews::new(
+///     PageviewsGranularity::Monthly, // Get monthly views
+///     PageviewsAccess::All, // Get all-access views
+///     PageviewsAgent::All, // Get views from all agents
+/// );
+///
+/// // Prepre a `(String,String)` vector of project-page pairs.
+/// let project_pages = [
+///     ("de.wikipedia", "Barack Obama"),
+///     ("de.wikipedia", "Trude Herr"),
+/// ].into_iter().map(|(a, b)| (a.into(), b.into())).collect();
+///
+/// // Get the pageviews for these pages for every month of 2016.
+/// let results = pv.get_multiple_articles(
+///     &project_pages,
+///     &Pageviews::month_start(2016, 1).unwrap(),
+///     &Pageviews::month_end(2016, 12).unwrap(),
+///     5,
+/// ).await.unwrap();
+///
+/// // Count all views of all pages.
+/// let overall_views: u64 = results.iter().map(|r| r.total_views()).sum();
+/// ```
 // NOTE: This does not use the `Tool` trait, it is too different.
-
 use chrono::{Duration, NaiveDate};
 use futures::prelude::*;
 use serde::Deserialize;

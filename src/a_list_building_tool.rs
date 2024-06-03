@@ -1,3 +1,20 @@
+/// # Completer
+/// Module for interacting with the [A list building tool](https://a-list-bulding-tool.toolforge.org/).
+/// You can retrieve a list of pages on one wiki that relate to a WIkidata item.
+/// There are blocking and async methods available.
+///
+/// ## Example
+/// ```rust
+/// let site = Site::from_wiki("enwiki").unwrap();
+/// let q = "Q42";
+/// let mut a = AListBuildingTool::new(site, q);
+/// a.run().await.unwrap();
+/// a.results()
+///     .iter()
+///     .for_each(|result| {
+///        println!("Page {} Item {}", result.title, result.qid);
+///     });
+/// ```
 use crate::{Site, Tool, ToolsError};
 use async_trait::async_trait;
 use serde_json::Value;

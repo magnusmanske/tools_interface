@@ -1,21 +1,20 @@
-//! # Completer
-//! Module for interacting with the [Completer tool](https://completer.toolforge.org/).
-//! You can retrieve a list of pages on one wiki that do not exist in the other.
-//! There are blocking and async methods available.
-//!
-//! ## Example
-//! ```rust
-//! let mut c = Completer::new("de", "en")
-//!     .filter(CompleterFilter::Category{category: "Biologie".to_string(), depth: 0})
-//!     .ignore_cache();
-//!  c.run().await.unwrap();
-//!  c.results()
-//!     .iter()
-//!     .for_each(|(title, count)| {
-//!        println!("{title} wanted {count} times");
-//!     });
-//! ```
-
+/// # Completer
+/// Module for interacting with the [Completer tool](https://completer.toolforge.org/).
+/// You can retrieve a list of pages on one wiki that do not exist in the other.
+/// There are blocking and async methods available.
+///
+/// ## Example
+/// ```rust
+/// let mut c = Completer::new("de", "en")
+///     .filter(CompleterFilter::Category{category: "Biologie".to_string(), depth: 0})
+///     .ignore_cache();
+///  c.run().await.unwrap();
+///  c.results()
+///     .iter()
+///     .for_each(|(title, count)| {
+///        println!("{title} wanted {count} times");
+///     });
+/// ```
 use crate::{Tool, ToolsError};
 use async_trait::async_trait;
 use serde_json::{json, Value};

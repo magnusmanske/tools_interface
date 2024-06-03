@@ -1,9 +1,8 @@
-//! # Site
-//! `Site` is a struct that represents a MediaWiki site.
-//! It can be created from a wiki name, or a language and project.
-//! It provides methods to get the language, project, and webserver of the site,
-//! as well as a MediaWiki `Api` object.
-
+/// # Site
+/// `Site` is a struct that represents a MediaWiki site.
+/// It can be created from a wiki name, or a language and project.
+/// It provides methods to get the language, project, and webserver of the site,
+/// as well as a MediaWiki `Api` object.
 use lazy_static::lazy_static;
 use mediawiki::api::Api;
 use regex::Regex;

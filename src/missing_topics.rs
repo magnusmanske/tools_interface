@@ -1,21 +1,20 @@
-//! # Missing Topics
-//! Module for interacting with the [Missing Topics tool](https://missingtopics.toolforge.org/).
-//! You can retrieve a list of missing topics for a page or category.
-//! There are blocking and async methods available.
-//!
-//! ## Example
-//! ```rust
-//! let mut mt = MissingTopics::new(Site::from_wiki("dewiki").unwrap())
-//!     .with_article("Biologie")
-//!     .no_template_links(true);
-//! mt.run().await.unwrap();
-//! mt.results()
-//!     .iter()
-//!     .for_each(|(title, count)| {
-//!        println!("{title} wanted {count} times");
-//!     });
-//! ```
-
+/// # Missing Topics
+/// Module for interacting with the [Missing Topics tool](https://missingtopics.toolforge.org/).
+/// You can retrieve a list of missing topics for a page or category.
+/// There are blocking and async methods available.
+///
+/// ## Example
+/// ```rust
+/// let mut mt = MissingTopics::new(Site::from_wiki("dewiki").unwrap())
+///     .with_article("Biologie")
+///     .no_template_links(true);
+/// mt.run().await.unwrap();
+/// mt.results()
+///     .iter()
+///     .for_each(|(title, count)| {
+///        println!("{title} wanted {count} times");
+///     });
+/// ```
 use crate::{Site, Tool, ToolsError};
 use async_trait::async_trait;
 use serde_json::Value;
