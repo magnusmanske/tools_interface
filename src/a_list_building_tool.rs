@@ -111,6 +111,9 @@ mod tests {
         let q = "Q42";
         let mut tool = AListBuildingTool::new(site, q);
         tool.run().await.unwrap();
-        assert!(tool.results().iter().any(|result| result.qid == "Q5" && result.title == "Human"));
+        assert!(tool
+            .results()
+            .iter()
+            .any(|result| result.qid == "Q5" && result.title == "Human"));
     }
 }
