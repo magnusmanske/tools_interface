@@ -17,7 +17,17 @@
 //!
 //! Example: Run Missing Topics on German Wikipedia for the article "Biologie", without template links:
 //! ```shell
-//! missing_topics --wiki dewiki --article Biologie --no_template_links
+//! ti missing_topics --wiki dewiki --article Biologie --no_template_links
+//! ```
+//!
+//! To convert the output to a more human-readable format, you can use `jq`:
+//! ```shell
+//! # First, pipe your output to a file:
+//! ti SOME_COMMAND > test.json
+//! # Assuming you just want the page titles:
+//! jq -r '.pages[].prefixed_title' < test.json
+//! # Assuming the output has additional `counter` fields:
+//! jq -r '.pages[] | "\(.prefixed_title)\t\(.counter)"' < test.json
 //! ```
 
 use clap::{value_parser, Arg, ArgAction, ArgMatches, Command};

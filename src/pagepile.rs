@@ -114,12 +114,7 @@ impl PagePile {
     pub fn site(&self) -> Option<crate::Site> {
         Some(match &self.wiki {
             Some(wiki) => Site::from_wiki(wiki)?,
-            None => {
-                Site::from_language_project(
-                    self.language.as_ref()?,
-                    self.project.as_ref()?,
-                )
-            }
+            None => Site::from_language_project(self.language.as_ref()?, self.project.as_ref()?),
         })
     }
 }
