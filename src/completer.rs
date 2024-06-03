@@ -1,6 +1,6 @@
 //! # Completer
 //! Module for interacting with the [Completer tool](https://completer.toolforge.org/).
-//! You can retrieve a list of pages on one wiki taht do not exist in the other.
+//! You can retrieve a list of pages on one wiki that do not exist in the other.
 //! There are blocking and async methods available.
 //!
 //! ## Example
@@ -8,7 +8,6 @@
 //! let mut c = Completer::new("de", "en")
 //!     .filter(CompleterFilter::Category{category: "Biologie".to_string(), depth: 0})
 //!     .ignore_cache();
-//!  c.tool_url = format!("{}/data", mock_server.uri());
 //!  c.run().await.unwrap();
 //!  c.results()
 //!     .iter()
