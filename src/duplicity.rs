@@ -19,7 +19,8 @@
 //!     });
 //! ```
 
-use crate::{Site, ToolsError};
+use crate::{Site, Tool, ToolsError};
+use async_trait::async_trait;
 use chrono::NaiveDateTime;
 use serde_json::Value;
 
@@ -82,6 +83,17 @@ impl Duplicity {
         }
     }
 
+    pub fn site(&self) -> &Site {
+        &self.site
+    }
+
+    pub fn results(&self) -> &[DuplicityResult] {
+        &self.results
+    }
+}
+
+#[async_trait]
+impl Tool for Duplicity {
     fn generate_paramters(&self) -> Result<Vec<(String, String)>, ToolsError> {
         let parameters: Vec<(String, String)> = [
             ("action".to_string(), "articles".to_string()),
@@ -93,7 +105,7 @@ impl Duplicity {
 
     #[cfg(feature = "blocking")]
     /// Run the query in a blocking manner.
-    pub fn run_blocking(&mut self) -> Result<(), ToolsError> {
+    fn run_blocking(&mut self) -> Result<(), ToolsError> {
         let url = "https://wikidata-todo.toolforge.org/duplicity/api.php";
         let parameters = self.generate_paramters()?;
         let client = crate::ToolsInterface::blocking_client()?;
@@ -103,7 +115,7 @@ impl Duplicity {
 
     #[cfg(feature = "tokio")]
     /// Run the query asynchronously.
-    pub async fn run(&mut self) -> Result<(), ToolsError> {
+    async fn run(&mut self) -> Result<(), ToolsError> {
         let url = "https://wikidata-todo.toolforge.org/duplicity/api.php";
         let parameters = self.generate_paramters()?;
         let client = crate::ToolsInterface::tokio_client()?;
@@ -126,14 +138,6 @@ impl Duplicity {
             .map(|x| DuplicityResult::from_json(x))
             .collect::<Result<Vec<DuplicityResult>, ToolsError>>()?;
         Ok(())
-    }
-
-    pub fn site(&self) -> &Site {
-        &self.site
-    }
-
-    pub fn results(&self) -> &[DuplicityResult] {
-        &self.results
     }
 }
 

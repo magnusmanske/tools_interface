@@ -11,7 +11,8 @@
 //! let page_titles = pp.prefixed_titles();
 //! ```
 
-use crate::{Site, ToolsError};
+use crate::{Site, Tool, ToolsError};
+use async_trait::async_trait;
 use serde_json::Value;
 
 #[derive(Debug, Default, PartialEq)]
@@ -31,63 +32,6 @@ impl PagePile {
             id,
             ..Default::default()
         }
-    }
-
-    #[cfg(feature = "blocking")]
-    /// Retrieves the PagePile.
-    pub fn get_blocking(&mut self) -> Result<(), ToolsError> {
-        let url = format!(
-            "https://pagepile.toolforge.org/api.php?id={id}&action=get_data&doit&format=json",
-            id = self.id
-        );
-        let client = crate::ToolsInterface::blocking_client()?;
-        let json = client.get(&url).send()?.json()?;
-        self.from_json(&json)
-    }
-
-    #[cfg(feature = "tokio")]
-    /// Retrieves the PagePile asynchronously.
-    pub async fn get(&mut self) -> Result<(), ToolsError> {
-        let url = format!(
-            "https://pagepile.toolforge.org/api.php?id={id}&action=get_data&doit&format=json",
-            id = self.id
-        );
-        let client = crate::ToolsInterface::tokio_client()?;
-        let json = client.get(&url).send().await?.json().await?;
-        self.from_json(&json)
-    }
-
-    fn from_json(&mut self, j: &Value) -> Result<(), ToolsError> {
-        self.language = j["language"].as_str().map(|s| s.to_string());
-        self.project = j["project"].as_str().map(|s| s.to_string());
-        self.wiki = j["wiki"].as_str().map(|s| s.to_string());
-        self.prefixed_titles = j["pages"]
-            .as_array()
-            .ok_or(ToolsError::Json("['pages'] has no rows array".into()))?
-            .iter()
-            .filter_map(|page| page.as_str())
-            .map(|prefixed_title| prefixed_title.to_string())
-            .collect();
-        let pages_returned = j["pages_returned"].as_i64().ok_or(ToolsError::Json(
-            "['pages_returned'] is not an integer".into(),
-        ))?;
-        let pages_total = j["pages_total"]
-            .as_i64()
-            .ok_or(ToolsError::Json("['pages_total'] is not an integer".into()))?;
-        if pages_returned != pages_total {
-            return Err(ToolsError::Json(format!(
-                "pages_returned ({}) != pages_total ({})",
-                pages_returned, pages_total
-            )));
-        }
-        if pages_total != self.prefixed_titles.len() as i64 {
-            return Err(ToolsError::Json(format!(
-                "pages_total ({}) != prefixed_titles.len() ({})",
-                pages_total,
-                self.prefixed_titles.len()
-            )));
-        }
-        Ok(())
     }
 
     /// Returns the namespace-prefixed pages in the PagePile.
@@ -119,6 +63,66 @@ impl PagePile {
     }
 }
 
+#[async_trait]
+impl Tool for PagePile {
+    #[cfg(feature = "blocking")]
+    /// Retrieves the PagePile.
+    fn run_blocking(&mut self) -> Result<(), ToolsError> {
+        let url = format!(
+            "https://pagepile.toolforge.org/api.php?id={id}&action=get_data&doit&format=json",
+            id = self.id
+        );
+        let client = crate::ToolsInterface::blocking_client()?;
+        let json = client.get(&url).send()?.json()?;
+        self.from_json(json)
+    }
+
+    #[cfg(feature = "tokio")]
+    /// Retrieves the PagePile asynchronously.
+    async fn run(&mut self) -> Result<(), ToolsError> {
+        let url = format!(
+            "https://pagepile.toolforge.org/api.php?id={id}&action=get_data&doit&format=json",
+            id = self.id
+        );
+        let client = crate::ToolsInterface::tokio_client()?;
+        let json = client.get(&url).send().await?.json().await?;
+        self.from_json(json)
+    }
+
+    fn from_json(&mut self, j: Value) -> Result<(), ToolsError> {
+        self.language = j["language"].as_str().map(|s| s.to_string());
+        self.project = j["project"].as_str().map(|s| s.to_string());
+        self.wiki = j["wiki"].as_str().map(|s| s.to_string());
+        self.prefixed_titles = j["pages"]
+            .as_array()
+            .ok_or(ToolsError::Json("['pages'] has no rows array".into()))?
+            .iter()
+            .filter_map(|page| page.as_str())
+            .map(|prefixed_title| prefixed_title.to_string())
+            .collect();
+        let pages_returned = j["pages_returned"].as_i64().ok_or(ToolsError::Json(
+            "['pages_returned'] is not an integer".into(),
+        ))?;
+        let pages_total = j["pages_total"]
+            .as_i64()
+            .ok_or(ToolsError::Json("['pages_total'] is not an integer".into()))?;
+        if pages_returned != pages_total {
+            return Err(ToolsError::Json(format!(
+                "pages_returned ({}) != pages_total ({})",
+                pages_returned, pages_total
+            )));
+        }
+        if pages_total != self.prefixed_titles.len() as i64 {
+            return Err(ToolsError::Json(format!(
+                "pages_total ({}) != prefixed_titles.len() ({})",
+                pages_total,
+                self.prefixed_titles.len()
+            )));
+        }
+        Ok(())
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -133,7 +137,7 @@ mod tests {
     #[test]
     fn test_pagepile_get_blocking() {
         let mut pp = PagePile::new(51805);
-        pp.get_blocking().unwrap();
+        pp.run_blocking().unwrap();
         assert_eq!(pp.language().unwrap(), "de");
         assert_eq!(pp.project().unwrap(), "wikipedia");
         assert_eq!(pp.wiki().unwrap(), "dewiki");
@@ -144,7 +148,7 @@ mod tests {
     #[tokio::test]
     async fn test_pagepile_get_async() {
         let mut pp = PagePile::new(51805);
-        pp.get().await.unwrap();
+        pp.run().await.unwrap();
         assert_eq!(pp.language().unwrap(), "de");
         assert_eq!(pp.project().unwrap(), "wikipedia");
         assert_eq!(pp.wiki().unwrap(), "dewiki");

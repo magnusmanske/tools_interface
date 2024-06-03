@@ -34,7 +34,7 @@ use clap::{value_parser, Arg, ArgAction, ArgMatches, Command};
 use mediawiki::{api::Api, title::Title};
 use serde_json::{json, Value};
 use tools_interface::{
-    Completer, CompleterFilter, Duplicity, MissingTopics, PagePile, PetScan, Site,
+    Completer, CompleterFilter, Duplicity, MissingTopics, PagePile, PetScan, Site, Tool,
 };
 
 #[derive(Debug, PartialEq)]
@@ -153,7 +153,7 @@ async fn pagepile(params_all: &ArgMatches) {
         .expect("No subcommand matches found");
     let id = params.get_one::<u32>("id").expect("--id missing");
     let mut pp = PagePile::new(*id);
-    pp.get().await.unwrap();
+    pp.run().await.unwrap();
     let site = pp.site().expect("Unknown site for PagePile");
     let api = site.api().await.unwrap();
     let out = json!({
@@ -188,7 +188,7 @@ async fn petscan(params_all: &ArgMatches) {
         ps.parameters_mut()
             .push((key.to_string(), value.to_string())); // Add new value
     }
-    ps.get().await.unwrap();
+    ps.run().await.unwrap();
     let site = Site::from_wiki(ps.wiki().expect("No wiki in PetScan result")).unwrap();
     let api = site.api().await.unwrap();
     let out = json!({

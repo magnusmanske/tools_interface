@@ -11,6 +11,7 @@ keywords = ["API", "wikimedia", "wikipedia", "wikidata"]
 categories = ["api-bindings", "asynchronous"]
 
 [dependencies]
+async-trait = "^0.1"
 chrono = "^0.4"
 clap = { version = "^4", features = ["derive"] }
 csv = "^1.3"

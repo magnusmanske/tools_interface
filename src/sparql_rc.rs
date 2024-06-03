@@ -16,7 +16,8 @@
 //!     });
 //! ```
 
-use crate::ToolsError;
+use crate::{Tool, ToolsError};
+use async_trait::async_trait;
 use chrono::NaiveDateTime;
 use serde_json::Value;
 
@@ -151,9 +152,17 @@ impl SparqlRC {
         }
     }
 
+    /// Get the results of the last query.
+    pub fn results(&self) -> &[EntityEdit] {
+        &self.results
+    }
+}
+
+#[async_trait]
+impl Tool for SparqlRC {
     #[cfg(feature = "tokio")]
     /// Run the query asynchronously.
-    pub async fn run(&mut self) -> Result<(), ToolsError> {
+    async fn run(&mut self) -> Result<(), ToolsError> {
         self.check_start_date()?;
         let url = &self.tool_url;
         let parameters = self.generate_paramters()?;
@@ -165,7 +174,7 @@ impl SparqlRC {
 
     #[cfg(feature = "blocking")]
     /// Run the query in a blocking manner.
-    pub fn run_blocking(&mut self) -> Result<(), ToolsError> {
+    fn run_blocking(&mut self) -> Result<(), ToolsError> {
         self.check_start_date()?;
         let url = &self.tool_url;
         let parameters = self.generate_paramters()?;
@@ -188,11 +197,6 @@ impl SparqlRC {
             .filter_map(|j| EntityEdit::from_json(j))
             .collect();
         Ok(())
-    }
-
-    /// Get the results of the last query.
-    pub fn results(&self) -> &[EntityEdit] {
-        &self.results
     }
 }
 

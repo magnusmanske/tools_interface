@@ -33,6 +33,8 @@
 //! let overall_views: u64 = results.iter().map(|r| r.total_views()).sum();
 //! ```
 
+// TODO Use `Tool` trait!
+
 use chrono::{Duration, NaiveDate};
 use futures::prelude::*;
 use serde::Deserialize;

@@ -1,16 +1,18 @@
 //! # Persondata Vorlagen
 //! Queries the [Persondata Vorlagen tool](https://persondata.toolforge.org/vorlagen) for information about template usage on Germam Wikipedia.
-//! Build a `PersondataTemplatesQuery` and call `get_blocking()` to get the results.
+//! Build a `PersondataTemplates` and call `get_blocking()` to get the results.
 //! Results are returned as a `Vec<PersondataTemplatesResult>`.
 //!
 //! Example:
 //! ```rust
-//! let results: Vec<PersondataTemplatesResult> = PersondataTemplatesQuery::with_template("Roscher")
+//! let results: Vec<PersondataTemplatesResult> = PersondataTemplates::with_template("Roscher")
 //!     .parameter_name("4")
 //!     .get().await.unwrap();
 //! ```
 
-use crate::ToolsError;
+use async_trait::async_trait;
+
+use crate::{Tool, ToolsError};
 use std::{collections::HashMap, fmt};
 
 #[derive(Debug, Default, PartialEq)]
@@ -128,7 +130,7 @@ impl PersondataTemplatesResult {
 }
 
 #[derive(Debug, Default)]
-pub struct PersondataTemplatesQuery {
+pub struct PersondataTemplates {
     with_wl: bool,                                   // Mit Weiterleitungen
     tmpl: String,                                    // Name der Vorlage
     occ: Option<u32>,                                // Einschränkung auf die wievielte Einbindung
@@ -144,9 +146,11 @@ pub struct PersondataTemplatesQuery {
     param_value_op: PersondataTemplatesParamValueOp, // Vergleichs-Operator
     in_c: bool,          // Text innerhalb HTML-Kommentaren des Parameterinhalts durchsuchen
     case: bool,          // Groß-/Kleinschreibung im Parameterinhalt beachten
+
+    results: Vec<PersondataTemplatesResult>,
 }
 
-impl PersondataTemplatesQuery {
+impl PersondataTemplates {
     pub fn new() -> Self {
         Self::default()
     }
@@ -286,9 +290,16 @@ impl PersondataTemplatesQuery {
 
         url
     }
+    
+    pub fn results(&self) -> &[PersondataTemplatesResult] {
+        &self.results
+    }
+}
 
+#[async_trait]
+impl Tool for PersondataTemplates {
     #[cfg(feature = "blocking")]
-    pub fn get_blocking(&self) -> Result<Vec<PersondataTemplatesResult>, ToolsError> {
+    fn run_blocking(&mut self) -> Result<(), ToolsError> {
         let url = self.generate_csv_url();
         let client = crate::ToolsInterface::blocking_client()?;
         let response = client.get(&url).send()?;
@@ -300,15 +311,16 @@ impl PersondataTemplatesQuery {
             .from_reader(response);
         let headers = reader.headers()?.to_owned();
 
-        Ok(reader
+        self.results = reader
             .records()
             .filter_map(|result| result.ok())
             .map(|record| PersondataTemplatesResult::from_record(&headers, &record))
-            .collect())
+            .collect();
+        Ok(())
     }
 
     #[cfg(feature = "tokio")]
-    pub async fn get(&self) -> Result<Vec<PersondataTemplatesResult>, ToolsError> {
+    async fn run(&mut self) -> Result<(), ToolsError> {
         let url = self.generate_csv_url();
         let client = crate::ToolsInterface::tokio_client()?;
         let response = client.get(&url).send().await?;
@@ -321,11 +333,12 @@ impl PersondataTemplatesQuery {
             .from_reader(body.as_bytes());
         let headers = reader.headers()?.to_owned();
 
-        Ok(reader
+        self.results = reader
             .records()
             .filter_map(|result| result.ok())
             .map(|record| PersondataTemplatesResult::from_record(&headers, &record))
-            .collect())
+            .collect();
+        Ok(())
     }
 }
 
@@ -335,7 +348,7 @@ mod tests {
 
     #[test]
     fn test_persondata_templates_query() {
-        let query = PersondataTemplatesQuery::with_template("Roscher")
+        let query = PersondataTemplates::with_template("Roscher")
             .with_occurrence_op(4, PersondataTemplatesOccOp::Equal)
             .in_table()
             .in_template()
@@ -367,18 +380,20 @@ mod tests {
     #[cfg(feature = "blocking")]
     #[test]
     fn get_persondata_template_blocking() {
-        let query = PersondataTemplatesQuery::with_template("Roscher")
+        let mut query = PersondataTemplates::with_template("Roscher")
             .parameter_name_op("4", PersondataTemplatesParamNameOp::default());
-        let x = query.get_blocking().unwrap();
-        assert!(x.len() > 2000);
+        query.run_blocking().unwrap();
+        let results = query.results();
+        assert!(results.len() > 2000);
     }
 
     #[cfg(feature = "tokio")]
     #[tokio::test]
     async fn get_persondata_template_async() {
-        let query = PersondataTemplatesQuery::with_template("Roscher")
+        let mut query = PersondataTemplates::with_template("Roscher")
             .parameter_name_op("4", PersondataTemplatesParamNameOp::default());
-        let x = query.get().await.unwrap();
-        assert!(x.len() > 2000);
+        query.run().await.unwrap();
+        let results = query.results();
+        assert!(results.len() > 2000);
     }
 }

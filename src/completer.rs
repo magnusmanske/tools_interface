@@ -16,7 +16,8 @@
 //!     });
 //! ```
 
-use crate::ToolsError;
+use crate::{Tool, ToolsError};
+use async_trait::async_trait;
 use serde_json::{json, Value};
 
 #[derive(Debug, PartialEq)]
@@ -65,8 +66,8 @@ impl CompleterFilter {
 
 #[derive(Debug, Default, PartialEq)]
 pub struct Completer {
-    wiki_from: String,
-    wiki_to: String,
+    lang_from: String,
+    lang_to: String,
     filters: Vec<CompleterFilter>,
     ignore_cache: bool,
 
@@ -76,13 +77,13 @@ pub struct Completer {
 }
 
 impl Completer {
-    /// Finds articles on a wikipedia (`wiki_from`) that are missing on another (`wiki_to`).
+    /// Finds articles on a wikipedia (`lang_from`) that are missing on another (`lang_to`).
     /// **Note**: These are _language codes_ for Wikipedia (eg "de", "en").
-    /// This tool olny seems to work on Wikipedia.
-    pub fn new(wiki_from: &str, wiki_to: &str) -> Completer {
+    /// This tool only seems to work on Wikipedia.
+    pub fn new(lang_from: &str, lang_to: &str) -> Completer {
         Completer {
-            wiki_from: wiki_from.to_string(),
-            wiki_to: wiki_to.to_string(),
+            lang_from: lang_from.to_string(),
+            lang_to: lang_to.to_string(),
             tool_url: "https://completer.toolforge.org/data".to_string(),
             ..Default::default()
         }
@@ -100,20 +101,22 @@ impl Completer {
         self
     }
 
-    fn generate_payload(&self) -> Value {
-        json!({
-            "info": {
-                "from": self.wiki_from,
-                "to": self.wiki_to,
-                "ignoreCache": self.ignore_cache,
-                "filters": self.filters.iter().map(|f|f.to_json()).collect::<Vec<Value>>(),
-            },
-        })
+    /// Returns the ID of the query.
+    pub fn id(&self) -> u64 {
+        self.id
     }
 
+    /// Returns the results of the query.
+    pub fn results(&self) -> &[(String, u64)] {
+        &self.results
+    }
+}
+
+#[async_trait]
+impl Tool for Completer {
     #[cfg(feature = "blocking")]
     /// Run the query in a blocking manner.
-    pub fn run_blocking(&mut self) -> Result<(), ToolsError> {
+    fn run_blocking(&mut self) -> Result<(), ToolsError> {
         let url = &self.tool_url;
         let j = self.generate_payload();
         let client = crate::ToolsInterface::blocking_client()?;
@@ -123,7 +126,7 @@ impl Completer {
 
     #[cfg(feature = "tokio")]
     /// Run the query asynchronously.
-    pub async fn run(&mut self) -> Result<(), ToolsError> {
+    async fn run(&mut self) -> Result<(), ToolsError> {
         let url = &self.tool_url;
         let j = self.generate_payload();
         let client = crate::ToolsInterface::tokio_client()?;
@@ -150,14 +153,15 @@ impl Completer {
         Ok(())
     }
 
-    /// Returns the ID of the query.
-    pub fn id(&self) -> u64 {
-        self.id
-    }
-
-    /// Returns the results of the query.
-    pub fn results(&self) -> &[(String, u64)] {
-        &self.results
+    fn generate_payload(&self) -> Value {
+        json!({
+            "info": {
+                "from": self.lang_from,
+                "to": self.lang_to,
+                "ignoreCache": self.ignore_cache,
+                "filters": self.filters.iter().map(|f|f.to_json()).collect::<Vec<Value>>(),
+            },
+        })
     }
 }
 

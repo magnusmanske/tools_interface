@@ -16,9 +16,10 @@
 //! }
 //! ```
 
+use async_trait::async_trait;
 use serde_json::Value;
 
-use crate::ToolsError;
+use crate::{Tool, ToolsError};
 
 #[derive(Debug, Default, PartialEq)]
 pub struct Quarry {
@@ -34,55 +35,6 @@ impl Quarry {
             id,
             ..Default::default()
         }
-    }
-
-    #[cfg(feature = "blocking")]
-    /// Download the latest results from Quarry.
-    pub fn get_blocking(&mut self) -> Result<(), ToolsError> {
-        let url = format!(
-            "https://quarry.wmcloud.org/query/{id}/result/latest/0/json",
-            id = self.id
-        );
-        let client = crate::ToolsInterface::blocking_client()?;
-        let json: Value = client.get(&url).send()?.json()?;
-        self.from_json(&json)
-    }
-
-    #[cfg(feature = "tokio")]
-    /// Download the latest results from Quarry.
-    pub async fn get(&mut self) -> Result<(), ToolsError> {
-        let url = format!(
-            "https://quarry.wmcloud.org/query/{id}/result/latest/0/json",
-            id = self.id
-        );
-        let client = crate::ToolsInterface::tokio_client()?;
-        let json: Value = client.get(&url).send().await?.json().await?;
-        self.from_json(&json)
-    }
-
-    fn from_json(&mut self, json: &Value) -> Result<(), ToolsError> {
-        self.columns = json
-            .get("headers")
-            .ok_or_else(|| ToolsError::Json("No headers in Quarry JSON".to_string()))?
-            .as_array()
-            .ok_or_else(|| {
-                ToolsError::Json("['headers'] is not an array in Quarry JSON".to_string())
-            })?
-            .iter()
-            .map(|s| s.as_str().unwrap_or("").to_string())
-            .collect();
-
-        self.rows = json
-            .get("rows")
-            .ok_or_else(|| ToolsError::Json("No rows in Quarry JSON".to_string()))?
-            .as_array()
-            .ok_or_else(|| ToolsError::Json("Rows is not an array in Quarry JSON".to_string()))?
-            .iter()
-            .filter_map(|row| row.as_array())
-            .map(|row| row.to_vec())
-            .collect();
-
-        Ok(())
     }
 
     /// Get the column titles.
@@ -106,6 +58,58 @@ impl Quarry {
     }
 }
 
+#[async_trait]
+impl Tool for Quarry {
+    #[cfg(feature = "blocking")]
+    /// Download the latest results from Quarry.
+    fn run_blocking(&mut self) -> Result<(), ToolsError> {
+        let url = format!(
+            "https://quarry.wmcloud.org/query/{id}/result/latest/0/json",
+            id = self.id
+        );
+        let client = crate::ToolsInterface::blocking_client()?;
+        let json: Value = client.get(&url).send()?.json()?;
+        self.from_json(json)
+    }
+
+    #[cfg(feature = "tokio")]
+    /// Download the latest results from Quarry.
+    async fn run(&mut self) -> Result<(), ToolsError> {
+        let url = format!(
+            "https://quarry.wmcloud.org/query/{id}/result/latest/0/json",
+            id = self.id
+        );
+        let client = crate::ToolsInterface::tokio_client()?;
+        let json: Value = client.get(&url).send().await?.json().await?;
+        self.from_json(json)
+    }
+
+    fn from_json(&mut self, json: Value) -> Result<(), ToolsError> {
+        self.columns = json
+            .get("headers")
+            .ok_or_else(|| ToolsError::Json("No headers in Quarry JSON".to_string()))?
+            .as_array()
+            .ok_or_else(|| {
+                ToolsError::Json("['headers'] is not an array in Quarry JSON".to_string())
+            })?
+            .iter()
+            .map(|s| s.as_str().unwrap_or("").to_string())
+            .collect();
+
+        self.rows = json
+            .get("rows")
+            .ok_or_else(|| ToolsError::Json("No rows in Quarry JSON".to_string()))?
+            .as_array()
+            .ok_or_else(|| ToolsError::Json("Rows is not an array in Quarry JSON".to_string()))?
+            .iter()
+            .filter_map(|row| row.as_array())
+            .map(|row| row.to_vec())
+            .collect();
+
+        Ok(())
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -114,7 +118,7 @@ mod tests {
     #[test]
     fn test_quarry_get_blocking() {
         let mut quarry = Quarry::new(82868); // dewiki root categories
-        quarry.get_blocking().unwrap();
+        quarry.run_blocking().unwrap();
         let column_number = quarry.colnum("page_title").unwrap();
         assert_eq!(column_number, 2);
         assert!(quarry
@@ -127,7 +131,7 @@ mod tests {
     #[tokio::test]
     async fn test_quarry_get_async() {
         let mut quarry = Quarry::new(82868); // dewiki root categories
-        quarry.get().await.unwrap();
+        quarry.run().await.unwrap();
         let column_number = quarry.colnum("page_title").unwrap();
         assert_eq!(column_number, 2);
         assert!(quarry

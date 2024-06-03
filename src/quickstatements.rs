@@ -14,6 +14,8 @@
 //! let batch_id = qs.run().await.unwrap();
 //! ```
 
+// TODO: convert to `Tool` trait!
+
 use crate::ToolsError;
 use serde_json::Value;
 

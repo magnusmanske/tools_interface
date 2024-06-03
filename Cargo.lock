@@ -1808,6 +1808,7 @@ dependencies = [
 name = "tools_interface"
 version = "0.1.5"
 dependencies = [
+ "async-trait",
  "chrono",
  "clap",
  "csv",

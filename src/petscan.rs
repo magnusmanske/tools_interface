@@ -13,7 +13,8 @@
 
 use std::collections::HashMap;
 
-use crate::ToolsError;
+use crate::{Tool, ToolsError};
+use async_trait::async_trait;
 use serde::{Deserialize, Serialize};
 use serde_json::Value;
 
@@ -106,31 +107,55 @@ impl PetScan {
         }
     }
 
+    /// Get the mutable parameters for the future PetScan query.
+    /// You can override the parameters from the PSID this way.
+    pub fn parameters_mut(&mut self) -> &mut Vec<(String, String)> {
+        &mut self.parameters
+    }
+
+    /// Get the namespaces from the PetScan query.
+    pub fn pages(&self) -> &[PetScanPage] {
+        &self.pages
+    }
+
+    /// Get the (main) wiki from the PetScan query.
+    pub fn wiki(&self) -> Option<&String> {
+        self.wiki.as_ref()
+    }
+
+    /// Get the PetScan query that was run.
+    pub fn query(&self) -> Option<&String> {
+        self.query.as_ref()
+    }
+}
+
+#[async_trait]
+impl Tool for PetScan {
     #[cfg(feature = "blocking")]
     /// Perform a blocking PetScan query.
-    pub fn get_blocking(&mut self) -> Result<(), ToolsError> {
+    fn run_blocking(&mut self) -> Result<(), ToolsError> {
         let url = format!("https://petscan.wmflabs.org/?psid={psid}&format=json&output_compatability=quick-intersection", psid=self.psid);
         let client = crate::ToolsInterface::blocking_client()?;
-        let json: Value = client.get(&url).query(&self.parameters).send()?.json()?;
-        self.from_json(&json)
+        let j: Value = client.get(&url).query(&self.parameters).send()?.json()?;
+        self.from_json(j)
     }
 
     #[cfg(feature = "tokio")]
     /// Get the PetScan query asynchronously.
-    pub async fn get(&mut self) -> Result<(), ToolsError> {
+    async fn run(&mut self) -> Result<(), ToolsError> {
         let url = format!("https://petscan.wmflabs.org/?psid={psid}&format=json&output_compatability=quick-intersection", psid=self.psid);
         let client = crate::ToolsInterface::tokio_client()?;
-        let json = client
+        let j = client
             .get(&url)
             .query(&self.parameters)
             .send()
             .await?
             .json()
             .await?;
-        self.from_json(&json)
+        self.from_json(j)
     }
 
-    fn from_json(&mut self, json: &Value) -> Result<(), ToolsError> {
+    fn from_json(&mut self, json: Value) -> Result<(), ToolsError> {
         self.status = json["status"].as_str().map(|s| s.to_string());
         if self.status != Some("OK".to_string()) {
             return Err(ToolsError::Tool(format!(
@@ -155,27 +180,6 @@ impl PetScan {
         }
         Ok(())
     }
-
-    /// Get the mutable parameters for the future PetScan query.
-    /// You can override the parameters from the PSID this way.
-    pub fn parameters_mut(&mut self) -> &mut Vec<(String, String)> {
-        &mut self.parameters
-    }
-
-    /// Get the namespaces from the PetScan query.
-    pub fn pages(&self) -> &[PetScanPage] {
-        &self.pages
-    }
-
-    /// Get the (main) wiki from the PetScan query.
-    pub fn wiki(&self) -> Option<&String> {
-        self.wiki.as_ref()
-    }
-
-    /// Get the PetScan query that was run.
-    pub fn query(&self) -> Option<&String> {
-        self.query.as_ref()
-    }
 }
 
 #[cfg(test)]
@@ -193,7 +197,7 @@ mod tests {
     #[test]
     fn test_petscan_get_blocking() {
         let mut ps = PetScan::new(25951472);
-        ps.get_blocking().unwrap();
+        ps.run_blocking().unwrap();
         assert_eq!(ps.pages.len(), 1);
         assert_eq!(ps.pages[0].page_id, 3361346);
         assert_eq!(ps.pages[0].page_title, "Magnus_Manske");
@@ -203,7 +207,7 @@ mod tests {
     #[tokio::test]
     async fn test_pagepile_get_async() {
         let mut ps = PetScan::new(25951472);
-        ps.get().await.unwrap();
+        ps.run().await.unwrap();
         assert_eq!(ps.pages.len(), 1);
         assert_eq!(ps.pages[0].page_id, 3361346);
         assert_eq!(ps.pages[0].page_title, "Magnus_Manske");
@@ -213,7 +217,7 @@ mod tests {
     #[test]
     fn test_petscan_get_blocking_file() {
         let mut ps = PetScan::new(28348161);
-        ps.get_blocking().unwrap();
+        ps.run_blocking().unwrap();
         let expected_giui = PetScanFileUsage {
             ns: 0,
             page: "St._Laurentius_(Wald-Michelbach)".to_string(),
@@ -236,7 +240,7 @@ mod tests {
     #[test]
     fn test_petscan_get_blocking_metadata() {
         let mut ps = PetScan::new(28348714);
-        ps.get_blocking().unwrap();
+        ps.run_blocking().unwrap();
         assert_eq!(ps.pages[0].page_id, 12115738);
         assert_eq!(ps.pages[0].page_title, "St._Laurentius_(Wald-Michelbach)");
         assert_eq!(

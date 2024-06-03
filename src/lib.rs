@@ -29,6 +29,7 @@ pub mod quarry;
 pub mod quickstatements;
 pub mod site;
 pub mod sparql_rc;
+pub mod tool;
 pub mod tools_interface;
 
 pub use completer::{Completer, CompleterFilter};
@@ -43,6 +44,7 @@ pub use quarry::Quarry;
 pub use quickstatements::QuickStatements;
 pub use site::Site;
 pub use sparql_rc::{EntityEdit, EntityEditor, SparqlRC};
+pub use tool::Tool;
 pub use tools_interface::ToolsInterface;
 
 /*

@@ -16,7 +16,8 @@
 //!     });
 //! ```
 
-use crate::{Site, ToolsError};
+use crate::{Site, Tool, ToolsError};
+use async_trait::async_trait;
 use serde_json::Value;
 
 #[derive(Debug, Default, PartialEq)]
@@ -73,6 +74,25 @@ impl MissingTopics {
         self
     }
 
+    /// Get the URL used for the last query.
+    pub fn url_used(&self) -> &str {
+        &self.url_used
+    }
+
+    /// Get the results of the last query.
+    /// The results are a list of tuples with the missing article and the number of occurrences.
+    pub fn results(&self) -> &[(String, u64)] {
+        &self.results
+    }
+
+    /// Get the site used for the query.
+    pub fn site(&self) -> &Site {
+        &self.site
+    }
+}
+
+#[async_trait]
+impl Tool for MissingTopics {
     fn generate_paramters(&self) -> Result<Vec<(String, String)>, ToolsError> {
         let mut parameters: Vec<(String, String)> = [
             ("language".to_string(), self.site.language().to_string()),
@@ -114,7 +134,7 @@ impl MissingTopics {
 
     #[cfg(feature = "tokio")]
     /// Run the query asynchronously.
-    pub async fn run(&mut self) -> Result<(), ToolsError> {
+    async fn run(&mut self) -> Result<(), ToolsError> {
         let url = &self.tool_url;
         let parameters = self.generate_paramters()?;
         let client = crate::ToolsInterface::tokio_client()?;
@@ -125,7 +145,7 @@ impl MissingTopics {
 
     #[cfg(feature = "blocking")]
     /// Run the query in a blocking manner.
-    pub fn run_blocking(&mut self) -> Result<(), ToolsError> {
+    fn run_blocking(&mut self) -> Result<(), ToolsError> {
         let url = &self.tool_url;
         let parameters = self.generate_paramters()?;
         let client = crate::ToolsInterface::blocking_client()?;
@@ -151,22 +171,6 @@ impl MissingTopics {
             .ok_or(ToolsError::Json("['url'] is missing".into()))?
             .to_string();
         Ok(())
-    }
-
-    /// Get the URL used for the last query.
-    pub fn url_used(&self) -> &str {
-        &self.url_used
-    }
-
-    /// Get the results of the last query.
-    /// The results are a list of tuples with the missing article and the number of occurrences.
-    pub fn results(&self) -> &[(String, u64)] {
-        &self.results
-    }
-
-    /// Get the site used for the query.
-    pub fn site(&self) -> &Site {
-        &self.site
     }
 }
 
