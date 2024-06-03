@@ -4,6 +4,7 @@ This rust crate implements structs to easily interface with several Wikipedia/Wi
 
 ## Supported tools
 
+- [A List Building Tool](https://a-list-bulding-tool.toolforge.org/)
 - [Completer](https://completer.toolforge.org/)
 - [Duplicity](https://wikidata-todo.toolforge.org/duplicity/)
 - [PagePile](https://pagepile.toolforge.org/) (read only)

@@ -290,7 +290,7 @@ impl PersondataTemplates {
 
         url
     }
-    
+
     pub fn results(&self) -> &[PersondataTemplatesResult] {
         &self.results
     }

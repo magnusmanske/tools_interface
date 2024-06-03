@@ -33,7 +33,7 @@
 //! let overall_views: u64 = results.iter().map(|r| r.total_views()).sum();
 //! ```
 
-// TODO Use `Tool` trait!
+// NOTE: This does not use the `Tool` trait, it is too different.
 
 use chrono::{Duration, NaiveDate};
 use futures::prelude::*;

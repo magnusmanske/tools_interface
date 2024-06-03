@@ -34,7 +34,8 @@ use clap::{value_parser, Arg, ArgAction, ArgMatches, Command};
 use mediawiki::{api::Api, title::Title};
 use serde_json::{json, Value};
 use tools_interface::{
-    Completer, CompleterFilter, Duplicity, MissingTopics, PagePile, PetScan, Site, Tool,
+    AListBuildingTool, Completer, CompleterFilter, Duplicity, MissingTopics, PagePile, PetScan,
+    Site, Tool,
 };
 
 #[derive(Debug, PartialEq)]
@@ -81,6 +82,30 @@ fn write_output(out: &Value, params_all: &ArgMatches) {
         "json" => write_json(&out),
         _ => eprintln!("Unknown format: {format}"),
     }
+}
+
+async fn alistbuildingtool(params_all: &ArgMatches) {
+    let params = params_all
+        .subcommand_matches("alistbuildingtool")
+        .expect("No subcommand matches found");
+    let wiki = params.get_one::<String>("wiki").expect("--wiki missing");
+    let qid = params
+        .get_one::<String>("item")
+        .expect("--item missing")
+        .to_ascii_uppercase();
+    let mut a = AListBuildingTool::new(Site::from_wiki(wiki).unwrap(), &qid);
+    a.run().await.unwrap();
+    let site = a.site();
+    let api = site.api().await.unwrap();
+    let out = json!({
+        "pages": a.results()
+            .iter()
+            .map(|result| (FancyTitle::from_prefixed(&result.title, &api).to_json(),result))
+            .map(|(mut v,result)| {v["wikidata"] = json!(result.qid); v})
+            .collect::<Vec<Value>>(),
+        "site": site,
+    });
+    write_output(&out, params_all);
 }
 
 async fn completer(params_all: &ArgMatches) {
@@ -259,6 +284,20 @@ fn get_arg_matches() -> ArgMatches {
                 .help("Output format (optional)"),
         )
         .subcommands([
+            Command::new("alistbuildingtool")
+                .about("Retrieves pages from A List Building Tool")
+                .arg(
+                    Arg::new("wiki")
+                        .long("wiki")
+                        .help("Wiki (eg enwiki)")
+                        .required(true),
+                )
+                .arg(
+                    Arg::new("item")
+                        .long("item")
+                        .help("A Wikidatata item (eg Q42")
+                        .required(true),
+                ),
             Command::new("completer")
                 .about("Retrieves potential pages from Completer")
                 .arg(
@@ -374,6 +413,7 @@ fn get_arg_matches() -> ArgMatches {
 async fn main() {
     let m = get_arg_matches();
     match m.subcommand_name() {
+        Some("alistbuildingtool") => alistbuildingtool(&m).await,
         Some("completer") => completer(&m).await,
         Some("duplicity") => duplicity(&m).await,
         Some("pagepile") => pagepile(&m).await,

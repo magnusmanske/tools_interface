@@ -4,6 +4,7 @@
 //!
 //! ## Supported tools
 //!
+//! - [A List Building Tool](https://a-list-bulding-tool.toolforge.org/) `AListBuildingTool`
 //! - [Completer](https://completer.toolforge.org/) `Completer`
 //! - [Duplicity](https://wikidata-todo.toolforge.org/duplicity/) `Duplicity`
 //! - [PagePile](https://pagepile.toolforge.org/) (read only) `PagePile`
@@ -17,6 +18,7 @@
 //!
 //! If you would like to see other tools supported, add a request to the [Issue tracker](https://github.com/magnusmanske/tools_interface/issues).
 
+pub mod a_list_building_tool;
 pub mod completer;
 pub mod duplicity;
 pub mod error;
@@ -32,6 +34,7 @@ pub mod sparql_rc;
 pub mod tool;
 pub mod tools_interface;
 
+pub use a_list_building_tool::AListBuildingTool;
 pub use completer::{Completer, CompleterFilter};
 pub use duplicity::Duplicity;
 pub use error::ToolsError;
@@ -52,7 +55,6 @@ TEST:
 cargo test --lib --tests --bins
 
 TODO
-- https://a-list-bulding-tool.toolforge.org ?
 - WD-FIST
 - https://xtools.wmcloud.org/pages (parse wikitext output)
 - https://ws-search.toolforge.org/ (needs HTML scraping?)
