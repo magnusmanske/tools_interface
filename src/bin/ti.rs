@@ -33,7 +33,9 @@
 use clap::{value_parser, Arg, ArgAction, ArgMatches, Command};
 use mediawiki::{api::Api, title::Title};
 use serde_json::{json, Value};
-use tools_interface::{Completer, CompleterFilter, MissingTopics, PagePile, PetScan, Site};
+use tools_interface::{
+    Completer, CompleterFilter, Duplicity, MissingTopics, PagePile, PetScan, Site,
+};
 
 #[derive(Debug, PartialEq)]
 struct FancyTitle {
@@ -119,6 +121,26 @@ async fn completer(params_all: &ArgMatches) {
             .iter()
             .map(|(prefixed_title,counter)| (FancyTitle::from_prefixed(&prefixed_title, &api).to_json(),counter))
             .map(|(mut v,counter)| {v["counter"] = json!(*counter); v})
+            .collect::<Vec<Value>>(),
+        "site": site,
+    });
+    write_output(&out, params_all);
+}
+
+async fn duplicity(params_all: &ArgMatches) {
+    let params = params_all
+        .subcommand_matches("duplicity")
+        .expect("No subcommand matches found");
+    let wiki = params.get_one::<String>("wiki").expect("--wiki missing");
+    let mut d = Duplicity::new(Site::from_wiki(wiki).unwrap());
+    d.run().await.unwrap();
+    let site = d.site();
+    let api = site.api().await.unwrap();
+    let out = json!({
+        "pages": d.results()
+            .iter()
+            .map(|result| (FancyTitle::from_prefixed(&result.title, &api).to_json(),result))
+            .map(|(mut v,result)| {v["added_to_tool"] = json!(format!("{}",result.creation_date.format("%Y-%m-%d %H:%M:%S"))); v})
             .collect::<Vec<Value>>(),
         "site": site,
     });
@@ -277,6 +299,14 @@ fn get_arg_matches() -> ArgMatches {
                         .default_value("0")
                         .required(false),
                 ),
+            Command::new("duplicity")
+                .about("Retrieves pages from Duplicity")
+                .arg(
+                    Arg::new("wiki")
+                        .long("wiki")
+                        .help("Wiki (eg enwiki)")
+                        .required(true),
+                ),
             Command::new("pagepile")
                 .about("Retrieves pages from PagePile")
                 .arg(
@@ -345,6 +375,7 @@ async fn main() {
     let m = get_arg_matches();
     match m.subcommand_name() {
         Some("completer") => completer(&m).await,
+        Some("duplicity") => duplicity(&m).await,
         Some("pagepile") => pagepile(&m).await,
         Some("petscan") => petscan(&m).await,
         Some("missing_topics") => missing_topics(&m).await,
