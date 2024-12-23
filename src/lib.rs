@@ -4,17 +4,17 @@
 //!
 //! ## Supported tools
 //!
-//! - [A List Building Tool](https://a-list-bulding-tool.toolforge.org/) `AListBuildingTool`
-//! - [Completer](https://completer.toolforge.org/) `Completer`
-//! - [Duplicity](https://wikidata-todo.toolforge.org/duplicity/) `Duplicity`
-//! - [PagePile](https://pagepile.toolforge.org/) (read only) `PagePile`
-//! - [Pageviews API](https://wikitech.wikimedia.org/wiki/Analytics/AQS/Pageviews) `Pageviews`
-//! - [Persondata Template](https://persondata.toolforge.org/vorlagen/) `PersondataTemplate`
-//! - [PetScan](https://petscan.wmflabs.org/) `PetScan`
-//! - [Missing Topics](https://missingtopics.toolforge.org/) `MissingTopics`
-//! - [Quarry](https://quarry.wmcloud.org/) (existing results only) `Quarry`
-//! - [QuickStatements](https://quickstatements.toolforge.org/) (start batches) `QuickStatements`
-//! - [SparqlRC](https://wikidata-todo.toolforge.org/sparql_rc.php) `SparqlRC`
+//! - [A List Building Tool](https://a-list-bulding-tool.toolforge.org/)
+//! - [Completer](https://completer.toolforge.org/)
+//! - [Duplicity](https://wikidata-todo.toolforge.org/duplicity/)
+//! - [PagePile](https://pagepile.toolforge.org/) (read only)
+//! - [Pageviews API](https://wikitech.wikimedia.org/wiki/Analytics/AQS/Pageviews)
+//! - [Persondata Template](https://persondata.toolforge.org/vorlagen/)
+//! - [PetScan](https://petscan.wmflabs.org/)
+//! - [Missing Topics](https://missingtopics.toolforge.org/)
+//! - [Quarry](https://quarry.wmcloud.org/) (retrieve existing results only)
+//! - [QuickStatements](https://quickstatements.toolforge.org/) (create and start batches)
+//! - [SparqlRC](https://wikidata-todo.toolforge.org/sparql_rc.php)
 //!
 //! If you would like to see other tools supported, add a request to the [Issue tracker](https://github.com/magnusmanske/tools_interface/issues).
 
@@ -66,8 +66,7 @@ TODO
 - https://fist.toolforge.org/wd4wp/#/
 - https://whattodo.toolforge.org
 - https://checkwiki.toolforge.org/checkwiki.cgi
-- https://cil2.toolforge.org/
-- https://grep.toolforge.org/
+- https://grep.toolforge.org/ [DEFUNCT?]
 - https://nppbrowser.toolforge.org/
 - https://searchsbl.toolforge.org/
 - https://item-quality-evaluator.toolforge.org (to add scores)
