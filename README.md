@@ -23,6 +23,18 @@ If you would like to see other tools supported, add a request to the [Issue trac
 The is a `ti` binary, working as a command-line interface to the tools_interface library.
 It allows you to run queries against various Wikimedia tools from shell.
 
+### Installation
+To just use the binary, follow these steps:
+```
+# Install rust, unless it is already installed
+# See https://rust-lang.org/tools/install/
+curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+
+# Install `ti`
+cargo install tools_interface
+```
+
+### Usage
 Use `ti help` to get the list of subommands,
 and `ti help <subcommand>` to get help on a specific subcommand.
 

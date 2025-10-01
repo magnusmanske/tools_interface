@@ -422,14 +422,3 @@ async fn main() {
         _ => eprintln!("No subcommand given"),
     }
 }
-
-/*
-TODO:
-
-[Pageviews API](https://wikitech.wikimedia.org/wiki/Analytics/AQS/Pageviews)
-[Persondata Template](https://persondata.toolforge.org/vorlagen/)
-[Quarry](https://quarry.wmcloud.org/) (existing results only)
-[QuickStatements](https://quickstatements.toolforge.org/) (start batches)
-[SparqlRC](https://wikidata-todo.toolforge.org/sparql_rc.php)
-
-*/

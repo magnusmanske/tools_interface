@@ -1,8 +1,8 @@
 [package]
 name = "tools_interface"
-version = "0.1.6"
+version = "0.1.7"
 authors = ["Magnus Manske <magnusmanske@googlemail.com>"]
-edition = "2021"
+edition = "2024"
 description = "Abstractions of serveral Wikipedia/Wikimedia/Wikidata-related tools"
 readme = "README.md"
 repository = "https://github.com/magnusmanske/tools_interface/"
