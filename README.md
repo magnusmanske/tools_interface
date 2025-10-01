@@ -52,4 +52,6 @@ ti SOME_COMMAND > test.json
 jq -r '.pages[].prefixed_title' < test.json
 # Assuming the output has additional `counter` fields:
 jq -r '.pages[] | "\(.prefixed_title)\t\(.counter)"' < test.json
+# Example: Using PetScan to get a category tree of all German churches, and their Wikidata items:
+ti petscan --id 39413398 | jq -r '.pages[] | "\(.prefixed_title)\t\(.metadata.wikidata)"'
 ```
