@@ -13,7 +13,7 @@ pub trait Tool {
     /// Run the tool asynchronously.
     async fn run(&mut self) -> Result<(), ToolsError>;
 
-    fn from_json(&mut self, _j: Value) -> Result<(), ToolsError> {
+    fn set_from_json(&mut self, _j: Value) -> Result<(), ToolsError> {
         unimplemented!();
     }
 

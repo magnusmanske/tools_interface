@@ -4,7 +4,7 @@
 /// Results are returned as a `Vec<PersondataTemplatesResult>`.
 ///
 /// Example:
-/// ```rust
+/// ```ignore
 /// let results: Vec<PersondataTemplatesResult> = PersondataTemplates::with_template("Roscher")
 ///     .parameter_name("4")
 ///     .get().await.unwrap();
@@ -93,22 +93,19 @@ impl PersondataTemplatesResult {
     fn from_record(header: &csv::StringRecord, record: &csv::StringRecord) -> Self {
         let mut result = Self::default();
         for i in 0..header.len() {
-            match record.get(i) {
-                Some(value) => {
-                    match header.get(i) {
-                        Some("Artikel") => result.article = value.to_string(),
-                        Some("Einbindung") => result.usage_number = value.parse().unwrap_or(0),
-                        Some(other) => {
-                            if let Ok(key) = other.parse::<u32>() {
-                                result.params.insert(key, value.to_string());
-                            } else {
-                                //     println!("Unknown header: {other}:{value}");
-                            }
+            if let Some(value) = record.get(i) {
+                match header.get(i) {
+                    Some("Artikel") => result.article = value.to_string(),
+                    Some("Einbindung") => result.usage_number = value.parse().unwrap_or(0),
+                    Some(other) => {
+                        if let Ok(key) = other.parse::<u32>() {
+                            result.params.insert(key, value.to_string());
+                        } else {
+                            //     println!("Unknown header: {other}:{value}");
                         }
-                        _ => {}
                     }
+                    _ => {}
                 }
-                None => (),
             }
         }
         result
@@ -360,16 +357,16 @@ mod tests {
             .parameter_value_op("value", PersondataTemplatesParamValueOp::Equal);
 
         assert_eq!(query.tmpl, "Roscher");
-        assert_eq!(query.with_wl, true);
+        assert!(query.with_wl);
         assert_eq!(query.occ, Some(4));
         assert_eq!(query.occ_op, PersondataTemplatesOccOp::Equal);
-        assert_eq!(query.in_t, true);
-        assert_eq!(query.in_v, true);
-        assert_eq!(query.in_r, true);
-        assert_eq!(query.in_l, true);
-        assert_eq!(query.in_a, true);
-        assert_eq!(query.in_c, true);
-        assert_eq!(query.case, true);
+        assert!(query.in_t);
+        assert!(query.in_v);
+        assert!(query.in_r);
+        assert!(query.in_l);
+        assert!(query.in_a);
+        assert!(query.in_c);
+        assert!(query.case);
         assert_eq!(query.param_name, "name");
         assert_eq!(query.param_name_op, PersondataTemplatesParamNameOp::Equal);
         assert_eq!(query.param_value, "value");

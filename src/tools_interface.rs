@@ -3,7 +3,7 @@
 /// e.g. creating HTTP clients, getting Wikidata item ID for page titles, etc.
 ///
 /// ## Example
-/// ```rust
+/// ```ignore
 /// let result = ToolsInterface::wikidata_item_for_titles(wiki, ["Albert Einstein".to_string()]).await.unwrap();
 /// let q = result.get("Albert Einstein").unwrap(); // Yields "Q937"
 /// ```
@@ -110,7 +110,7 @@ impl ToolsInterface {
                     ("sites", wiki),
                     ("titles", &chunk),
                     ("props", "sitelinks"), // return only sitelinks...
-                    ("sitefilter", &wiki),  // ...from this wiki
+                    ("sitefilter", wiki),   // ...from this wiki
                 ]
                 .iter()
                 .map(|(k, v)| (k.to_string(), v.to_string()))

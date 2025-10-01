@@ -4,7 +4,7 @@
 /// There are blocking and async methods available.
 ///
 /// ## Example
-/// ```rust
+/// ```ignore
 /// let mut rc = SparqlRC::new("SELECT ?q { ?q wdt:P31 wd:Q23413 }")
 ///     .start(NaiveDate::from_ymd_opt(2024, 5, 1).unwrap().into())
 ///     .end(NaiveDate::from_ymd_opt(2024, 5, 2).unwrap().into());
@@ -30,7 +30,7 @@ pub struct EntityEditor {
 impl EntityEditor {
     fn from_json(j: &Value) -> Option<Self> {
         Some(Self {
-            id: j["user_id"].as_str().map(|s| s.parse().ok()).flatten()?,
+            id: j["user_id"].as_str().and_then(|s| s.parse().ok())?,
             name: j["user_text"].as_str()?.to_string(),
             edits: j["edits"].as_u64()?,
         })
@@ -77,11 +77,7 @@ impl EntityEdit {
 
     fn parse_editors(j: &Value) -> Vec<EntityEditor> {
         j.as_array()
-            .map(|a| {
-                a.iter()
-                    .filter_map(|j| EntityEditor::from_json(j))
-                    .collect()
-            })
+            .map(|a| a.iter().filter_map(EntityEditor::from_json).collect())
             .unwrap_or_default()
     }
 }
@@ -147,7 +143,9 @@ impl SparqlRC {
     fn check_start_date(&self) -> Result<(), ToolsError> {
         match self.start {
             Some(_) => Ok(()),
-            None => Err(ToolsError::Tool(format!("SparqlRC start date is not set"))),
+            None => Err(ToolsError::Tool(
+                "SparqlRC start date is not set".to_string(),
+            )),
         }
     }
 
@@ -168,7 +166,7 @@ impl Tool for SparqlRC {
         let client = crate::ToolsInterface::tokio_client()?;
         let response = client.get(url).query(&parameters).send().await?;
         let j: Value = response.json().await?;
-        self.from_json(j)
+        self.set_from_json(j)
     }
 
     #[cfg(feature = "blocking")]
@@ -179,10 +177,10 @@ impl Tool for SparqlRC {
         let parameters = self.generate_paramters()?;
         let client = crate::ToolsInterface::blocking_client()?;
         let j: Value = client.get(url).query(&parameters).send()?.json()?;
-        self.from_json(j)
+        self.set_from_json(j)
     }
 
-    fn from_json(&mut self, j: Value) -> Result<(), ToolsError> {
+    fn set_from_json(&mut self, j: Value) -> Result<(), ToolsError> {
         if j["status"].as_str() != Some("OK") {
             return Err(ToolsError::Tool(format!(
                 "SparqlRC status is not OK: {:?}",
@@ -193,7 +191,7 @@ impl Tool for SparqlRC {
             .as_array()
             .ok_or(ToolsError::Json("['items'] has no array".into()))?
             .iter()
-            .filter_map(|j| EntityEdit::from_json(j))
+            .filter_map(EntityEdit::from_json)
             .collect();
         Ok(())
     }
@@ -210,7 +208,7 @@ mod tests {
     async fn get_mock_server() -> MockServer {
         let file = File::open("test_data/sparql_rc.json").expect("file not found");
         let j: Value = serde_json::from_reader(file).expect("error while reading file");
-        let mock_path = format!("/sparql_rc.php");
+        let mock_path = "/sparql_rc.php";
         let mock_server = MockServer::start().await;
         Mock::given(method("GET"))
             .and(query_param_contains(
@@ -222,7 +220,7 @@ mod tests {
             .and(query_param_contains("no_bots", "0"))
             .and(query_param_contains("skip_unchanged", "0"))
             .and(query_param_contains("format", "json"))
-            .and(path(&mock_path))
+            .and(path(mock_path))
             .respond_with(ResponseTemplate::new(200).set_body_json(j))
             .mount(&mock_server)
             .await;

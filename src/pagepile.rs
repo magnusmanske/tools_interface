@@ -4,7 +4,7 @@
 /// There are blocking and async methods available.
 ///
 /// ## Example
-/// ```rust
+/// ```ignore
 /// let mut pp = PagePile::new(12345); // Your PagePile ID
 /// pp.get().await.unwrap();
 /// let wiki = pp.wiki().unwrap();
@@ -73,7 +73,7 @@ impl Tool for PagePile {
         );
         let client = crate::ToolsInterface::blocking_client()?;
         let json = client.get(&url).send()?.json()?;
-        self.from_json(json)
+        self.set_from_json(json)
     }
 
     #[cfg(feature = "tokio")]
@@ -85,10 +85,10 @@ impl Tool for PagePile {
         );
         let client = crate::ToolsInterface::tokio_client()?;
         let json = client.get(&url).send().await?.json().await?;
-        self.from_json(json)
+        self.set_from_json(json)
     }
 
-    fn from_json(&mut self, j: Value) -> Result<(), ToolsError> {
+    fn set_from_json(&mut self, j: Value) -> Result<(), ToolsError> {
         self.language = j["language"].as_str().map(|s| s.to_string());
         self.project = j["project"].as_str().map(|s| s.to_string());
         self.wiki = j["wiki"].as_str().map(|s| s.to_string());

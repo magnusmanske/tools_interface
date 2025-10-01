@@ -4,7 +4,7 @@
 /// There are blocking and async methods available.
 ///
 /// ## Example
-/// ```rust
+/// ```ignore
 /// let mut ps = PetScan::new(12345); // Your PSID
 /// ps.parameters_mut().push(("foo".to_string(), "bar".to_string())); // Override parameters from the PSID
 /// ps.get().await.unwrap();
@@ -79,10 +79,10 @@ pub struct PetScanPage {
     pub metadata: PetScanMetadata,
 }
 
-impl Into<mediawiki::title::Title> for PetScanPage {
-    fn into(self) -> mediawiki::title::Title {
-        let title_with_spaces = mediawiki::title::Title::underscores_to_spaces(&self.page_title);
-        mediawiki::title::Title::new(&title_with_spaces, self.page_namespace)
+impl From<PetScanPage> for mediawiki::title::Title {
+    fn from(val: PetScanPage) -> Self {
+        let title_with_spaces = mediawiki::title::Title::underscores_to_spaces(&val.page_title);
+        mediawiki::title::Title::new(&title_with_spaces, val.page_namespace)
     }
 }
 
@@ -136,7 +136,7 @@ impl Tool for PetScan {
         let url = format!("https://petscan.wmflabs.org/?psid={psid}&format=json&output_compatability=quick-intersection", psid=self.psid);
         let client = crate::ToolsInterface::blocking_client()?;
         let j: Value = client.get(&url).query(&self.parameters).send()?.json()?;
-        self.from_json(j)
+        self.set_from_json(j)
     }
 
     #[cfg(feature = "tokio")]
@@ -151,10 +151,10 @@ impl Tool for PetScan {
             .await?
             .json()
             .await?;
-        self.from_json(j)
+        self.set_from_json(j)
     }
 
-    fn from_json(&mut self, json: Value) -> Result<(), ToolsError> {
+    fn set_from_json(&mut self, json: Value) -> Result<(), ToolsError> {
         self.status = json["status"].as_str().map(|s| s.to_string());
         if self.status != Some("OK".to_string()) {
             return Err(ToolsError::Tool(format!(

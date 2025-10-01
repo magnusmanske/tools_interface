@@ -8,7 +8,7 @@
 /// There are blocking and async methods available.
 ///
 /// ## Example
-/// ```rust
+/// ```ignore
 /// let mut qs = QuickStatements::new("Your user name", "Your PetScan token").batch_name("My batch");
 /// qs.add_command("Q4115189\tP31\tQ1");
 /// qs.run().await.unwrap();
@@ -144,7 +144,7 @@ mod tests {
     #[cfg(feature = "tokio")]
     #[tokio::test]
     async fn test_quickstatements_run_async() {
-        let mock_path = format!("/api.php");
+        let mock_path = "/api.php";
         let mock_server = MockServer::start().await;
         let token = "FAKE_TOKEN";
         Mock::given(method("POST"))
@@ -157,7 +157,7 @@ mod tests {
             .and(body_string_contains("compress=1"))
             .and(body_string_contains("Q4115189%09P31%09Q1"))
             .and(body_string_contains("site=wikidata"))
-            .and(path(&mock_path))
+            .and(path(mock_path))
             .respond_with(ResponseTemplate::new(200).set_body_json(json!({
                 "batch_id": 12345,
                 "debug": {

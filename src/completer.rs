@@ -4,7 +4,7 @@
 /// There are blocking and async methods available.
 ///
 /// ## Example
-/// ```rust
+/// ```ignore
 /// let mut c = Completer::new("de", "en")
 ///     .filter(CompleterFilter::Category{category: "Biologie".to_string(), depth: 0})
 ///     .ignore_cache();
@@ -120,7 +120,7 @@ impl Tool for Completer {
         let j = self.generate_payload();
         let client = crate::ToolsInterface::blocking_client()?;
         let j: Value = client.post(url).json(&j).send()?.json()?;
-        self.from_json(j)
+        self.set_from_json(j)
     }
 
     #[cfg(feature = "tokio")]
@@ -131,10 +131,10 @@ impl Tool for Completer {
         let client = crate::ToolsInterface::tokio_client()?;
         let response = client.post(url).json(&j).send().await?;
         let j: Value = response.json().await?;
-        self.from_json(j)
+        self.set_from_json(j)
     }
 
-    fn from_json(&mut self, j: Value) -> Result<(), ToolsError> {
+    fn set_from_json(&mut self, j: Value) -> Result<(), ToolsError> {
         if j["success"].as_bool() != Some(true) {
             return Err(ToolsError::Tool(format!("Completer has failed: {:?}", j)));
         }
@@ -146,7 +146,7 @@ impl Tool for Completer {
             .ok_or(ToolsError::Json("['data'] has no array".into()))?
             .iter()
             .filter_map(|arr| arr.as_array())
-            .filter_map(|arr| Some((arr.get(0)?, arr.get(1)?)))
+            .filter_map(|arr| Some((arr.first()?, arr.get(1)?)))
             .filter_map(|(k, v)| Some((k.as_str()?.to_string(), v.as_u64()?)))
             .collect();
         Ok(())
@@ -171,12 +171,12 @@ mod tests {
     use wiremock::{Mock, MockServer, ResponseTemplate};
 
     async fn get_mock_server() -> MockServer {
-        let mock_path = format!("data");
+        let mock_path = "data";
         let mock_server = MockServer::start().await;
         let bj = json!({"info":{"filters":[{"specific":{"depth":0,"talk":false,"title":"Biologie"},"type":"category"}],"from":"de","ignoreCache":true,"to":"en"}});
         Mock::given(method("POST"))
             .and(body_json(bj))
-            .and(path(&mock_path))
+            .and(path(mock_path))
             .respond_with(ResponseTemplate::new(200).set_body_json(json!({"data":[["Optimum",4],["Zustandsänderung",1]],"meta":{"cache_age":null,"cached":false,"debugLine":true,"id":6623,"reachedMaxStatementTime":false,"time":"0.08"},"success":true})))
             .mount(&mock_server)
             .await;

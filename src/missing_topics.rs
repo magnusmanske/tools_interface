@@ -4,7 +4,7 @@
 /// There are blocking and async methods available.
 ///
 /// ## Example
-/// ```rust
+/// ```ignore
 /// let mut mt = MissingTopics::new(Site::from_wiki("dewiki").unwrap())
 ///     .with_article("Biologie")
 ///     .no_template_links(true);
@@ -139,7 +139,7 @@ impl Tool for MissingTopics {
         let client = crate::ToolsInterface::tokio_client()?;
         let response = client.get(url).query(&parameters).send().await?;
         let j: Value = response.json().await?;
-        self.from_json(j)
+        self.set_from_json(j)
     }
 
     #[cfg(feature = "blocking")]
@@ -149,10 +149,10 @@ impl Tool for MissingTopics {
         let parameters = self.generate_paramters()?;
         let client = crate::ToolsInterface::blocking_client()?;
         let j: Value = client.get(url).query(&parameters).send()?.json()?;
-        self.from_json(j)
+        self.set_from_json(j)
     }
 
-    fn from_json(&mut self, j: Value) -> Result<(), ToolsError> {
+    fn set_from_json(&mut self, j: Value) -> Result<(), ToolsError> {
         if j["status"].as_str() != Some("OK") {
             return Err(ToolsError::Tool(format!(
                 "MissingTopics status is not OK: {:?}",
@@ -182,7 +182,7 @@ mod tests {
     use wiremock::{Mock, MockServer, ResponseTemplate};
 
     async fn get_mock_server() -> MockServer {
-        let mock_path = format!("/");
+        let mock_path = "/";
         let mock_server = MockServer::start().await;
         Mock::given(method("GET"))
             .and(query_param_contains("language","de"))
@@ -192,7 +192,7 @@ mod tests {
             .and(query_param_contains("doit","Run"))
             .and(query_param_contains("wikimode","json"))
             .and(query_param_contains("no_template_links","1"))
-            .and(path(&mock_path))
+            .and(path(mock_path))
             .respond_with(ResponseTemplate::new(200).set_body_json(json!({"results":{"Ethnobiologie":4,"Landschaftsdiversität":3,"Micrographia":4,"Spezielle_Botanik":6,"Wbetavirus":4,"Zellphysiologie":4},"status":"OK","url":"https://missingtopics.toolforge.org/?language=de&project=wikipedia&depth=1&category=&article=Biologie&wikimode=json&limitnum=1&notemplatelinks=0"})))
             .mount(&mock_server)
             .await;

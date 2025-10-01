@@ -18,7 +18,6 @@ pub enum ToolsError {
 }
 
 impl Display for ToolsError {
-    #[cfg(not(tarpaulin_include))]
     fn fmt(&self, f: &mut Formatter) -> fmt::Result {
         match self {
             ToolsError::Tool(e) => write!(f, "Tool error: {}", e),

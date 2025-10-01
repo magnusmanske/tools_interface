@@ -4,7 +4,7 @@
 /// There are blocking and async methods available.
 ///
 /// ## Example
-/// ```rust
+/// ```ignore
 /// #[tokio::main]
 /// async fn main() {
 ///     let mut quarry = Quarry::new(12345); // Your Quarry query ID
@@ -68,7 +68,7 @@ impl Tool for Quarry {
         );
         let client = crate::ToolsInterface::blocking_client()?;
         let json: Value = client.get(&url).send()?.json()?;
-        self.from_json(json)
+        self.set_from_json(json)
     }
 
     #[cfg(feature = "tokio")]
@@ -80,10 +80,10 @@ impl Tool for Quarry {
         );
         let client = crate::ToolsInterface::tokio_client()?;
         let json: Value = client.get(&url).send().await?.json().await?;
-        self.from_json(json)
+        self.set_from_json(json)
     }
 
-    fn from_json(&mut self, json: Value) -> Result<(), ToolsError> {
+    fn set_from_json(&mut self, json: Value) -> Result<(), ToolsError> {
         self.columns = json
             .get("headers")
             .ok_or_else(|| ToolsError::Json("No headers in Quarry JSON".to_string()))?

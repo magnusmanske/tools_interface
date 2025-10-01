@@ -48,7 +48,7 @@ impl FancyTitle {
     fn new(s: &str, ns: i64, api: &Api) -> Self {
         let title = Title::new(s, ns);
         Self {
-            prefixed_title: title.full_pretty(&api).unwrap_or_default(),
+            prefixed_title: title.full_pretty(api).unwrap_or_default(),
             title,
         }
     }
@@ -79,7 +79,7 @@ fn write_output(out: &Value, params_all: &ArgMatches) {
         .get_one::<String>("format")
         .expect("--format missing");
     match format.as_str() {
-        "json" => write_json(&out),
+        "json" => write_json(out),
         _ => eprintln!("Unknown format: {format}"),
     }
 }
@@ -120,7 +120,7 @@ async fn completer(params_all: &ArgMatches) {
     let category = params.get_one::<String>("category");
     let depth = params.get_one::<u32>("depth").unwrap();
 
-    let mut c = Completer::new(&from, &to);
+    let mut c = Completer::new(from, to);
     if let Some(psid) = psid {
         c = c.filter(CompleterFilter::PetScan {
             psid: psid.to_string(),
@@ -139,12 +139,12 @@ async fn completer(params_all: &ArgMatches) {
     }
     c.run().await.unwrap();
 
-    let site = Site::from_language_project(&to, "wikipedia");
+    let site = Site::from_language_project(to, "wikipedia");
     let api = site.api().await.unwrap();
     let out = json!({
         "pages": c.results()
             .iter()
-            .map(|(prefixed_title,counter)| (FancyTitle::from_prefixed(&prefixed_title, &api).to_json(),counter))
+            .map(|(prefixed_title,counter)| (FancyTitle::from_prefixed(prefixed_title, &api).to_json(),counter))
             .map(|(mut v,counter)| {v["counter"] = json!(*counter); v})
             .collect::<Vec<Value>>(),
         "site": site,
@@ -184,7 +184,7 @@ async fn pagepile(params_all: &ArgMatches) {
     let out = json!({
         "pages": pp.prefixed_titles()
             .iter()
-            .map(|prefixed_title| FancyTitle::from_prefixed(&prefixed_title, &api).to_json())
+            .map(|prefixed_title| FancyTitle::from_prefixed(prefixed_title, &api).to_json())
             .collect::<Vec<Value>>(),
         "site": site,
     });
@@ -245,13 +245,13 @@ async fn missing_topics(params_all: &ArgMatches) {
     let depth = *params.get_one::<u32>("depth").unwrap();
     let no_template_links = params
         .get_one::<bool>("no_template_links")
-        .map(|b| *b)
+        .copied()
         .unwrap_or_default();
 
-    let mut mt = MissingTopics::new(Site::from_wiki(&wiki).expect("No such wiki {wiki}"))
+    let mut mt = MissingTopics::new(Site::from_wiki(wiki).expect("No such wiki {wiki}"))
         .no_template_links(no_template_links);
     if let Some(article) = article {
-        mt = mt.with_article(&article);
+        mt = mt.with_article(article);
     }
     if let Some(category) = category {
         mt = mt.with_category(category, depth);
@@ -264,7 +264,7 @@ async fn missing_topics(params_all: &ArgMatches) {
     let out = json!({
         "pages": mt.results()
             .iter()
-            .map(|(prefixed_title,counter)| (FancyTitle::from_prefixed(&prefixed_title, &api).to_json(),counter))
+            .map(|(prefixed_title,counter)| (FancyTitle::from_prefixed(prefixed_title, &api).to_json(),counter))
             .map(|(mut v,counter)| {v["counter"] = json!(*counter); v})
             .collect::<Vec<Value>>(),
         "site": site,

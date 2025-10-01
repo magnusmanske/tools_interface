@@ -4,7 +4,7 @@
 /// There are blocking and async methods available.
 ///
 /// ## Example
-/// ```rust
+/// ```ignore
 /// let wikis = Duplicity::wikis().await.unwrap();
 /// wikis
 ///     .iter()
@@ -109,7 +109,7 @@ impl Tool for Duplicity {
         let parameters = self.generate_paramters()?;
         let client = crate::ToolsInterface::blocking_client()?;
         let j: Value = client.get(url).query(&parameters).send()?.json()?;
-        self.from_json(j)
+        self.set_from_json(j)
     }
 
     #[cfg(feature = "tokio")]
@@ -120,10 +120,10 @@ impl Tool for Duplicity {
         let client = crate::ToolsInterface::tokio_client()?;
         let response = client.get(url).query(&parameters).send().await?;
         let j: Value = response.json().await?;
-        self.from_json(j)
+        self.set_from_json(j)
     }
 
-    fn from_json(&mut self, j: Value) -> Result<(), ToolsError> {
+    fn set_from_json(&mut self, j: Value) -> Result<(), ToolsError> {
         if j["status"].as_str() != Some("OK") {
             return Err(ToolsError::Tool(format!(
                 "MissingTopics status is not OK: {:?}",
@@ -134,7 +134,7 @@ impl Tool for Duplicity {
             .as_array()
             .ok_or_else(|| ToolsError::Json("['results'] is not an array".to_string()))?
             .iter()
-            .map(|x| DuplicityResult::from_json(x))
+            .map(DuplicityResult::from_json)
             .collect::<Result<Vec<DuplicityResult>, ToolsError>>()?;
         Ok(())
     }

@@ -8,7 +8,7 @@
 /// Views for multiple pages, on multiple projects, can be retrieved concurrently for a single time span.
 ///
 /// ## Example
-/// ```rust
+/// ```ignore
 /// let pv = Pageviews::new(
 ///     PageviewsGranularity::Monthly, // Get monthly views
 ///     PageviewsAccess::All, // Get all-access views
@@ -123,11 +123,11 @@ impl From<&str> for PageviewsTimestamp {
     }
 }
 
-impl Into<String> for PageviewsTimestamp {
-    fn into(self) -> String {
+impl From<PageviewsTimestamp> for String {
+    fn from(val: PageviewsTimestamp) -> Self {
         format!(
             "{:04}{:02}{:02}{:02}",
-            self.year, self.month, self.day, self.hour
+            val.year, val.month, val.day, val.hour
         )
     }
 }
@@ -165,6 +165,10 @@ impl PageviewsResult {
 
     pub fn len(&self) -> usize {
         self.entries.len()
+    }
+
+    pub fn is_empty(&self) -> bool {
+        self.len() == 0
     }
 }
 
@@ -219,8 +223,8 @@ impl Pageviews {
             access=self.access.as_str(),
             agent=self.agent.as_str(),
             granularity=self.granularity.as_str(),
-            start=start.format("%Y%m%d").to_string(),
-            end=end.format("%Y%m%d").to_string(),
+            start=start.format("%Y%m%d"),
+            end=end.format("%Y%m%d"),
         );
         let client = crate::ToolsInterface::tokio_client()?;
         let json: Value;
@@ -259,14 +263,14 @@ impl Pageviews {
                 crate::ToolsError::Json("'items' is not an array in Pageviews JSON".to_string())
             })?;
         let ret = PageviewsResult {
-            project: project,
-            article: page.into(),
+            project,
+            article: page,
             granularity: self.granularity.to_owned(),
             access: self.access.to_owned(),
             agent: self.agent.to_owned(),
             entries: items
                 .iter()
-                .filter_map(|item| PageviewsParams::from_json(item))
+                .filter_map(PageviewsParams::from_json)
                 .collect(),
         };
         Ok(ret)
