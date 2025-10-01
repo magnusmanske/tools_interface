@@ -2,6 +2,8 @@
 
 This rust crate implements structs to easily interface with several Wikipedia/Wikidata/Wikimedia tools and APIs.
 
+It is available as a Rust [crate](https://crates.io/crates/tools_interface).
+
 ## Supported tools
 
 - [A List Building Tool](https://a-list-bulding-tool.toolforge.org/)
@@ -20,7 +22,7 @@ If you would like to see other tools supported, add a request to the [Issue trac
 
 ## Binary
 
-The is a `ti` binary, working as a command-line interface to the tools_interface library.
+There is a `ti` binary, working as a command-line interface to the tools_interface library.
 It allows you to run queries against various Wikimedia tools from shell.
 
 ### Installation
