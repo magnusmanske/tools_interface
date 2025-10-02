@@ -35,7 +35,7 @@ use mediawiki::{api::Api, title::Title};
 use serde_json::{Value, json};
 use tools_interface::{
     AListBuildingTool, Completer, CompleterFilter, Duplicity, MissingTopics, PagePile, PetScan,
-    Site, Tool, list_building::ListBuilding, wiki_nearby::WikiNearby,
+    Site, Tool, list_building::ListBuilding, wiki_nearby::WikiNearby, xtools_pages::XtoolsPages,
 };
 
 #[derive(Debug, PartialEq)]
@@ -161,6 +161,36 @@ async fn wikinearby(params_all: &ArgMatches) {
             v["lat"] = json!(result.lat);
             v["lon"] = json!(result.lon);
             v["distance"] = json!(result.distance);
+            v
+            })
+            .collect::<Vec<Value>>(),
+        "site": site,
+    });
+    write_output(&out, params_all);
+}
+
+async fn xtools_pages(params_all: &ArgMatches) {
+    let params = params_all
+        .subcommand_matches("xtools-pages")
+        .expect("No subcommand matches found");
+    let wiki = params.get_one::<String>("wiki").expect("--wiki missing");
+    let user = params.get_one::<String>("user").expect("--user missing");
+    let namespace_id = params.get_one::<u32>("ns").expect("--ns missing"); // Has default value 0
+
+    let site = Site::from_wiki(wiki).unwrap();
+    let mut a = XtoolsPages::new(site, user).with_namespace_id(*namespace_id);
+    a.run().await.unwrap();
+    let site = a.site();
+    let api = site.api().await.unwrap();
+    let out = json!({
+        "pages": a.results()
+            .iter()
+            .map(|result| (FancyTitle::new(&result.title, result.namespace_id as i64, &api).to_json(),result))
+            .map(|(mut v,result)| {
+            v["meta"]["creation_date"] = json!(result.date.format("%Y-%m-%dT%H:%M:%SZ").to_string());
+            v["meta"]["original_size"] = json!(result.original_size);
+            v["meta"]["current_size"] = json!(result.current_size);
+            v["meta"]["assessment"] = json!(result.assessment);
             v
             })
             .collect::<Vec<Value>>(),
@@ -513,6 +543,28 @@ fn get_arg_matches() -> ArgMatches {
                         .value_parser(value_parser!(usize))
                         .required(false),
                 ),
+            Command::new("xtools-pages")
+                .about("Retrieves pages from Xtools pages (created by a user)")
+                .arg(
+                    Arg::new("wiki")
+                        .long("wiki")
+                        .help("Wiki (eg enwiki)")
+                        .required(true),
+                )
+                .arg(
+                    Arg::new("user")
+                        .long("user")
+                        .help("Username")
+                        .required(true),
+                )
+                .arg(
+                    Arg::new("ns")
+                        .long("namespace")
+                        .help("Namespace ID")
+                        .default_value("0")
+                        .value_parser(value_parser!(u32))
+                        .required(false),
+                ),
         ])
         .get_matches()
 }
@@ -529,6 +581,7 @@ async fn main() {
         Some("petscan") => petscan(&m).await,
         Some("missing_topics") => missing_topics(&m).await,
         Some("wikinearby") => wikinearby(&m).await,
+        Some("xtools-pages") => xtools_pages(&m).await,
         Some(other) => eprintln!("Unknown subcommand given: {other}"),
         None => eprintln!("No subcommand given"),
     }

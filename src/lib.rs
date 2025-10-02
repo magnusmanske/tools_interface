@@ -17,6 +17,7 @@
 //! - [QuickStatements](https://quickstatements.toolforge.org/) (create and start batches)
 //! - [SparqlRC](https://wikidata-todo.toolforge.org/sparql_rc.php)
 //! - [WikiNearby](https://wikinearby.toolforge.org/)
+//! - [XTools pages](https://xtools.wmcloud.org/pages)
 //!
 //! If you would like to see other tools supported, add a request to the [Issue tracker](https://github.com/magnusmanske/tools_interface/issues).
 
@@ -37,6 +38,7 @@ pub mod sparql_rc;
 pub mod tool;
 pub mod tools_interface;
 pub mod wiki_nearby;
+pub mod xtools_pages;
 
 pub use a_list_building_tool::AListBuildingTool;
 pub use completer::{Completer, CompleterFilter};
@@ -60,7 +62,6 @@ cargo test --lib --tests --bins
 
 TODO
 - WD-FIST
-- https://xtools.wmcloud.org/pages (parse wikitext output)
 - https://ws-search.toolforge.org/ (needs HTML scraping?)
 - https://wp-trending.toolforge.org/
 - https://wikidata-todo.toolforge.org/user_edits.php

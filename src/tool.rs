@@ -23,6 +23,10 @@ pub trait Tool {
         self.set_from_json(json)
     }
 
+    fn set_from_text(&mut self, _text: &str) -> Result<(), ToolsError> {
+        unimplemented!();
+    }
+
     fn set_from_json(&mut self, _j: Value) -> Result<(), ToolsError> {
         unimplemented!();
     }
