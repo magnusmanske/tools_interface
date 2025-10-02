@@ -24,7 +24,7 @@ pub struct WikiSearchResult {
     pub namespace_id: u32,
     pub title: String,
     pub page_id: usize,
-    pub size: usize,
+    pub size: Option<usize>,
     pub wordcount: usize,
     pub snippet: String,
 }
@@ -35,7 +35,7 @@ impl WikiSearchResult {
             namespace_id: json["ns"].as_u64()? as u32,
             title: json["title"].as_str()?.to_string(),
             page_id: json["pageid"].as_u64()? as usize,
-            size: json["size"].as_u64()? as usize,
+            size: json["size"].as_u64().map(|i| i as usize),
             wordcount: json["wordcount"].as_u64()? as usize,
             snippet: json["snippet"].as_str()?.to_string(),
         })
