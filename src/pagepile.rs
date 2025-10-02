@@ -64,28 +64,11 @@ impl PagePile {
 
 #[async_trait]
 impl Tool for PagePile {
-    #[cfg(feature = "blocking")]
-    /// Retrieves the PagePile.
-    fn run_blocking(&mut self) -> Result<(), ToolsError> {
-        let url = format!(
+    fn get_url(&self) -> String {
+        format!(
             "https://pagepile.toolforge.org/api.php?id={id}&action=get_data&doit&format=json",
             id = self.id
-        );
-        let client = crate::ToolsInterface::blocking_client()?;
-        let json = client.get(&url).send()?.json()?;
-        self.set_from_json(json)
-    }
-
-    #[cfg(feature = "tokio")]
-    /// Retrieves the PagePile asynchronously.
-    async fn run(&mut self) -> Result<(), ToolsError> {
-        let url = format!(
-            "https://pagepile.toolforge.org/api.php?id={id}&action=get_data&doit&format=json",
-            id = self.id
-        );
-        let client = crate::ToolsInterface::tokio_client()?;
-        let json = client.get(&url).send().await?.json().await?;
-        self.set_from_json(json)
+        )
     }
 
     fn set_from_json(&mut self, j: Value) -> Result<(), ToolsError> {
