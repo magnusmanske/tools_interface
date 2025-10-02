@@ -23,6 +23,10 @@ It is available as a Rust [crate](https://crates.io/crates/tools_interface).
 
 If you would like to see other tools supported, add a request to the [Issue tracker](https://github.com/magnusmanske/tools_interface/issues).
 
+## Other functionalities
+
+- *Search* on any WMF wiki
+
 ## Binary
 
 There is a `ti` binary, working as a command-line interface to the tools_interface library.

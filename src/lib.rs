@@ -33,6 +33,7 @@ pub mod persondata_template;
 pub mod petscan;
 pub mod quarry;
 pub mod quickstatements;
+pub mod search;
 pub mod site;
 pub mod sparql_rc;
 pub mod tool;
