@@ -9,6 +9,7 @@ It is available as a Rust [crate](https://crates.io/crates/tools_interface).
 - [A List Building Tool](https://a-list-bulding-tool.toolforge.org/)
 - [Completer](https://completer.toolforge.org/)
 - [Duplicity](https://wikidata-todo.toolforge.org/duplicity/)
+- [List Building](https://list-building.toolforge.org)
 - [PagePile](https://pagepile.toolforge.org/) (read only)
 - [Pageviews API](https://wikitech.wikimedia.org/wiki/Analytics/AQS/Pageviews)
 - [Persondata Template](https://persondata.toolforge.org/vorlagen/)
@@ -18,6 +19,7 @@ It is available as a Rust [crate](https://crates.io/crates/tools_interface).
 - [QuickStatements](https://quickstatements.toolforge.org/) (create and start batches)
 - [SparqlRC](https://wikidata-todo.toolforge.org/sparql_rc.php)
 - [WikiNearby](https://wikinearby.toolforge.org/)
+- [XTools pages](https://xtools.wmcloud.org/pages)
 
 If you would like to see other tools supported, add a request to the [Issue tracker](https://github.com/magnusmanske/tools_interface/issues).
 
