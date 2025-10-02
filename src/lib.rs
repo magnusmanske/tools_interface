@@ -7,6 +7,7 @@
 //! - [A List Building Tool](https://a-list-bulding-tool.toolforge.org/)
 //! - [Completer](https://completer.toolforge.org/)
 //! - [Duplicity](https://wikidata-todo.toolforge.org/duplicity/)
+//! - [List Building](https://list-building.toolforge.org)
 //! - [PagePile](https://pagepile.toolforge.org/) (read only)
 //! - [Pageviews API](https://wikitech.wikimedia.org/wiki/Analytics/AQS/Pageviews)
 //! - [Persondata Template](https://persondata.toolforge.org/vorlagen/)
@@ -22,6 +23,7 @@ pub mod a_list_building_tool;
 pub mod completer;
 pub mod duplicity;
 pub mod error;
+pub mod list_building;
 pub mod missing_topics;
 pub mod pagepile;
 pub mod pageviews;
