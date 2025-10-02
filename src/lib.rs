@@ -25,6 +25,7 @@ pub mod a_list_building_tool;
 pub mod completer;
 pub mod duplicity;
 pub mod error;
+pub mod fancy_title;
 pub mod list_building;
 pub mod missing_topics;
 pub mod pagepile;

@@ -31,45 +31,12 @@
 //! ```
 
 use clap::{Arg, ArgAction, ArgMatches, Command, value_parser};
-use mediawiki::{api::Api, title::Title};
 use serde_json::{Value, json};
 use tools_interface::{
     AListBuildingTool, Completer, CompleterFilter, Duplicity, MissingTopics, PagePile, PetScan,
-    Site, Tool, list_building::ListBuilding, search::WikiSearch, wiki_nearby::WikiNearby,
-    xtools_pages::XtoolsPages,
+    Site, Tool, fancy_title::FancyTitle, list_building::ListBuilding, search::WikiSearch,
+    wiki_nearby::WikiNearby, xtools_pages::XtoolsPages,
 };
-
-#[derive(Debug, PartialEq)]
-struct FancyTitle {
-    title: Title,
-    prefixed_title: String,
-}
-
-impl FancyTitle {
-    fn new(s: &str, ns: i64, api: &Api) -> Self {
-        let title = Title::new(s, ns);
-        Self {
-            prefixed_title: title.full_pretty(api).unwrap_or_default(),
-            title,
-        }
-    }
-
-    fn from_prefixed(s: &str, api: &Api) -> Self {
-        let title = Title::new_from_full(s, api);
-        Self {
-            prefixed_title: title.full_pretty(api).unwrap_or_default(),
-            title,
-        }
-    }
-
-    fn to_json(&self) -> serde_json::Value {
-        json!({
-            "title": self.title.pretty(),
-            "prefixed_title": self.prefixed_title,
-            "namespace_id": self.title.namespace_id(),
-        })
-    }
-}
 
 fn write_json(j: &Value) {
     println!("{}", serde_json::to_string_pretty(&j).unwrap());
@@ -117,16 +84,7 @@ async fn listbuilding(params_all: &ArgMatches) {
     let title = params.get_one::<String>("title").expect("--title missing");
     let mut a = ListBuilding::new(Site::from_wiki(wiki).unwrap(), title);
     a.run().await.unwrap();
-    let site = a.site();
-    let api = site.api().await.unwrap();
-    let out = json!({
-        "pages": a.results()
-            .iter()
-            .map(|result| (FancyTitle::from_prefixed(&result.title, &api).to_json(),result))
-            .map(|(mut v,result)| {v["wikidata"] = json!(result.qid); v})
-            .collect::<Vec<Value>>(),
-        "site": site,
-    });
+    let out = a.as_json().await;
     write_output(&out, params_all);
 }
 
@@ -270,24 +228,9 @@ async fn search(params_all: &ArgMatches) {
         .expect("No subcommand matches found");
     let wiki = params.get_one::<String>("wiki").expect("--wiki missing");
     let query = params.get_one::<String>("query").expect("--query missing");
-    let mut d = WikiSearch::new(Site::from_wiki(wiki).unwrap(), query);
-    d.run().await.unwrap();
-    let site = d.site();
-    let api = site.api().await.unwrap();
-    let out = json!({
-        "pages": d.results()
-            .iter()
-            .map(|result| (FancyTitle::new(&result.title, result.namespace_id as i64, &api).to_json(),result))
-            .map(|(mut v,result)| {
-                v["page_id"] = json!(result.page_id);
-                v["size"] = json!(result.size);
-                v["wordcount"] = json!(result.wordcount);
-                v["snippet"] = json!(result.snippet);
-                v
-            })
-            .collect::<Vec<Value>>(),
-        "site": site,
-    });
+    let mut tool = WikiSearch::new(Site::from_wiki(wiki).unwrap(), query);
+    tool.run().await.unwrap();
+    let out = tool.as_json().await;
     write_output(&out, params_all);
 }
 
@@ -296,17 +239,9 @@ async fn pagepile(params_all: &ArgMatches) {
         .subcommand_matches("pagepile")
         .expect("No subcommand matches found");
     let id = params.get_one::<u32>("id").expect("--id missing");
-    let mut pp = PagePile::new(*id);
-    pp.run().await.unwrap();
-    let site = pp.site().expect("Unknown site for PagePile");
-    let api = site.api().await.unwrap();
-    let out = json!({
-        "pages": pp.prefixed_titles()
-            .iter()
-            .map(|prefixed_title| FancyTitle::from_prefixed(prefixed_title, &api).to_json())
-            .collect::<Vec<Value>>(),
-        "site": site,
-    });
+    let mut tool = PagePile::new(*id);
+    tool.run().await.unwrap();
+    let out = tool.as_json().await.unwrap_or(json!({}));
     write_output(&out, params_all);
 }
 

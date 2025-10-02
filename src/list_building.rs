@@ -15,9 +15,9 @@
 ///        println!("Page {} Item {} Description {}", result.title, result.qid, result.description);
 ///     });
 /// ```
-use crate::{Site, Tool, ToolsError};
+use crate::{Site, Tool, ToolsError, fancy_title::FancyTitle};
 use async_trait::async_trait;
-use serde_json::Value;
+use serde_json::{Value, json};
 
 #[derive(Debug, Default, PartialEq)]
 pub struct ListBuildingResult {
@@ -52,6 +52,22 @@ impl ListBuilding {
 
     pub fn title(&self) -> &str {
         &self.title
+    }
+    pub async fn as_json(&self) -> Value {
+        let site = self.site();
+        let api = site.api().await.unwrap();
+        json!({
+            "pages": self.results()
+                .iter()
+                .map(|result| (FancyTitle::from_prefixed(&result.title, &api).to_json(),result))
+                .map(|(mut v,result)| {
+                    v["wikidata"] = json!(result.qid);
+                    v["description"] = json!(result.description);
+                    v
+                })
+                .collect::<Vec<Value>>(),
+            "site": site,
+        })
     }
 }
 

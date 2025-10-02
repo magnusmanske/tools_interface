@@ -15,9 +15,9 @@
 ///        println!("Page {} Item {} Description {}", result.title, result.qid, result.description);
 ///     });
 /// ```
-use crate::{Site, Tool, ToolsError};
+use crate::{Site, Tool, ToolsError, fancy_title::FancyTitle};
 use async_trait::async_trait;
-use serde_json::Value;
+use serde_json::{Value, json};
 
 #[derive(Debug, Default, PartialEq)]
 pub struct WikiSearchResult {
@@ -105,6 +105,25 @@ impl WikiSearch {
 
     pub fn limit(&self) -> u32 {
         self.limit
+    }
+
+    pub async fn as_json(&self) -> Value {
+        let site = self.site();
+        let api = site.api().await.unwrap();
+        json!({
+            "pages": self.results()
+                .iter()
+                .map(|result| (FancyTitle::new(&result.title, result.namespace_id as i64, &api).to_json(),result))
+                .map(|(mut v,result)| {
+                    v["page_id"] = json!(result.page_id);
+                    v["size"] = json!(result.size);
+                    v["wordcount"] = json!(result.wordcount);
+                    v["snippet"] = json!(result.snippet);
+                    v
+                })
+                .collect::<Vec<Value>>(),
+            "site": site,
+        })
     }
 }
 

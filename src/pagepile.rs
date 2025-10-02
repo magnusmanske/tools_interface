@@ -10,9 +10,9 @@
 /// let wiki = pp.wiki().unwrap();
 /// let page_titles = pp.prefixed_titles();
 /// ```
-use crate::{Site, Tool, ToolsError};
+use crate::{Site, Tool, ToolsError, fancy_title::FancyTitle};
 use async_trait::async_trait;
-use serde_json::Value;
+use serde_json::{Value, json};
 
 #[derive(Debug, Default, PartialEq)]
 pub struct PagePile {
@@ -59,6 +59,18 @@ impl PagePile {
             Some(wiki) => Site::from_wiki(wiki)?,
             None => Site::from_language_project(self.language.as_ref()?, self.project.as_ref()?),
         })
+    }
+
+    pub async fn as_json(&self) -> Option<Value> {
+        let site = self.site()?;
+        let api = site.api().await.ok()?;
+        Some(json!({
+            "pages": self.prefixed_titles()
+                .iter()
+                .map(|prefixed_title| FancyTitle::from_prefixed(prefixed_title, &api).to_json())
+                .collect::<Vec<Value>>(),
+            "site": site,
+        }))
     }
 }
 
