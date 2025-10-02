@@ -7,11 +7,21 @@ use crate::ToolsError;
 pub trait Tool {
     #[cfg(feature = "blocking")]
     /// Run the tool in a blocking manner.
-    fn run_blocking(&mut self) -> Result<(), ToolsError>;
+    fn run_blocking(&mut self) -> Result<(), ToolsError> {
+        let url = self.get_url();
+        let client = crate::ToolsInterface::blocking_client()?;
+        let json = client.get(&url).send()?.json()?;
+        self.set_from_json(json)
+    }
 
     #[cfg(feature = "tokio")]
     /// Run the tool asynchronously.
-    async fn run(&mut self) -> Result<(), ToolsError>;
+    async fn run(&mut self) -> Result<(), ToolsError> {
+        let url = self.get_url();
+        let client = crate::ToolsInterface::tokio_client()?;
+        let json = client.get(&url).send().await?.json().await?;
+        self.set_from_json(json)
+    }
 
     fn set_from_json(&mut self, _j: Value) -> Result<(), ToolsError> {
         unimplemented!();
@@ -22,6 +32,10 @@ pub trait Tool {
     }
 
     fn generate_paramters(&self) -> Result<Vec<(String, String)>, ToolsError> {
+        unimplemented!();
+    }
+
+    fn get_url(&self) -> String {
         unimplemented!();
     }
 }

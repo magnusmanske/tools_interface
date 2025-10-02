@@ -35,7 +35,7 @@ use mediawiki::{api::Api, title::Title};
 use serde_json::{Value, json};
 use tools_interface::{
     AListBuildingTool, Completer, CompleterFilter, Duplicity, MissingTopics, PagePile, PetScan,
-    Site, Tool, list_building::ListBuilding,
+    Site, Tool, list_building::ListBuilding, wiki_nearby::WikiNearby,
 };
 
 #[derive(Debug, PartialEq)]
@@ -123,6 +123,46 @@ async fn listbuilding(params_all: &ArgMatches) {
             .iter()
             .map(|result| (FancyTitle::from_prefixed(&result.title, &api).to_json(),result))
             .map(|(mut v,result)| {v["wikidata"] = json!(result.qid); v})
+            .collect::<Vec<Value>>(),
+        "site": site,
+    });
+    write_output(&out, params_all);
+}
+
+async fn wikinearby(params_all: &ArgMatches) {
+    let params = params_all
+        .subcommand_matches("wikinearby")
+        .expect("No subcommand matches found");
+    let wiki = params.get_one::<String>("wiki").expect("--wiki missing");
+    let title = params.get_one::<String>("title");
+    let lat = params.get_one::<f64>("lat");
+    let lon = params.get_one::<f64>("lon");
+    let offset = params.get_one::<usize>("offset");
+    let site = Site::from_wiki(wiki).unwrap();
+    let mut a = match title {
+        Some(title) => WikiNearby::new_from_page(site, title),
+        None => match (lat, lon) {
+            (Some(lat), Some(lon)) => WikiNearby::new_from_coordinates(site, *lat, *lon),
+            _ => panic!("Missing either page title or latitude&longitude"),
+        },
+    };
+    if let Some(offset) = offset {
+        a.set_offset(*offset);
+    }
+    a.run().await.unwrap();
+    let site = a.site();
+    let api = site.api().await.unwrap();
+    let out = json!({
+        "pages": a.results()
+            .iter()
+            .map(|result| (FancyTitle::from_prefixed(&result.title, &api).to_json(),result))
+            .map(|(mut v,result)| {
+            v["image"] = json!(result.image);
+            v["lat"] = json!(result.lat);
+            v["lon"] = json!(result.lon);
+            v["distance"] = json!(result.distance);
+            v
+            })
             .collect::<Vec<Value>>(),
         "site": site,
     });
@@ -440,6 +480,39 @@ fn get_arg_matches() -> ArgMatches {
                         .help("No template links (optional)")
                         .action(ArgAction::SetTrue),
                 ),
+            Command::new("wikinearby")
+                .about("Retrieves pages from WikiNearby")
+                .arg(
+                    Arg::new("wiki")
+                        .long("wiki")
+                        .help("Wiki (eg enwiki)")
+                        .required(true),
+                )
+                .arg(
+                    Arg::new("title")
+                        .long("title")
+                        .help("Page title")
+                        .required(false),
+                )
+                .arg(
+                    Arg::new("lat")
+                        .long("lat")
+                        .help("Latitude (requires --lon)")
+                        .required(false),
+                )
+                .arg(
+                    Arg::new("lon")
+                        .long("lon")
+                        .help("Longitude (requires --lat)")
+                        .required(false),
+                )
+                .arg(
+                    Arg::new("offset")
+                        .long("offset")
+                        .help("query offset (default:0)")
+                        .value_parser(value_parser!(usize))
+                        .required(false),
+                ),
         ])
         .get_matches()
 }
@@ -455,6 +528,8 @@ async fn main() {
         Some("pagepile") => pagepile(&m).await,
         Some("petscan") => petscan(&m).await,
         Some("missing_topics") => missing_topics(&m).await,
-        _ => eprintln!("No subcommand given"),
+        Some("wikinearby") => wikinearby(&m).await,
+        Some(other) => eprintln!("Unknown subcommand given: {other}"),
+        None => eprintln!("No subcommand given"),
     }
 }

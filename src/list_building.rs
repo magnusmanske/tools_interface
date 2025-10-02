@@ -57,28 +57,12 @@ impl ListBuilding {
 
 #[async_trait]
 impl Tool for ListBuilding {
-    #[cfg(feature = "blocking")]
-    fn run_blocking(&mut self) -> Result<(), ToolsError> {
-        let url = format!(
+    fn get_url(&self) -> String {
+        format!(
             "https://list-building.toolforge.org/api/serpentine?lang={lang}&title={title}&qid=&k-reader=3&k-links=3&k-morelike=4&wp",
             lang = self.site.language(),
             title = self.title,
-        );
-        let client = crate::ToolsInterface::blocking_client()?;
-        let json = client.get(&url).send()?.json()?;
-        self.set_from_json(json)
-    }
-
-    #[cfg(feature = "tokio")]
-    async fn run(&mut self) -> Result<(), ToolsError> {
-        let url = format!(
-            "https://list-building.toolforge.org/api/serpentine?lang={lang}&title={title}&qid=&k-reader=3&k-links=3&k-morelike=4&wp",
-            lang = self.site.language(),
-            title = self.title,
-        );
-        let client = crate::ToolsInterface::tokio_client()?;
-        let json = client.get(&url).send().await?.json().await?;
-        self.set_from_json(json)
+        )
     }
 
     fn set_from_json(&mut self, j: Value) -> Result<(), ToolsError> {

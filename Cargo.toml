@@ -1,6 +1,6 @@
 [package]
 name = "tools_interface"
-version = "0.1.8"
+version = "0.1.9"
 authors = ["Magnus Manske <magnusmanske@googlemail.com>"]
 edition = "2024"
 description = "Abstractions of serveral Wikipedia/Wikimedia/Wikidata-related tools"
