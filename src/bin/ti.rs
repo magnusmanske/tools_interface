@@ -93,7 +93,7 @@ async fn wikinearby(params_all: &ArgMatches) {
         Some(title) => WikiNearby::new_from_page(site, title),
         None => match (lat, lon) {
             (Some(lat), Some(lon)) => WikiNearby::new_from_coordinates(site, *lat, *lon),
-            _ => panic!("Missing either page title or latitude&longitude"),
+            _ => panic!("Either page title or latitude&longitude are required"),
         },
     };
     if let Some(offset) = offset {
