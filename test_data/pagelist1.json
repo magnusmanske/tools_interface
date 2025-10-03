@@ -1,0 +1,25 @@
+{
+  "pages": [
+    {
+      "namespace_id": 0,
+      "prefixed_title": "Magnus Manske",
+      "title": "Magnus Manske",
+"foo": "bar"
+    },
+    {
+      "namespace_id": 0,
+      "prefixed_title": "Magyarmecske",
+      "title": "Magyarmecske"
+    },
+    {
+      "namespace_id": 0,
+      "prefixed_title": "Magdalena Damaske",
+      "title": "Magdalena Damaske"
+    }
+  ],
+  "site": {
+    "language": "en",
+    "project": "wikipedia",
+    "wiki": "enwiki"
+  }
+}

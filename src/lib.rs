@@ -29,6 +29,7 @@ pub mod fancy_title;
 pub mod grep;
 pub mod list_building;
 pub mod missing_topics;
+pub mod page_list;
 pub mod pagepile;
 pub mod pageviews;
 pub mod persondata_template;

@@ -26,7 +26,9 @@ If you would like to see other tools supported, add a request to the [Issue trac
 
 ## Other functionalities
 
-- *Search* on any WMF wiki
+- *search* on any WMF wiki
+- *subset* two JSON files with pages
+- *union* two JSON files with pages
 
 ## Binary
 

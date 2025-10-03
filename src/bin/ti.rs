@@ -34,7 +34,7 @@ use clap::{Arg, ArgAction, ArgMatches, Command, value_parser};
 use serde_json::Value;
 use tools_interface::{
     AListBuildingTool, Completer, CompleterFilter, Duplicity, MissingTopics, PagePile, PetScan,
-    Site, Tool, grep::Grep, list_building::ListBuilding, search::WikiSearch,
+    Site, Tool, grep::Grep, list_building::ListBuilding, page_list::PageList, search::WikiSearch,
     wiki_nearby::WikiNearby, xtools_pages::XtoolsPages,
 };
 
@@ -173,6 +173,32 @@ async fn search(params_all: &ArgMatches) {
     let mut tool = WikiSearch::new(Site::from_wiki(wiki).unwrap(), query);
     tool.run().await.unwrap();
     let out = tool.as_json().await;
+    write_output(&out, params_all);
+}
+
+async fn subset(params_all: &ArgMatches) {
+    let params = params_all
+        .subcommand_matches("subset")
+        .expect("No subcommand matches found");
+    let file1 = params.get_one::<String>("file1").expect("--file1 missing");
+    let file2 = params.get_one::<String>("file2").expect("--file2 missing");
+    let pages1 = PageList::from_file(file1).unwrap();
+    let pages2 = PageList::from_file(file2).unwrap();
+    let result = pages1.subset(&pages2).await;
+    let out = result.as_json().await;
+    write_output(&out, params_all);
+}
+
+async fn union(params_all: &ArgMatches) {
+    let params = params_all
+        .subcommand_matches("union")
+        .expect("No subcommand matches found");
+    let file1 = params.get_one::<String>("file1").expect("--file1 missing");
+    let file2 = params.get_one::<String>("file2").expect("--file2 missing");
+    let pages1 = PageList::from_file(file1).unwrap();
+    let pages2 = PageList::from_file(file2).unwrap();
+    let result = pages1.union(&pages2).await;
+    let out = result.as_json().await;
     write_output(&out, params_all);
 }
 
@@ -497,6 +523,14 @@ fn get_arg_matches() -> ArgMatches {
                         .value_parser(value_parser!(usize))
                         .required(false),
                 ),
+            Command::new("subset")
+                .about("Generates the subset of two JSON output files. Merges metadata for duplicate pages")
+                .arg(Arg::new("file1").required(true).index(1))
+                .arg(Arg::new("file2").required(true).index(2)),
+            Command::new("union")
+                .about("Generates the union of two JSON output files. Merges metadata for duplicate pages")
+                .arg(Arg::new("file1").required(true).index(1))
+                .arg(Arg::new("file2").required(true).index(2)),
         ])
         .get_matches()
 }
@@ -514,6 +548,8 @@ async fn main() {
         Some("pagepile") => pagepile(&m).await,
         Some("petscan") => petscan(&m).await,
         Some("search") => search(&m).await,
+        Some("subset") => subset(&m).await,
+        Some("union") => union(&m).await,
         Some("wikinearby") => wikinearby(&m).await,
         Some("xtools_pages") => xtools_pages(&m).await,
         Some(other) => eprintln!("Unknown subcommand given: {other}"),

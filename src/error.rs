@@ -15,6 +15,7 @@ pub enum ToolsError {
     Json(String),
     SerdeJson(serde_json::Error),
     MediaWiki(MediaWikiError),
+    Io(std::io::Error),
 }
 
 impl Display for ToolsError {
@@ -26,6 +27,7 @@ impl Display for ToolsError {
             ToolsError::Json(e) => write!(f, "JSON error: {}", e),
             ToolsError::SerdeJson(e) => write!(f, "Serde JSON error: {}", e),
             ToolsError::MediaWiki(e) => write!(f, "MediaWiki error: {}", e),
+            ToolsError::Io(e) => write!(f, "IO error: {}", e),
         }
     }
 }
@@ -53,5 +55,11 @@ impl From<serde_json::Error> for ToolsError {
 impl From<MediaWikiError> for ToolsError {
     fn from(e: MediaWikiError) -> Self {
         Self::MediaWiki(e)
+    }
+}
+
+impl From<std::io::Error> for ToolsError {
+    fn from(e: std::io::Error) -> Self {
+        Self::Io(e)
     }
 }
