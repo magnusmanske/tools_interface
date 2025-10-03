@@ -15,9 +15,10 @@
 ///        println!("Page {} Item {} Description {}", result.title, result.qid, result.description);
 ///     });
 /// ```
-use crate::{Site, Tool, ToolsError};
+use crate::{Site, Tool, ToolsError, fancy_title::FancyTitle};
 use async_trait::async_trait;
 use chrono::{NaiveDate, NaiveDateTime};
+use serde_json::{Value, json};
 
 #[derive(Debug, Default, PartialEq)]
 pub struct XtoolsPagesResult {
@@ -167,6 +168,25 @@ impl XtoolsPages {
 
     pub fn deleted_pages(&self) -> &DeletedPages {
         &self.deleted_pages
+    }
+
+    pub async fn as_json(&self) -> Value {
+        let site = self.site();
+        let api = site.api().await.unwrap();
+        json!({
+            "pages": self.results()
+                .iter()
+                .map(|result| (FancyTitle::new(&result.title, result.namespace_id as i64, &api).to_json(),result))
+                .map(|(mut v,result)| {
+                v["creation_date"] = json!(result.date.format("%Y-%m-%dT%H:%M:%SZ").to_string());
+                v["original_size"] = json!(result.original_size);
+                v["current_size"] = json!(result.current_size);
+                v["assessment"] = json!(result.assessment);
+                v
+                })
+                .collect::<Vec<Value>>(),
+            "site": site,
+        })
     }
 }
 

@@ -18,10 +18,10 @@
 ///        println!("{} was added {}",result.title, result.creation_date);
 ///     });
 /// ```
-use crate::{Site, Tool, ToolsError};
+use crate::{Site, Tool, ToolsError, fancy_title::FancyTitle};
 use async_trait::async_trait;
 use chrono::NaiveDateTime;
-use serde_json::Value;
+use serde_json::{Value, json};
 
 #[derive(Debug, Default, PartialEq)]
 pub struct DuplicityResult {
@@ -88,6 +88,19 @@ impl Duplicity {
 
     pub fn results(&self) -> &[DuplicityResult] {
         &self.results
+    }
+
+    pub async fn as_json(&self) -> Value {
+        let site = self.site();
+        let api = site.api().await.unwrap();
+        json!({
+            "pages": self.results()
+                .iter()
+                .map(|result| (FancyTitle::from_prefixed(&result.title, &api).to_json(),result))
+                .map(|(mut v,result)| {v["added_to_tool"] = json!(format!("{}",result.creation_date.format("%Y-%m-%d %H:%M:%S"))); v})
+                .collect::<Vec<Value>>(),
+            "site": site,
+        })
     }
 }
 

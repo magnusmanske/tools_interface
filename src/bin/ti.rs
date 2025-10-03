@@ -31,11 +31,11 @@
 //! ```
 
 use clap::{Arg, ArgAction, ArgMatches, Command, value_parser};
-use serde_json::{Value, json};
+use serde_json::Value;
 use tools_interface::{
     AListBuildingTool, Completer, CompleterFilter, Duplicity, MissingTopics, PagePile, PetScan,
-    Site, Tool, fancy_title::FancyTitle, list_building::ListBuilding, search::WikiSearch,
-    wiki_nearby::WikiNearby, xtools_pages::XtoolsPages,
+    Site, Tool, list_building::ListBuilding, search::WikiSearch, wiki_nearby::WikiNearby,
+    xtools_pages::XtoolsPages,
 };
 
 fn write_json(j: &Value) {
@@ -61,18 +61,9 @@ async fn alistbuildingtool(params_all: &ArgMatches) {
         .get_one::<String>("item")
         .expect("--item missing")
         .to_ascii_uppercase();
-    let mut a = AListBuildingTool::new(Site::from_wiki(wiki).unwrap(), &qid);
-    a.run().await.unwrap();
-    let site = a.site();
-    let api = site.api().await.unwrap();
-    let out = json!({
-        "pages": a.results()
-            .iter()
-            .map(|result| (FancyTitle::from_prefixed(&result.title, &api).to_json(),result))
-            .map(|(mut v,result)| {v["wikidata"] = json!(result.qid); v})
-            .collect::<Vec<Value>>(),
-        "site": site,
-    });
+    let mut tool = AListBuildingTool::new(Site::from_wiki(wiki).unwrap(), &qid);
+    tool.run().await.unwrap();
+    let out = tool.as_json().await;
     write_output(&out, params_all);
 }
 
@@ -82,9 +73,9 @@ async fn listbuilding(params_all: &ArgMatches) {
         .expect("No subcommand matches found");
     let wiki = params.get_one::<String>("wiki").expect("--wiki missing");
     let title = params.get_one::<String>("title").expect("--title missing");
-    let mut a = ListBuilding::new(Site::from_wiki(wiki).unwrap(), title);
-    a.run().await.unwrap();
-    let out = a.as_json().await;
+    let mut tool = ListBuilding::new(Site::from_wiki(wiki).unwrap(), title);
+    tool.run().await.unwrap();
+    let out = tool.as_json().await;
     write_output(&out, params_all);
 }
 
@@ -98,7 +89,7 @@ async fn wikinearby(params_all: &ArgMatches) {
     let lon = params.get_one::<f64>("lon");
     let offset = params.get_one::<usize>("offset");
     let site = Site::from_wiki(wiki).unwrap();
-    let mut a = match title {
+    let mut tool = match title {
         Some(title) => WikiNearby::new_from_page(site, title),
         None => match (lat, lon) {
             (Some(lat), Some(lon)) => WikiNearby::new_from_coordinates(site, *lat, *lon),
@@ -106,25 +97,10 @@ async fn wikinearby(params_all: &ArgMatches) {
         },
     };
     if let Some(offset) = offset {
-        a.set_offset(*offset);
+        tool.set_offset(*offset);
     }
-    a.run().await.unwrap();
-    let site = a.site();
-    let api = site.api().await.unwrap();
-    let out = json!({
-        "pages": a.results()
-            .iter()
-            .map(|result| (FancyTitle::from_prefixed(&result.title, &api).to_json(),result))
-            .map(|(mut v,result)| {
-            v["image"] = json!(result.image);
-            v["lat"] = json!(result.lat);
-            v["lon"] = json!(result.lon);
-            v["distance"] = json!(result.distance);
-            v
-            })
-            .collect::<Vec<Value>>(),
-        "site": site,
-    });
+    tool.run().await.unwrap();
+    let out = tool.as_json().await;
     write_output(&out, params_all);
 }
 
@@ -137,24 +113,9 @@ async fn xtools_pages(params_all: &ArgMatches) {
     let namespace_id = params.get_one::<u32>("ns").expect("--ns missing"); // Has default value 0
 
     let site = Site::from_wiki(wiki).unwrap();
-    let mut a = XtoolsPages::new(site, user).with_namespace_id(*namespace_id);
-    a.run().await.unwrap();
-    let site = a.site();
-    let api = site.api().await.unwrap();
-    let out = json!({
-        "pages": a.results()
-            .iter()
-            .map(|result| (FancyTitle::new(&result.title, result.namespace_id as i64, &api).to_json(),result))
-            .map(|(mut v,result)| {
-            v["creation_date"] = json!(result.date.format("%Y-%m-%dT%H:%M:%SZ").to_string());
-            v["original_size"] = json!(result.original_size);
-            v["current_size"] = json!(result.current_size);
-            v["assessment"] = json!(result.assessment);
-            v
-            })
-            .collect::<Vec<Value>>(),
-        "site": site,
-    });
+    let mut tool = XtoolsPages::new(site, user).with_namespace_id(*namespace_id);
+    tool.run().await.unwrap();
+    let out = tool.as_json().await;
     write_output(&out, params_all);
 }
 
@@ -170,35 +131,25 @@ async fn completer(params_all: &ArgMatches) {
     let category = params.get_one::<String>("category");
     let depth = params.get_one::<u32>("depth").unwrap();
 
-    let mut c = Completer::new(from, to);
+    let mut tool = Completer::new(from, to);
     if let Some(psid) = psid {
-        c = c.filter(CompleterFilter::PetScan {
+        tool = tool.filter(CompleterFilter::PetScan {
             psid: psid.to_string(),
         });
     }
     if let Some(template) = template {
-        c = c.filter(CompleterFilter::Template {
+        tool = tool.filter(CompleterFilter::Template {
             template: template.to_string(),
         });
     }
     if let Some(category) = category {
-        c = c.filter(CompleterFilter::Category {
+        tool = tool.filter(CompleterFilter::Category {
             category: category.to_string(),
             depth: *depth,
         });
     }
-    c.run().await.unwrap();
-
-    let site = Site::from_language_project(to, "wikipedia");
-    let api = site.api().await.unwrap();
-    let out = json!({
-        "pages": c.results()
-            .iter()
-            .map(|(prefixed_title,counter)| (FancyTitle::from_prefixed(prefixed_title, &api).to_json(),counter))
-            .map(|(mut v,counter)| {v["counter"] = json!(*counter); v})
-            .collect::<Vec<Value>>(),
-        "site": site,
-    });
+    tool.run().await.unwrap();
+    let out = tool.as_json().await;
     write_output(&out, params_all);
 }
 
@@ -207,18 +158,9 @@ async fn duplicity(params_all: &ArgMatches) {
         .subcommand_matches("duplicity")
         .expect("No subcommand matches found");
     let wiki = params.get_one::<String>("wiki").expect("--wiki missing");
-    let mut d = Duplicity::new(Site::from_wiki(wiki).unwrap());
-    d.run().await.unwrap();
-    let site = d.site();
-    let api = site.api().await.unwrap();
-    let out = json!({
-        "pages": d.results()
-            .iter()
-            .map(|result| (FancyTitle::from_prefixed(&result.title, &api).to_json(),result))
-            .map(|(mut v,result)| {v["added_to_tool"] = json!(format!("{}",result.creation_date.format("%Y-%m-%d %H:%M:%S"))); v})
-            .collect::<Vec<Value>>(),
-        "site": site,
-    });
+    let mut tool = Duplicity::new(Site::from_wiki(wiki).unwrap());
+    tool.run().await.unwrap();
+    let out = tool.as_json().await;
     write_output(&out, params_all);
 }
 
@@ -241,7 +183,7 @@ async fn pagepile(params_all: &ArgMatches) {
     let id = params.get_one::<u32>("id").expect("--id missing");
     let mut tool = PagePile::new(*id);
     tool.run().await.unwrap();
-    let out = tool.as_json().await.unwrap_or(json!({}));
+    let out = tool.as_json().await.unwrap();
     write_output(&out, params_all);
 }
 
@@ -254,7 +196,7 @@ async fn petscan(params_all: &ArgMatches) {
         .get_many::<String>("params")
         .unwrap_or_default()
         .collect::<Vec<_>>();
-    let mut ps = PetScan::new(*id);
+    let mut tool = PetScan::new(*id);
     for p in override_params {
         let mut parts = p.splitn(2, "=");
         let key = parts.next().expect("Override parameter key expected");
@@ -263,28 +205,12 @@ async fn petscan(params_all: &ArgMatches) {
             eprintln!("Ignoring format override");
             continue;
         }
-        ps.parameters_mut().retain(|(k, _)| k != key); // Remove old value, if any
-        ps.parameters_mut()
+        tool.parameters_mut().retain(|(k, _)| k != key); // Remove old value, if any
+        tool.parameters_mut()
             .push((key.to_string(), value.to_string())); // Add new value
     }
-    ps.run().await.unwrap();
-    let site = Site::from_wiki(ps.wiki().expect("No wiki in PetScan result")).unwrap();
-    let api = site.api().await.unwrap();
-    let out = json!({
-        "pages": ps.pages()
-            .iter()
-            .map(|page| (FancyTitle::new(&page.page_title, page.page_namespace, &api).to_json(),page))
-            .map(|(mut j,page)| {
-                j["id"] = page.page_id.into();
-                j["len"] = page.page_len.into();
-                j["timestamp"] = json!(page.page_latest);
-                j["metadata"] = json!(page.metadata);
-                j["giu"] = json!(page.giu); // Global image usage
-                j
-            })
-            .collect::<Vec<Value>>(),
-        "site": site,
-    });
+    tool.run().await.unwrap();
+    let out = tool.as_json().await;
     write_output(&out, params_all);
 }
 
@@ -302,27 +228,16 @@ async fn missing_topics(params_all: &ArgMatches) {
         .copied()
         .unwrap_or_default();
 
-    let mut mt = MissingTopics::new(Site::from_wiki(wiki).expect("No such wiki {wiki}"))
+    let mut tool = MissingTopics::new(Site::from_wiki(wiki).expect("No such wiki {wiki}"))
         .no_template_links(no_template_links);
     if let Some(article) = article {
-        mt = mt.with_article(article);
+        tool = tool.with_article(article);
     }
     if let Some(category) = category {
-        mt = mt.with_category(category, depth);
+        tool = tool.with_category(category, depth);
     }
-
-    mt.run().await.unwrap();
-
-    let site = mt.site();
-    let api = site.api().await.unwrap();
-    let out = json!({
-        "pages": mt.results()
-            .iter()
-            .map(|(prefixed_title,counter)| (FancyTitle::from_prefixed(prefixed_title, &api).to_json(),counter))
-            .map(|(mut v,counter)| {v["counter"] = json!(*counter); v})
-            .collect::<Vec<Value>>(),
-        "site": site,
-    });
+    tool.run().await.unwrap();
+    let out = tool.as_json().await;
     write_output(&out, params_all);
 }
 

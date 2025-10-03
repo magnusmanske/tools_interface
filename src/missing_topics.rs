@@ -15,9 +15,9 @@
 ///        println!("{title} wanted {count} times");
 ///     });
 /// ```
-use crate::{Site, Tool, ToolsError};
+use crate::{Site, Tool, ToolsError, fancy_title::FancyTitle};
 use async_trait::async_trait;
-use serde_json::Value;
+use serde_json::{Value, json};
 
 #[derive(Debug, Default, PartialEq)]
 pub struct MissingTopics {
@@ -87,6 +87,19 @@ impl MissingTopics {
     /// Get the site used for the query.
     pub fn site(&self) -> &Site {
         &self.site
+    }
+
+    pub async fn as_json(&self) -> Value {
+        let site = self.site();
+        let api = site.api().await.unwrap();
+        json!({
+            "pages": self.results()
+                .iter()
+                .map(|(prefixed_title,counter)| (FancyTitle::from_prefixed(prefixed_title, &api).to_json(),counter))
+                .map(|(mut v,counter)| {v["counter"] = json!(*counter); v})
+                .collect::<Vec<Value>>(),
+            "site": site,
+        })
     }
 }
 
@@ -211,6 +224,9 @@ mod tests {
         assert_eq!(mt.results.len(), 6);
         assert_eq!(mt.results[5].0, "Zellphysiologie");
         assert_eq!(mt.results[5].1, 4);
-        assert_eq!(mt.url_used, "https://missingtopics.toolforge.org/?language=de&project=wikipedia&depth=1&category=&article=Biologie&wikimode=json&limitnum=1&notemplatelinks=0")
+        assert_eq!(
+            mt.url_used,
+            "https://missingtopics.toolforge.org/?language=de&project=wikipedia&depth=1&category=&article=Biologie&wikimode=json&limitnum=1&notemplatelinks=0"
+        )
     }
 }

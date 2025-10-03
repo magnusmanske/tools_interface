@@ -15,9 +15,9 @@
 ///        println!("{title} wanted {count} times");
 ///     });
 /// ```
-use crate::{Tool, ToolsError};
+use crate::{Site, Tool, ToolsError, fancy_title::FancyTitle};
 use async_trait::async_trait;
-use serde_json::{json, Value};
+use serde_json::{Value, json};
 
 #[derive(Debug, PartialEq)]
 /// This is a filter value for `Completer`.
@@ -108,6 +108,19 @@ impl Completer {
     /// Returns the results of the query.
     pub fn results(&self) -> &[(String, u64)] {
         &self.results
+    }
+
+    pub async fn as_json(&self) -> Value {
+        let site = Site::from_language_project(&self.lang_to, "wikipedia");
+        let api = site.api().await.unwrap();
+        json!({
+            "pages": self.results()
+                .iter()
+                .map(|(prefixed_title,counter)| (FancyTitle::from_prefixed(prefixed_title, &api).to_json(),counter))
+                .map(|(mut v,counter)| {v["counter"] = json!(*counter); v})
+                .collect::<Vec<Value>>(),
+            "site": site,
+        })
     }
 }
 

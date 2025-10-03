@@ -15,9 +15,9 @@
 ///        println!("Page {} Item {}", result.title, result.qid);
 ///     });
 /// ```
-use crate::{Site, Tool, ToolsError};
+use crate::{Site, Tool, ToolsError, fancy_title::FancyTitle};
 use async_trait::async_trait;
-use serde_json::Value;
+use serde_json::{Value, json};
 
 #[derive(Debug, Default, PartialEq)]
 pub struct AListBuildingToolResult {
@@ -51,6 +51,19 @@ impl AListBuildingTool {
 
     pub fn q(&self) -> &str {
         &self.q
+    }
+
+    pub async fn as_json(&self) -> Value {
+        let site = self.site();
+        let api = site.api().await.unwrap();
+        json!({
+            "pages": self.results()
+                .iter()
+                .map(|result| (FancyTitle::from_prefixed(&result.title, &api).to_json(),result))
+                .map(|(mut v,result)| {v["wikidata"] = json!(result.qid); v})
+                .collect::<Vec<Value>>(),
+            "site": site,
+        })
     }
 }
 

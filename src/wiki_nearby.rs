@@ -16,9 +16,9 @@
 ///        println!("Page {} Description {} Lat {} Lon {} Image {}", result.title, result.description, result.lat, result.lon, result.image);
 ///     });
 /// ```
-use crate::{Site, Tool, ToolsError};
+use crate::{Site, Tool, ToolsError, fancy_title::FancyTitle};
 use async_trait::async_trait;
-use serde_json::Value;
+use serde_json::{Value, json};
 
 #[derive(Debug, Default, PartialEq)]
 pub struct WikiNearbyResult {
@@ -102,6 +102,25 @@ impl WikiNearby {
 
     pub fn query(&self) -> &str {
         &self.query
+    }
+
+    pub async fn as_json(&self) -> Value {
+        let site = self.site();
+        let api = site.api().await.unwrap();
+        json!({
+            "pages": self.results()
+                .iter()
+                .map(|result| (FancyTitle::from_prefixed(&result.title, &api).to_json(),result))
+                .map(|(mut v,result)| {
+                v["image"] = json!(result.image);
+                v["lat"] = json!(result.lat);
+                v["lon"] = json!(result.lon);
+                v["distance"] = json!(result.distance);
+                v
+                })
+                .collect::<Vec<Value>>(),
+            "site": site,
+        })
     }
 }
 

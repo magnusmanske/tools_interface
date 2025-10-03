@@ -12,10 +12,10 @@
 /// ```
 use std::collections::HashMap;
 
-use crate::{Tool, ToolsError};
+use crate::{Site, Tool, ToolsError, fancy_title::FancyTitle};
 use async_trait::async_trait;
 use serde::{Deserialize, Serialize};
-use serde_json::Value;
+use serde_json::{Value, json};
 
 #[derive(Debug, Default, PartialEq, Serialize, Deserialize)]
 pub struct PetScanFileUsage {
@@ -126,6 +126,26 @@ impl PetScan {
     pub fn query(&self) -> Option<&String> {
         self.query.as_ref()
     }
+
+    pub async fn as_json(&self) -> Value {
+        let site = Site::from_wiki(self.wiki().expect("No wiki in PetScan result")).unwrap();
+        let api = site.api().await.unwrap();
+        json!({
+            "pages": self.pages()
+                .iter()
+                .map(|page| (FancyTitle::new(&page.page_title, page.page_namespace, &api).to_json(),page))
+                .map(|(mut j,page)| {
+                    j["id"] = page.page_id.into(); // TODO consistent with other tools?
+                    j["len"] = page.page_len.into(); // TODO consistent with other tools?
+                    j["timestamp"] = json!(page.page_latest); // TODO consistent with other tools?
+                    j["metadata"] = json!(page.metadata);
+                    j["giu"] = json!(page.giu); // Global image usage
+                    j
+                })
+                .collect::<Vec<Value>>(),
+            "site": site,
+        })
+    }
 }
 
 #[async_trait]
@@ -133,7 +153,10 @@ impl Tool for PetScan {
     #[cfg(feature = "blocking")]
     /// Perform a blocking PetScan query.
     fn run_blocking(&mut self) -> Result<(), ToolsError> {
-        let url = format!("https://petscan.wmflabs.org/?psid={psid}&format=json&output_compatability=quick-intersection", psid=self.psid);
+        let url = format!(
+            "https://petscan.wmflabs.org/?psid={psid}&format=json&output_compatability=quick-intersection",
+            psid = self.psid
+        );
         let client = crate::ToolsInterface::blocking_client()?;
         let j: Value = client.get(&url).query(&self.parameters).send()?.json()?;
         self.set_from_json(j)
@@ -142,7 +165,10 @@ impl Tool for PetScan {
     #[cfg(feature = "tokio")]
     /// Get the PetScan query asynchronously.
     async fn run(&mut self) -> Result<(), ToolsError> {
-        let url = format!("https://petscan.wmflabs.org/?psid={psid}&format=json&output_compatability=quick-intersection", psid=self.psid);
+        let url = format!(
+            "https://petscan.wmflabs.org/?psid={psid}&format=json&output_compatability=quick-intersection",
+            psid = self.psid
+        );
         let client = crate::ToolsInterface::tokio_client()?;
         let j = client
             .get(&url)
