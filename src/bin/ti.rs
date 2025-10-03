@@ -34,8 +34,8 @@ use clap::{Arg, ArgAction, ArgMatches, Command, value_parser};
 use serde_json::Value;
 use tools_interface::{
     AListBuildingTool, Completer, CompleterFilter, Duplicity, MissingTopics, PagePile, PetScan,
-    Site, Tool, list_building::ListBuilding, search::WikiSearch, wiki_nearby::WikiNearby,
-    xtools_pages::XtoolsPages,
+    Site, Tool, grep::Grep, list_building::ListBuilding, search::WikiSearch,
+    wiki_nearby::WikiNearby, xtools_pages::XtoolsPages,
 };
 
 fn write_json(j: &Value) {
@@ -236,6 +236,24 @@ async fn missing_topics(params_all: &ArgMatches) {
     if let Some(category) = category {
         tool = tool.with_category(category, depth);
     }
+    tool.run().await.unwrap();
+    let out = tool.as_json().await;
+    write_output(&out, params_all);
+}
+
+async fn grep(params_all: &ArgMatches) {
+    let params = params_all
+        .subcommand_matches("grep")
+        .expect("No subcommand matches found");
+
+    let wiki = params.get_one::<String>("wiki").expect("--wiki required");
+    let pattern = params
+        .get_one::<String>("pattern")
+        .expect("--pattern required");
+    let namespace_id = params.get_one::<usize>("ns").unwrap();
+
+    let mut tool = Grep::new(Site::from_wiki(wiki).expect("No such wiki {wiki}"), pattern)
+        .with_namespace(*namespace_id);
     tool.run().await.unwrap();
     let out = tool.as_json().await;
     write_output(&out, params_all);
@@ -457,6 +475,28 @@ fn get_arg_matches() -> ArgMatches {
                         .help("Search query")
                         .required(true),
                 ),
+            Command::new("grep")
+                .about("Queries the grep tool to search for page titles with a regular expression")
+                .arg(
+                    Arg::new("wiki")
+                        .long("wiki")
+                        .help("Wiki (eg enwiki)")
+                        .required(true),
+                )
+                .arg(
+                    Arg::new("pattern")
+                        .long("pattern")
+                        .help("RegExp pattern")
+                        .required(true),
+                )
+                .arg(
+                    Arg::new("ns")
+                        .long("namespace")
+                        .help("Namespace ID")
+                        .default_value("0")
+                        .value_parser(value_parser!(usize))
+                        .required(false),
+                ),
         ])
         .get_matches()
 }
@@ -466,12 +506,13 @@ async fn main() {
     let m = get_arg_matches();
     match m.subcommand_name() {
         Some("alistbuildingtool") => alistbuildingtool(&m).await,
-        Some("listbuilding") => listbuilding(&m).await,
         Some("completer") => completer(&m).await,
         Some("duplicity") => duplicity(&m).await,
+        Some("grep") => grep(&m).await,
+        Some("listbuilding") => listbuilding(&m).await,
+        Some("missing_topics") => missing_topics(&m).await,
         Some("pagepile") => pagepile(&m).await,
         Some("petscan") => petscan(&m).await,
-        Some("missing_topics") => missing_topics(&m).await,
         Some("search") => search(&m).await,
         Some("wikinearby") => wikinearby(&m).await,
         Some("xtools_pages") => xtools_pages(&m).await,

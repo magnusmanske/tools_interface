@@ -26,6 +26,7 @@ pub mod completer;
 pub mod duplicity;
 pub mod error;
 pub mod fancy_title;
+pub mod grep;
 pub mod list_building;
 pub mod missing_topics;
 pub mod pagepile;
