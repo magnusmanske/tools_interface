@@ -15,7 +15,7 @@
 ///        println!("Entity changed: {}", entity_edit.id);
 ///     });
 /// ```
-use crate::{Tool, ToolsError};
+use crate::{Tool, ToolsError, tool::check_ok_status};
 use async_trait::async_trait;
 use chrono::NaiveDateTime;
 use serde_json::Value;
@@ -123,7 +123,7 @@ impl SparqlRC {
             .unwrap_or("".to_string())
     }
 
-    fn generate_paramters(&self) -> Result<Vec<(String, String)>, ToolsError> {
+    fn generate_parameters(&self) -> Result<Vec<(String, String)>, ToolsError> {
         let parameters: Vec<(String, String)> = [
             ("sparql".into(), self.sparql.clone()),
             ("start".into(), Self::date2string(&self.start)),
@@ -162,7 +162,7 @@ impl Tool for SparqlRC {
     async fn run(&mut self) -> Result<(), ToolsError> {
         self.check_start_date()?;
         let url = &self.tool_url;
-        let parameters = self.generate_paramters()?;
+        let parameters = self.generate_parameters()?;
         let client = crate::ToolsInterface::tokio_client()?;
         let response = client.get(url).query(&parameters).send().await?;
         let j: Value = response.json().await?;
@@ -174,19 +174,14 @@ impl Tool for SparqlRC {
     fn run_blocking(&mut self) -> Result<(), ToolsError> {
         self.check_start_date()?;
         let url = &self.tool_url;
-        let parameters = self.generate_paramters()?;
+        let parameters = self.generate_parameters()?;
         let client = crate::ToolsInterface::blocking_client()?;
         let j: Value = client.get(url).query(&parameters).send()?.json()?;
         self.set_from_json(j)
     }
 
     fn set_from_json(&mut self, j: Value) -> Result<(), ToolsError> {
-        if j["status"].as_str() != Some("OK") {
-            return Err(ToolsError::Tool(format!(
-                "SparqlRC status is not OK: {:?}",
-                j["status"]
-            )));
-        }
+        check_ok_status(&j, "SparqlRC")?;
         self.results = j["items"]
             .as_array()
             .ok_or(ToolsError::Json("['items'] has no array".into()))?

@@ -3,6 +3,24 @@ use serde_json::Value;
 
 use crate::ToolsError;
 
+/// Helper function to check if a JSON response has status "OK".
+/// Returns an error with the tool name if status is not OK.
+pub fn check_ok_status(j: &Value, tool_name: &str) -> Result<(), ToolsError> {
+    if j["status"].as_str() != Some("OK") {
+        return Err(ToolsError::Tool(format!(
+            "{} status is not OK: {:?}",
+            tool_name, j["status"]
+        )));
+    }
+    Ok(())
+}
+
+/// Helper function to extract a string field from a JSON object.
+/// Returns None if the field doesn't exist or isn't a string.
+pub fn get_json_string<'a>(entry: &'a Value, field: &str) -> Option<&'a str> {
+    entry.get(field)?.as_str()
+}
+
 #[async_trait]
 pub trait Tool {
     #[cfg(feature = "blocking")]
@@ -35,7 +53,7 @@ pub trait Tool {
         unimplemented!();
     }
 
-    fn generate_paramters(&self) -> Result<Vec<(String, String)>, ToolsError> {
+    fn generate_parameters(&self) -> Result<Vec<(String, String)>, ToolsError> {
         unimplemented!();
     }
 

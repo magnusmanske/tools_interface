@@ -15,7 +15,7 @@
 ///        println!("{title} wanted {count} times");
 ///     });
 /// ```
-use crate::{Site, Tool, ToolsError, fancy_title::FancyTitle};
+use crate::{Site, Tool, ToolsError, fancy_title::FancyTitle, tool::check_ok_status};
 use async_trait::async_trait;
 use serde_json::{Value, json};
 
@@ -105,7 +105,7 @@ impl MissingTopics {
 
 #[async_trait]
 impl Tool for MissingTopics {
-    fn generate_paramters(&self) -> Result<Vec<(String, String)>, ToolsError> {
+    fn generate_parameters(&self) -> Result<Vec<(String, String)>, ToolsError> {
         let mut parameters: Vec<(String, String)> = [
             ("language".to_string(), self.site.language().to_string()),
             ("project".to_string(), self.site.project().to_string()),
@@ -148,7 +148,7 @@ impl Tool for MissingTopics {
     /// Run the query asynchronously.
     async fn run(&mut self) -> Result<(), ToolsError> {
         let url = &self.tool_url;
-        let parameters = self.generate_paramters()?;
+        let parameters = self.generate_parameters()?;
         let client = crate::ToolsInterface::tokio_client()?;
         let response = client.get(url).query(&parameters).send().await?;
         let j: Value = response.json().await?;
@@ -159,19 +159,14 @@ impl Tool for MissingTopics {
     /// Run the query in a blocking manner.
     fn run_blocking(&mut self) -> Result<(), ToolsError> {
         let url = &self.tool_url;
-        let parameters = self.generate_paramters()?;
+        let parameters = self.generate_parameters()?;
         let client = crate::ToolsInterface::blocking_client()?;
         let j: Value = client.get(url).query(&parameters).send()?.json()?;
         self.set_from_json(j)
     }
 
     fn set_from_json(&mut self, j: Value) -> Result<(), ToolsError> {
-        if j["status"].as_str() != Some("OK") {
-            return Err(ToolsError::Tool(format!(
-                "MissingTopics status is not OK: {:?}",
-                j["status"]
-            )));
-        }
+        check_ok_status(&j, "MissingTopics")?;
         self.results = j["results"]
             .as_object()
             .ok_or(ToolsError::Json("['results'] has no object".into()))?

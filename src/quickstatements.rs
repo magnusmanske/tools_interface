@@ -72,7 +72,7 @@ impl QuickStatements {
 
 #[async_trait]
 impl Tool for QuickStatements {
-    fn generate_paramters(&self) -> Result<Vec<(String, String)>, ToolsError> {
+    fn generate_parameters(&self) -> Result<Vec<(String, String)>, ToolsError> {
         let params = [
             ("action", "import"),
             ("submit", "1"),
@@ -96,7 +96,7 @@ impl Tool for QuickStatements {
     /// Returns the batch ID if successful.
     fn run_blocking(&mut self) -> Result<(), ToolsError> {
         let url = &self.petscan_uri;
-        let params = self.generate_paramters()?;
+        let params = self.generate_parameters()?;
         let client = crate::ToolsInterface::blocking_client()?;
         let j: Value = client.post(url).form(&params).send()?.json()?;
         let status = j["status"]
@@ -115,7 +115,7 @@ impl Tool for QuickStatements {
     #[cfg(feature = "tokio")]
     async fn run(&mut self) -> Result<(), ToolsError> {
         let url = &self.petscan_uri;
-        let params = self.generate_paramters()?;
+        let params = self.generate_parameters()?;
         let client = crate::ToolsInterface::tokio_client()?;
         let response = client.post(url).form(&params).send().await?;
         let j: Value = response.json().await?;

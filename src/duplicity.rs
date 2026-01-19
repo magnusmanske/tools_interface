@@ -18,7 +18,7 @@
 ///        println!("{} was added {}",result.title, result.creation_date);
 ///     });
 /// ```
-use crate::{Site, Tool, ToolsError, fancy_title::FancyTitle};
+use crate::{Site, Tool, ToolsError, fancy_title::FancyTitle, tool::check_ok_status};
 use async_trait::async_trait;
 use chrono::NaiveDateTime;
 use serde_json::{Value, json};
@@ -106,7 +106,7 @@ impl Duplicity {
 
 #[async_trait]
 impl Tool for Duplicity {
-    fn generate_paramters(&self) -> Result<Vec<(String, String)>, ToolsError> {
+    fn generate_parameters(&self) -> Result<Vec<(String, String)>, ToolsError> {
         let parameters: Vec<(String, String)> = [
             ("action".to_string(), "articles".to_string()),
             ("wiki".to_string(), self.site.wiki().to_string()),
@@ -119,7 +119,7 @@ impl Tool for Duplicity {
     /// Run the query in a blocking manner.
     fn run_blocking(&mut self) -> Result<(), ToolsError> {
         let url = "https://wikidata-todo.toolforge.org/duplicity/api.php";
-        let parameters = self.generate_paramters()?;
+        let parameters = self.generate_parameters()?;
         let client = crate::ToolsInterface::blocking_client()?;
         let j: Value = client.get(url).query(&parameters).send()?.json()?;
         self.set_from_json(j)
@@ -129,7 +129,7 @@ impl Tool for Duplicity {
     /// Run the query asynchronously.
     async fn run(&mut self) -> Result<(), ToolsError> {
         let url = "https://wikidata-todo.toolforge.org/duplicity/api.php";
-        let parameters = self.generate_paramters()?;
+        let parameters = self.generate_parameters()?;
         let client = crate::ToolsInterface::tokio_client()?;
         let response = client.get(url).query(&parameters).send().await?;
         let j: Value = response.json().await?;
@@ -137,12 +137,7 @@ impl Tool for Duplicity {
     }
 
     fn set_from_json(&mut self, j: Value) -> Result<(), ToolsError> {
-        if j["status"].as_str() != Some("OK") {
-            return Err(ToolsError::Tool(format!(
-                "MissingTopics status is not OK: {:?}",
-                j["status"]
-            )));
-        }
+        check_ok_status(&j, "Duplicity")?;
         self.results = j["articles"]
             .as_array()
             .ok_or_else(|| ToolsError::Json("['results'] is not an array".to_string()))?

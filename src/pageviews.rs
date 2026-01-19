@@ -34,6 +34,9 @@
 /// ```
 // NOTE: This does not use the `Tool` trait, it is too different.
 use chrono::{Duration, NaiveDate};
+
+/// Default delay in seconds when the API returns a 429 (throttling) response without a Retry-After header.
+const DEFAULT_RETRY_DELAY_SECS: u64 = 5;
 use futures::prelude::*;
 use serde::Deserialize;
 use serde_json::Value;
@@ -219,12 +222,13 @@ impl Pageviews {
     ) -> Result<PageviewsResult, crate::ToolsError> {
         let project: String = project.into();
         let page: String = page.into().replace(" ", "_");
-        let url = format!("https://wikimedia.org/api/rest_v1/metrics/pageviews/per-article/{project}/{access}/{agent}/{page}/{granularity}/{start}/{end}",
-            access=self.access.as_str(),
-            agent=self.agent.as_str(),
-            granularity=self.granularity.as_str(),
-            start=start.format("%Y%m%d"),
-            end=end.format("%Y%m%d"),
+        let url = format!(
+            "https://wikimedia.org/api/rest_v1/metrics/pageviews/per-article/{project}/{access}/{agent}/{page}/{granularity}/{start}/{end}",
+            access = self.access.as_str(),
+            agent = self.agent.as_str(),
+            granularity = self.granularity.as_str(),
+            start = start.format("%Y%m%d"),
+            end = end.format("%Y%m%d"),
         );
         let client = crate::ToolsInterface::tokio_client()?;
         let json: Value;
@@ -238,7 +242,7 @@ impl Pageviews {
                     .get("Retry-After")
                     .and_then(|s| s.to_str().ok())
                     .and_then(|s| s.parse().ok())
-                    .unwrap_or(5);
+                    .unwrap_or(DEFAULT_RETRY_DELAY_SECS);
                 tokio::time::sleep(tokio::time::Duration::from_secs(delay)).await;
                 continue;
             }

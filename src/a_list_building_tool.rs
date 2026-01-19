@@ -15,7 +15,7 @@
 ///        println!("Page {} Item {}", result.title, result.qid);
 ///     });
 /// ```
-use crate::{Site, Tool, ToolsError, fancy_title::FancyTitle};
+use crate::{Site, Tool, ToolsError, fancy_title::FancyTitle, tool::get_json_string};
 use async_trait::async_trait;
 use serde_json::{Value, json};
 
@@ -98,19 +98,11 @@ impl Tool for AListBuildingTool {
             .as_array()
             .ok_or_else(|| ToolsError::Json("Result is not an array".to_string()))?
         {
-            let title = match entry.get("title") {
-                Some(title) => match title.as_str() {
-                    Some(title) => title,
-                    None => continue, // Skip row
-                },
-                None => continue, // Skip row
+            let Some(title) = get_json_string(entry, "title") else {
+                continue;
             };
-            let qid = match entry.get("qid") {
-                Some(qid) => match qid.as_str() {
-                    Some(qid) => qid,
-                    None => continue, // Skip row
-                },
-                None => continue, // Skip row
+            let Some(qid) = get_json_string(entry, "qid") else {
+                continue;
             };
             self.results.push(AListBuildingToolResult {
                 title: title.to_string(),
