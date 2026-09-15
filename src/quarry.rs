@@ -120,10 +120,12 @@ mod tests {
         quarry.run_blocking().unwrap();
         let column_number = quarry.colnum("page_title").unwrap();
         assert_eq!(column_number, 2);
-        assert!(quarry
-            .rows()
-            .iter()
-            .any(|row| row[column_number].as_str() == Some("!Hauptkategorie")));
+        assert!(
+            quarry
+                .rows()
+                .iter()
+                .any(|row| row[column_number].as_str() == Some("!Hauptkategorie"))
+        );
     }
 
     #[cfg(feature = "tokio")]
@@ -133,9 +135,11 @@ mod tests {
         quarry.run().await.unwrap();
         let column_number = quarry.colnum("page_title").unwrap();
         assert_eq!(column_number, 2);
-        assert!(quarry
-            .rows()
-            .iter()
-            .any(|row| row[column_number].as_str() == Some("!Hauptkategorie")));
+        assert!(
+            quarry
+                .rows()
+                .iter()
+                .any(|row| row[column_number].as_str() == Some("!Hauptkategorie"))
+        );
     }
 }

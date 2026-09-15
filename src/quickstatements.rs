@@ -14,7 +14,8 @@
 /// qs.run().await.unwrap();
 /// let batch_id = qs.batch_id().unwrap();
 /// ```
-use crate::{Tool, ToolsError};
+use crate::page_list::{Page, PageList};
+use crate::{Site, Tool, ToolsError};
 use async_trait::async_trait;
 use serde_json::Value;
 
@@ -63,6 +64,57 @@ impl QuickStatements {
     /// Adds a tab-separated (V1) QS command.
     pub fn add_command(&mut self, command: &str) {
         self.commands += &format!("{}\n", command);
+    }
+
+    /// Adds one command per page in `list`, from a template in which `{item}` is replaced
+    /// by the page's Wikidata item and `{title}` by its title.
+    ///
+    /// The item is the page title itself for lists on `wikidatawiki`; for lists on other
+    /// wikis it is taken from the page metadata, where a tool has supplied one.
+    /// Fails without adding anything if the item of any page is unknown, so a batch is
+    /// never started half-populated - cast the list to `wikidatawiki` first.
+    pub fn add_commands_for_pages(
+        &mut self,
+        list: &PageList,
+        template: &str,
+    ) -> Result<usize, ToolsError> {
+        let commands = list
+            .pages()
+            .iter()
+            .map(|page| {
+                let item = Self::item_for_page(page, list.site()).ok_or_else(|| {
+                    ToolsError::Tool(format!(
+                        "no Wikidata item known for '{}' on {}; cast the list to wikidatawiki first",
+                        page.title().pretty(),
+                        list.site().wiki()
+                    ))
+                })?;
+                Ok(template
+                    .replace("{item}", &item)
+                    .replace("{title}", page.title().pretty()))
+            })
+            .collect::<Result<Vec<String>, ToolsError>>()?;
+        commands
+            .iter()
+            .for_each(|command| self.add_command(command));
+        Ok(commands.len())
+    }
+
+    fn item_for_page(page: &Page, site: &Site) -> Option<String> {
+        if site.wiki() == "wikidatawiki" {
+            return Some(page.title().pretty().to_string());
+        }
+        // Some tools report the Wikidata item of a page alongside it.
+        page.meta()
+            .values()
+            .filter_map(|meta| meta.get("wikidata")?.as_str())
+            .map(|item| item.to_string())
+            .next()
+    }
+
+    /// The accumulated V1 commands, newline separated.
+    pub fn commands(&self) -> &str {
+        &self.commands
     }
 
     pub fn batch_id(&self) -> Option<u64> {

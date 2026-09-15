@@ -14,6 +14,8 @@ use crate::{Site, Tool, ToolsError, fancy_title::FancyTitle};
 use async_trait::async_trait;
 use serde_json::{Value, json};
 
+const PAGEPILE_API: &str = "https://pagepile.toolforge.org/api.php";
+
 #[derive(Debug, Default, PartialEq)]
 pub struct PagePile {
     id: u32,
@@ -61,6 +63,51 @@ impl PagePile {
         })
     }
 
+    /// Creates a new PagePile from a list of namespace-prefixed titles,
+    /// and returns its ID. Requires no authentication.
+    #[cfg(feature = "tokio")]
+    pub async fn create(site: &Site, prefixed_titles: &[String]) -> Result<u32, ToolsError> {
+        let params = Self::create_parameters(site, prefixed_titles);
+        let client = crate::ToolsInterface::tokio_client()?;
+        let json: Value = client
+            .post(PAGEPILE_API)
+            .form(&params)
+            .send()
+            .await?
+            .json()
+            .await?;
+        Self::created_pile_id(&json)
+    }
+
+    /// Creates a new PagePile from a list of namespace-prefixed titles,
+    /// and returns its ID. Requires no authentication.
+    #[cfg(feature = "blocking")]
+    pub fn create_blocking(site: &Site, prefixed_titles: &[String]) -> Result<u32, ToolsError> {
+        let params = Self::create_parameters(site, prefixed_titles);
+        let client = crate::ToolsInterface::blocking_client()?;
+        let json: Value = client.post(PAGEPILE_API).form(&params).send()?.json()?;
+        Self::created_pile_id(&json)
+    }
+
+    fn create_parameters(site: &Site, prefixed_titles: &[String]) -> Vec<(String, String)> {
+        [
+            ("action", "create_pile_with_data"),
+            ("wiki", site.wiki()),
+            ("data", &prefixed_titles.join("\n")),
+        ]
+        .iter()
+        .map(|(key, value)| (key.to_string(), value.to_string()))
+        .collect()
+    }
+
+    fn created_pile_id(json: &Value) -> Result<u32, ToolsError> {
+        crate::tool::check_ok_status(json, "PagePile")?;
+        json["pile"]["id"]
+            .as_u64()
+            .map(|id| id as u32)
+            .ok_or_else(|| ToolsError::Json(format!("['pile']['id'] is not a number: {json}")))
+    }
+
     pub async fn as_json(&self) -> Option<Value> {
         let site = self.site()?;
         let api = site.api().await.ok()?;
@@ -78,7 +125,7 @@ impl PagePile {
 impl Tool for PagePile {
     fn get_url(&self) -> String {
         format!(
-            "https://pagepile.toolforge.org/api.php?id={id}&action=get_data&doit&format=json",
+            "{PAGEPILE_API}?id={id}&action=get_data&doit&format=json",
             id = self.id
         )
     }

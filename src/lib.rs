@@ -7,6 +7,7 @@
 //! - [A List Building Tool](https://a-list-bulding-tool.toolforge.org/)
 //! - [Completer](https://completer.toolforge.org/)
 //! - [Duplicity](https://wikidata-todo.toolforge.org/duplicity/)
+//! - [Grep](https://grep.toolforge.org/index.php)
 //! - [List Building](https://list-building.toolforge.org)
 //! - [PagePile](https://pagepile.toolforge.org/) (read only)
 //! - [Pageviews API](https://wikitech.wikimedia.org/wiki/Analytics/AQS/Pageviews)
@@ -20,6 +21,20 @@
 //! - [XTools pages](https://xtools.wmcloud.org/pages)
 //!
 //! If you would like to see other tools supported, add a request to the [Issue tracker](https://github.com/magnusmanske/tools_interface/issues).
+//!
+//! ## Composing tool output
+//!
+//! Tool results convert to a [`PageList`](page_list::PageList): a list of pages on one wiki,
+//! each carrying the metadata of the tools that contributed it.
+//! Lists can be combined with [`union`](page_list::PageList::union),
+//! [`intersection`](page_list::PageList::intersection),
+//! [`difference`](page_list::PageList::difference) and
+//! [`symmetric_difference`](page_list::PageList::symmetric_difference),
+//! and moved between wikis with [`cast`](page_list::PageList::cast).
+//! Metadata is namespaced per tool, so combining lists never loses it.
+//!
+//! Lists are written as JSONL so they can be piped between processes; see
+//! [`page_list`] for the format.
 
 pub mod a_list_building_tool;
 pub mod completer;
@@ -49,6 +64,7 @@ pub use completer::{Completer, CompleterFilter};
 pub use duplicity::Duplicity;
 pub use error::ToolsError;
 pub use missing_topics::MissingTopics;
+pub use page_list::{Page, PageList};
 pub use pagepile::PagePile;
 pub use pageviews::*;
 pub use persondata_template::*;
@@ -65,7 +81,7 @@ TEST:
 cargo test --lib --tests --bins
 
 TODO
-- WD-FIST
+- WD-FIST (needs a JSON output mode in the tool first)
 - https://ws-search.toolforge.org/ (needs HTML scraping?)
 - https://wp-trending.toolforge.org/
 - https://wikidata-todo.toolforge.org/user_edits.php
@@ -74,9 +90,8 @@ TODO
 - https://fist.toolforge.org/wd4wp/#/
 - https://whattodo.toolforge.org
 - https://checkwiki.toolforge.org/checkwiki.cgi
-- https://grep.toolforge.org/ [DEFUNCT?]
 - https://nppbrowser.toolforge.org/
 - https://searchsbl.toolforge.org/
-- https://item-quality-evaluator.toolforge.org (to add scores)
+- https://item-quality-evaluator.toolforge.org (serves HTML; use Lift Wing instead)
 - topicmatcher
 */

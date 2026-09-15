@@ -94,6 +94,95 @@ impl ToolsInterface {
         Ok(ret)
     }
 
+    #[cfg(feature = "tokio")]
+    /// Maps page titles on `from_wiki` to the titles of the same topic on `to_wiki`,
+    /// using Wikidata sitelinks. Titles without a counterpart are absent from the result.
+    ///
+    /// `wikidatawiki` is accepted on either side, where the "title" of a page is its entity ID.
+    pub async fn sitelinks_between_wikis(
+        from_wiki: &str,
+        to_wiki: &str,
+        titles: &[String],
+    ) -> Result<HashMap<String, String>, ToolsError> {
+        use futures::stream::StreamExt;
+
+        const MAX_CONCURRENT: usize = 5;
+        const MAX_TITLES_PER_REQUEST: usize = 50;
+
+        if from_wiki == to_wiki {
+            return Ok(titles
+                .iter()
+                .map(|title| (title.to_owned(), title.to_owned()))
+                .collect());
+        }
+        let api = std::sync::Arc::new(Self::wikidata_api().await?);
+        let requests: Vec<_> = titles
+            .chunks(MAX_TITLES_PER_REQUEST)
+            .map(|chunk| {
+                let mut params: HashMap<String, String> = [
+                    ("action", "wbgetentities"),
+                    ("format", "json"),
+                    ("props", "sitelinks"),
+                ]
+                .iter()
+                .map(|(key, value)| (key.to_string(), value.to_string()))
+                .collect();
+                // Wikidata pages are addressed by entity ID, not by sitelink.
+                if from_wiki == "wikidatawiki" {
+                    params.insert("ids".to_string(), chunk.join("|"));
+                } else {
+                    params.insert("sites".to_string(), from_wiki.to_string());
+                    params.insert("titles".to_string(), chunk.join("|"));
+                }
+                // The source sitelink is needed to map the result back to the input title.
+                params.insert(
+                    "sitefilter".to_string(),
+                    [from_wiki, to_wiki]
+                        .iter()
+                        .filter(|wiki| **wiki != "wikidatawiki")
+                        .cloned()
+                        .collect::<Vec<_>>()
+                        .join("|"),
+                );
+                (api.clone(), params)
+            })
+            .collect();
+
+        let futures = requests
+            .iter()
+            .map(|(api, params)| api.get_query_api_json(params));
+        let results = futures::stream::iter(futures)
+            .buffered(MAX_CONCURRENT)
+            .collect::<Vec<_>>()
+            .await;
+
+        let mut ret = HashMap::new();
+        for result in results {
+            let entities = result?["entities"]
+                .as_object()
+                .ok_or_else(|| ToolsError::Json("['entities'] is not an object".into()))?
+                .to_owned();
+            for (id, entity) in entities.iter() {
+                let sitelinks = entity["sitelinks"].as_object();
+                let title_on = |wiki: &str| -> Option<String> {
+                    if wiki == "wikidatawiki" {
+                        return Some(id.to_owned());
+                    }
+                    Some(
+                        sitelinks?.get(wiki)?["title"]
+                            .as_str()?
+                            .replace('_', " ")
+                            .to_string(),
+                    )
+                };
+                if let (Some(from), Some(to)) = (title_on(from_wiki), title_on(to_wiki)) {
+                    ret.insert(from, to);
+                }
+            }
+        }
+        Ok(ret)
+    }
+
     async fn generate_api_params_for_wikidata_item_for_titles(
         titles: &[String],
         wiki: &str,
@@ -125,6 +214,35 @@ impl ToolsInterface {
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    #[cfg(feature = "tokio")]
+    #[tokio::test]
+    async fn test_sitelinks_between_wikis() {
+        let titles = vec!["Biochemistry".to_string(), "Isaac Newton".to_string()];
+        let map = ToolsInterface::sitelinks_between_wikis("enwiki", "dewiki", &titles)
+            .await
+            .unwrap();
+        assert_eq!(map.get("Biochemistry"), Some(&"Biochemie".to_string()));
+        assert_eq!(map.get("Isaac Newton"), Some(&"Isaac Newton".to_string()));
+    }
+
+    #[cfg(feature = "tokio")]
+    #[tokio::test]
+    async fn test_sitelinks_to_and_from_wikidata() {
+        let titles = vec!["Isaac Newton".to_string()];
+        let to_wikidata =
+            ToolsInterface::sitelinks_between_wikis("enwiki", "wikidatawiki", &titles)
+                .await
+                .unwrap();
+        assert_eq!(to_wikidata.get("Isaac Newton"), Some(&"Q935".to_string()));
+
+        let items = vec!["Q935".to_string()];
+        let from_wikidata =
+            ToolsInterface::sitelinks_between_wikis("wikidatawiki", "dewiki", &items)
+                .await
+                .unwrap();
+        assert_eq!(from_wikidata.get("Q935"), Some(&"Isaac Newton".to_string()));
+    }
 
     #[cfg(feature = "tokio")]
     #[tokio::test]
